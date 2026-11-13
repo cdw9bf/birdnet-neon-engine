@@ -1,0 +1,244 @@
+libbnneon (one NEON engine library, model chosen by the weights file) - option menu, 2026-11-02
+=================================================================================================
+Status 2026-11-11: this file is the record of every option measured, session by session. Every .bnv3 / C3 row below is
+  the record of the retired hand-written v3 engine; the BirdNET v3.0 neon-fp16 packages (K2-B section) replaced it as
+  the Pi 5 path. The current thread tables of the shipped packages (Pi 5 with the detector stopped, Pi 4) are in
+  results/timing/; the gate criteria and the evaluation data in docs/GATES.md. "BirdNET-Go with the engine binding"
+  below is an opt-in BirdNET-Go build (build tag bnneon) that is not published. Commit ids and experiment ids are
+  provenance labels from the development repository (docs/GATES.md).
+Timing: 1 thread, taskset core 3, medians of 64 windows x 5 reps (v2.4) / 30 x 3 (v3), one flock per session.
+  Pi 5 = Cortex-A76 2.4 GHz with a BirdNET-Go detector running on the board, load ~0.2-0.9.
+  Pi 4 = Cortex-A72 1.5 GHz test box, idle.  Stock runtime rows are from the stock-runtime study (not in this repository).
+Accuracy: full 34.4 h gate, 227,022 windows (0.8 s + 1.5 s grids), BirdNET-Go 20261014 post-processing replay, paired
+  bootstrap over 37 periods; PRIMARY reference = official TFLite FP32 model (BirdNET-Go's non-arm64 default),
+  ONNX fp32 as calibration. Criterion (declared before any candidate): per config dP/dR not significantly negative and
+  mean shifts >= -0.5 pp; window hit-set Jaccard@0.8 > 0.97; no flip with margin > 0.05.
+  Configs: U = upstream default (overlap 0, thr 0.8, FP L0, range 0.01), T = Pi template (2.2/0.8/L2/0.05),
+  C4 = a third operating point (1.5/0.8/L2/0.05).
+
+BirdNET v2.4
+------------
+option                       Pi 5 ms   Pi 4 ms   gate vs TFLite (TP/FP/FN U | T | C4; dR [95% CI] worst)        window agreement      verdict
+NEON fp16 (mode 0 on A76)    19.3      -         161/16/169 | 138/3/192 | 137/4/193 = TFLite in every period;   54.3 dB, 163 flips    PASS (all 3 configs,
+ fast tier                    (min 19.2)          dP = dR = +0.00 [0, 0] in all three configs; saved            (max margin 0.0044),  both references)
+                                                     detections Jaccard 0.993 | 0.979 | 0.978 (27/61/66 differ)  Jaccard 0.9967
+NEON fp32 (mode 0 on A72,    (Pi 5      131.0     161/16/169 | 138/3/192 | 137/4/193 = TFLite in every period;   80.6 dB, 0 flips,     PASS (all 3 configs,
+ mode 2 anywhere)             mode 2:   (min 130.7) saved detections identical to TFLite (Jaccard 1.0000)        Jaccard 1.0000        both references)
+ exact tier                   not timed)
+--- stock runtimes (stock-runtime study, same boards; x86 = E5-2620 v4, 1 thread) ---      Pi 5    Pi 4    x86
+ORT INT8_ARM (BirdNET-Go arm64 default today; same decisions as dfttrunc, round 1) 146.9   544.5   64.8
+ORT int8_arm_dfttrunc (BirdNET-Go gallery file; U: -2 TP vs TFLite = FAIL by the -0.5 pp rule, CI incl. 0; T/C4 PASS)
+                                                                                 79.3    278.5   42.0
+ORT fp32_fused (this project's fused file, not hosted; PASS, 0 flips vs TFLite)            59.2    212.9   26.6
+ORT int8_arm_fused (2 TP short at U/C4 = today's default)                       57.7    209.7   25.1
+TFLite FP32 (x86 default = the reference)                                        79.2    243.2   49.1
+The NEON engine has no x86 path: x86 users keep the stock runtimes (the stock-runtime study's fused ONNX is the x86 option).
+Speed-ups of the NEON engine: Pi 5 4.1x vs int8_arm_dfttrunc, 7.6x vs stock INT8_ARM, 3.1x vs
+  fp32_fused; Pi 4 1.6x vs fp32_fused/int8_arm_fused, 1.9x vs TFLite, 4.2x vs INT8_ARM.
+CPU at each configuration's stride (Pi 5, % of one core for inference): C4 (0.667 windows/s) 1.3 % (int8_arm_dfttrunc 5.3 %,
+  fp32_fused 3.9 %); Pi template overlap 2.2 (1.25/s) 2.4 % (9.9 %); upstream default overlap 0 (0.33/s) 0.6 % (2.6 %).
+  Power: an earlier power profile (not in this repository) put inference at ~0.13 W of the 0.64 W above idle at C4 with the 77 ms
+  int8_arm_dfttrunc; scaled to 19.3 ms that is ~0.03 W, i.e. ~0.1 W saved (estimate, not measured).
+RSS: 119 MB VmRSS (bench/cli.c, Pi 5 and Pi 4 runs); stock-runtime study fresh-process peaks: int8_arm_fused 130, fp32_fused 168 MB.
+Pi 5 profile (ms): front end 3.5 (FFT 2.1), c0+pool 0.8, p0 0.26, pw 6.5, dw 1.7, SE 0.9, pwl 3.7, pc 0.46, head 1.5.
+Pi 4 profile (ms): front end 11.8, c0 4.7, p0 2.1, pw 49.1, dw 20.0, SE 2.7, pwl 30.2, pc 3.7, head 6.8.
+Profile before -> after (Pi 5, 1 thread): ORT int8_arm_dfttrunc 79.5 ms = front end 39.1 + body 41.6 + post 2.5 +
+  head 0.6 (stock-runtime study B001) -> NEON 19.3 ms = front end 3.5 + body 13.9 + pc 0.5 + head 1.5.
+Not on the menu (failed or dropped, DEADENDS.md; none of it is in the committed code): int8 SDOT head (Pi 5 18.4 ms;
+  FAIL at C4 by the -0.5 pp rule = 2 TPs, CI incl. 0; removed from the engine/API, D6), int8 everywhere (34.7 dB, D1),
+  fp32 depthwise on the A76 (+2.4 ms for +1.3 dB, D2), DCT-I front end (D3), 8-row head GEMV (D4), Pi 4 fp16 head /
+  low-degree exp2 / prefetch variants (D5).
+Provenance: gate candidates were scored by the arm64 container build (gcc 14.2, same as the Pis); container == Pi 5
+  (mode 0) and == Pi 4 (mode 2) bit-identical on 64 windows (cmp). Gated sources: fp16 27f6a1d7f52c4216, fp32
+  f9629f7d1acfacea; committed engine (30e367cffab07e68) is bit-identical to both for those modes (cmp, devA64).
+
+BirdNET v3.0 NA-east (same library, .bnv3 weights; engine retired 2026-11-10: the rows are its record)
+---------------------------------------------------
+NEON C3 int8/fp16 (mode 0)   132.0-132.2   n/a (needs dotprod+fp16;   v3 gate, v3 criterion (Mac replay): 171/4/159 = fp32,      PASS
+ bit-identical to the gated                  falls back to ORT on       dP +0.00 [-0.03,+0.06], dR +0.02 [-0.85,+0.94],
+ libbnv3.so build (sha 74e7acf8)             a Pi 4)                    Jaccard 0.9765, max flip margin 0.022
+ (inside BirdNET-Go with the engine binding: 132.1-132.6, same session)
+--- stock (stock-runtime study), Pi 5 / Pi 4 / x86 ms: ORT fp32 652 / 2309 / 229.8; fft3 581 / 2015 / 203.3; TFLite int8 270.7 /
+    1351 / -. v3 global (stock only, not exported for the engine): ORT 756.6 / 2685 / 279.5, fft3 696.1 / 2367 / 251.4.
+FORMAL v3 GATE OF THE LIBRARY BUILD (2026-11-03, results/gate_v3_deployed_result.txt): the libbnv3.so build
+  (sha256 74e7acf8...) itself scored all 92,829 windows (bench/v3pipe.c, removed with the v3 engine; arm64 container) -
+  bit-identical to this
+  framework on every window - and the v3 harness replay on the GPU server gives 171/4/159 (= fp32 ORT), dP +0.00
+  [-0.03, +0.06], dR +0.02 [-0.85, +0.94], Jaccard 0.9765, max flip margin 0.022 -> PASS (v3 strict criterion).
+  This replaces the 2026-10-31 C3 numbers (172/4/158) for that build: those score files are not reproduced
+  by it (94.7 % of float16 scores differ, max 0.07; the C3-gated sources were not kept).
+BirdNET v3.0 GLOBAL (11,560 classes; same legacy v3 engine, .bnv3 version 2; G001-G005, 2026-11-08)
+option                       Pi 5 ms   Pi 4 ms        peak / steady RSS   gate vs fp32 ORT global (v3 strict, site + own location)
+NEON C3 int8/fp16 (mode 0)   150.2-    n/a (refused:  405 / 187 MB        174/5/156 = fp32 at the site (<site-lat>, <site-lon>), dP +0.00 [-0.04, +0.07],
+ birdnet-v3.0-preview3.1-     150.7     no fp16+dot-   (ORT 732 MB on     dR +0.02 [-0.85, +0.94]; own location 174/4/156 = fp32; window over all
+ fp32-b1.bnv3, 540 MB,                  prod: ORT      the Pi 5)          11,560 classes: Jaccard@0.84 0.9765, 553 flips, max margin 0.021, top-1
+ CC BY-SA 4.0 + BirdNET ToU             fallback)                         0.975, 58.9 dB; 800 NA-east columns bit-identical to v3na.bnv3  -> PASS
+stock ORT 1.25.1 fp32 global 742.7     2685 (stock study) 732 MB              (the reference)
+  Same session (detector stopped): NA-east .bnv3 129.1 ms -> the 11,560-class head costs +21 ms (att+cla int8 GEMMs
+  1.04 GMAC vs 0.07); engine 4.9x ORT. Container (M4 VM): 38.5 vs ORT 190.4 ms. The detection gate exercises the 65
+  annotated (North American) species only; every other class is covered by window agreement alone.
+  Compiler (2026-11-08): BirdNET v3.0 did not compile then (front end, dense kxk convs, GeM, SED heads uncovered; G001
+  out-of-the-box test FAIL); it has compiled since (sections V and K2-B below), and the .bnv3 exporter
+  (scripts/export_v3.py) was removed with the v3 engine. The .bnv3 version-2 file needed an engine fix for > 2048
+  classes (logits buffer; older libbnneon refuse it cleanly).
+
+Platforms: NEON fp16 = ARMv8.2 with fp16 arithmetic (Pi 5 / A76, A55/A78-class); NEON fp32 = any AArch64 (Pi 4, Pi 3);
+  v3 path = dotprod + fp16. x86: not applicable (stock runtimes).
+BirdNET-Go with the engine binding (not published): opt-in build tag bnneon, birdnet.backend: neon +
+  birdnet.neonweights for v2.4, birdnetv3.backend: neon for v3.0; any failure falls back to ONNX Runtime. The .bn24
+  files are a re-layout of BirdNET_v2.4_fp32.onnx (CC BY-NC-SA 4.0), made with scripts/export_weights.py.
+
+=====================================================================================================================
+PHASE 2 (2026-11-04): compiled model packages (.bnpk), Perch v2 and BattyBirdNET - option menu
+=====================================================================================================================
+Timing: Pi 5 idle (BirdNET-Go stopped), taskset core 3, 1 thread, medians (16 Perch / 64 bat windows,
+  3-5 reps), one flock per session. Pi 4 / x86: not measured (Pi 4 unreachable all night; the engine has no x86 path).
+  Stock rows: the Perch and bat stock studies, same Pi 5, ORT 1.25.1, 1 thread.
+
+BirdNET v2.4 through the compiler
+  birdnet_v2.4-neon-fp16.bnpk 28.4 MB / -neon-fp32.bnpk 52.1 MB: BIT-IDENTICAL to the gated .bn24 engine (container,
+  Mac, Pi 5) -> inherits the A017 / A019 PASS. Pi 5 19.35 ms (legacy 18.95) / fp32 36.2 ms (legacy 36.6).
+
+BattyBirdNET (11 regions; v2.4 embedding model + region head, 256 kHz, 144000 samples, post sigmoid)
+option                         Pi 5 ms   gate (bat set, 26,505 windows, thr 0.5, 11 heads)                   verdict
+neon-fp32 package (both keys)  33.1      vs TFLite: Jaccard 0.9997, 21 flips, max margin 0.021, top-1 1.000;  PASS
+  25.2 MB per region                      vs stock ONNX: Jaccard 0.9976 (floor 0.9975), 187 flips (floor 194)
+neon-fp16 package              17.7      vs TFLite: USA / USA-EAST-high flips margin 0.062 / 0.068; J 0.986  FAIL (D8)
+  14.8 MB per region                      vs stock ONNX: J 0.985 vs floor 0.9975
+stock ORT dfttrunc + head      78.2      (gallery default); fused_t1 57.1; OpenVINO f32 83.7
+=> neon-fp32 is the bat package for both CPU classes: 2.4x the stock default on the Pi 5. Embeddings are
+   bit-identical to the gated v2.4 fp32 engine's.
+
+Perch v2 (14,795 classes, 32 kHz, 160000 samples, post softmax)
+option                          Pi 5 ms   RSS     file     dev set vs ORT fp32 (256 windows)        gate
+neon-fp16 + int8 SDOT head      141.8     140 MB  117 MB   51.7 dB, max|dconf| 0.0074, top-1 0.996  PASS 4/4 configs (N012)
+neon-fp16                       231.5     228 MB  208 MB   57.1 dB, max|dconf| 0.0038, top-1 0.996  PASS 4/4 configs (N013)
+neon-fp32                       454.3     427 MB  407 MB   105.5 dB, max|dconf| 2e-5                PASS 4/4 configs (N014)
+neon-fp32, fp16-stored protos   608.7     249 MB  225 MB   90.8 dB                                  (RAM option)
+regional slice (NA-east, 999)   68.0 / 73.7 / 151.7 (s8 / fp16 / fp32), RSS 55 / 61 / 94 MB, files 32 / 38 / 68 MB
+stock ORT fp32 / no_dft / int8_arm   652 / 666 / 400 (int8_arm numerically broken: 10.9 dB; its gate FAILS 4/4, recall
+  33.6 -> 3.0 %, Perch stock study). Its fused_int8_arm PASS 4/4 (54.8 dB), fused_fp32 / no_dft_fp32 PASS (exact).
+N012 gate (results/gate_N012_result.txt; 34.4 h, 142,293 windows, vs perch_v2_fp32 ORT, the Perch harness/adapter):
+  upstream_default 0/0.8/L0, pi_template 2.2/0.8/L2, c4 1.5/0.8/L2, perch_override 2.2/0.5/L2: all PASS; dP/dR
+  +0.00 [0, 0] except pi_template dP +0.73 [0, +2.40] and perch_override dP -0.29 [-0.99, 0] (mean >= -0.5 pp rule);
+  window @0.5: Jaccard 0.9951, 189 flips all within 0.0081 of the threshold; @0.8: 0.9906, 123 flips (max 0.0033);
+  top-1 0.9955; 51.8 dB; saved-detection Jaccard 0.97-0.98.
+N013 gate (results/gate_N013_result.txt, same set/reference): all 4 configs PASS, every period identical except
+  perch_override dP +0.30 [0, +0.93]; @0.5 Jaccard 0.9966, 130 flips (max margin 0.0061); @0.8 0.9942, 75 flips (max
+  0.0022); top-1 0.9969; 57.4 dB; saved-detection Jaccard 0.980-0.992.
+N014 gate (results/gate_N014_result.txt): all 4 configs PASS with identical detections (saved-detection Jaccard
+  1.0000 everywhere), 0 window flips, top-1 1.0000, 105.6 dB.
+Profile (s8): head 79.2 ms (73 GMAC/s = 95 % of the SDOT peak), 1x1 convs 42.4, depthwise 7.3 + 4.9, stem 2.9,
+  SE 2.8, front end 1.8. MACs: head 5818 MMAC (82 %), body 1233 MMAC.
+
+PHASE 2 - Pi 4 rows (Cortex-A72 1.5 GHz, idle, taskset core 3, 1 thread, medians; engine fp32 path = mode 0 there)
+model / package                      NEON Pi 4 ms   RSS     stock on the same Pi 4 (Perch / bat studies, ORT 1.25.1, 1 thread)
+BirdNET v2.4 package fp32            129.7-130.6    -       legacy .bn24 130.1-133.3, bit-identical output (cmp); ORT fused 212.9
+BattyBirdNET (eu) fp32 package       126.6          68 MB   stock embeddings dfttrunc 295.8 (2.3x), original export 568.1
+Perch v2 full, neon-fp32             1959           427 MB  stock fp32 fused 2113, no_dft 2312, int8_arm 2134 (broken), fused_int8_arm 1647
+Perch v2 full, fp32 + fp16-stored protos 2292       249 MB  (RAM option, 90.8 dB on the dev set)
+Perch v2 full, neon-int8 (fp32 body,  1110          161 MB  (K118; 589 / 419 / 334 ms at 2 / 3 / 4 threads; 135 MB file; gate K110 PASS 4/4:
+  int8 prototype head, no dotprod)                            53.1 dB, top-1 0.9962, @0.5 Jaccard 0.9963, 143 flips, max margin 0.0057;
+                                                              @0.8 0.9916, 109 flips, max margin 0.0038; results/gate_K110_result.txt)
+Perch v2 NA-east slice (999), fp32   577            94 MB   (no stock slice timing on the Pi 4)
+Perch on the A72 is head-bound (5.8 GMAC prototype head: 1502 ms in fp32, 688 ms in int8 at 8.5 GMAC/s, 175 ms on 4
+  threads). The neon-int8 package keeps up with a 1.33 s stride on 2 threads (589 ms) and uses 334 ms on 4; regional
+  slices are faster still. x86: the engine has no x86
+  path (stock runtimes only).
+
+PHASE 2 - Perch v2 regional slice, north-america-east (999 classes; the Pi 4 Perch path)
+option                          Pi 5 ms   Pi 4 ms   file     gate vs the sliced fp32 reference (34.4 h, 142,293 windows)
+neon-fp32 slice                 151.7     577       68 MB    N016 PASS 4/4, identical detections (1 of 3,755 differs at
+                                                             perch_override), 0 flips @0.8, 101 dB
+neon-fp16 + int8 head slice     68.0      -         32 MB    N017 PASS 4/4 (dP/dR CIs include 0, worst mean dP -0.43 pp
+                                                             at perch_override), 126 flips @0.8 max margin 0.0055, 47.9 dB;
+                                                             perch_override (thr 0.5): dP -0.43 pp [-1.07, 0], close to the
+                                                             -0.5 pp floor - a pass, not a clean margin; its saved-detection
+                                                             Jaccard 0.968 is report-only (the rule uses the window Jaccard,
+                                                             0.9958 @0.5)
+neon-fp16 slice                 73.7      -         38 MB    N018 PASS 4/4 (worst mean dP -0.21 pp [-0.68, 0] at
+                                                             perch_override), 81 flips @0.8 max margin 0.0029, 52.7 dB
+Calibration (N016b, report only): plain slice softmax = confidences ~1.65x the full model's (median); at threshold 0.8
+  P -2 to -8 pp, R +6 to +7 pp vs the full model's kept-species detections (0.5: P -12.5, R +8.1); the catalog's
+  softmax-rest-logit (9.92) restores the operating point within ~+-2 pp at the same thresholds. BirdNET-Go applies no
+  rest logit today (host-side change; the engine returns raw logits).
+
+=====================================================================================================================
+V (2026-11-08): BirdNET v3.0 compiled to packages for any AArch64 (the Pi 4's v3.0 path) - option menu
+=====================================================================================================================
+Packages: bnc.py compile of the stock fp32 ONNX (scripts/compile_models.sh v3), --wino 24 (fp32 Winograd F(4,3) for the
+  dense 3x3 convs with >= 24 input channels), one path per file. int8 = neon-int8 with every 1x1 conv and head GEMM in
+  int8 (--int8 pw,pwl,head,sed,lin; per-output-channel weights, per-row dynamic activations, SMULL/SMLAL/SADALP, no
+  dotprod); int8b = the same with the projections (pwl) in fp32; fp32 = neon-fp32. Dense 3x3, depthwise, SE, GeM,
+  front end and softmax are fp32 on every path.
+Timing (K068): Pi 4 = Cortex-A72 1.5 GHz, idle (load = the run itself), engine source 88f5091dc93ebdad, the shipped
+  packages, 8 windows x 3 reps, medians, taskset 3 / 2-3 / 0-3 for 1 / 2 / 4 threads, one flock; outputs bit-identical
+  for every thread count and to the gated candidates (same hashes). int8b: the frozen candidates, K068b (same
+  source, 02:20 EST).
+Gate V002 (criterion declared before scoring, docs/GATES.md): 92,829 windows on the overlap-2.2 grid vs fp32 ONNX Runtime of the
+  same model, same run; candidates scored by the arm64 container build (== the Pi 4 on a sample); v3 harness replay at
+  0.84 / overlap 2.2 / FP L3 / geomodel 0.05 at the evaluation site and each stream's location, paired bootstrap over 37
+  periods. PASS = dP / dR CI lower > -0.5 / -1.0 pp at both locations, Jaccard@0.84 > 0.97, no flip with margin > 0.05,
+  top-1 >= 0.97 (+ global: rest-class SQNR >= NA-east-class SQNR - 3 dB).
+
+BirdNET v3.0 NA-east (800 classes)
+option          Pi 4 ms 1 / 2 / 4 thr   peak RSS  file     gate V002 (replay at the site; window agreement)                      verdict
+neon-int8       950 / 525 / 330         78 MB     57 MB    171/5/159 = fp32; dP -0.00 [-0.05, +0.04], dR +0.01 [-0.87, +0.83]   PASS
+ (ships)                                                   (own location: CI lower -0.04 / -0.87); 53.0 dB, Jaccard 0.9800,
+                                                           top-1 0.9864, 468 flips, max margin 0.020, max |dconf| 0.161
+neon-int8b      1116 / 618 / 399        99 MB     80 MB    172/5/158 (+1 TP); dP +0.02 [+0.00, +0.05], dR +0.30 [+0.00, +0.88];   PASS
+                                                           57.0 dB, Jaccard 0.9872, top-1 0.9922, 299 flips, max margin 0.0135
+neon-fp32       1234 / 682 / 440        163 MB    141 MB   171/5/159 = fp32, 37/37 periods identical; 99.0 dB, Jaccard 1.0000,  PASS
+                                                           top-1 0.9999, 1 flip (margin 0.0000)
+stock ORT fp32  2311 / 1406 / 927 (H001)                   (the reference)
+TFLite int8 + XNNPACK (QS8 off) 1333 / 798 / 577 (H001)
+=> int8 is 2.4x / 2.7x / 2.8x stock ORT at 1 / 2 / 4 threads and 1.4x / 1.5x / 1.7x (577 / 330) the TFLite int8 file.
+
+BirdNET v3.0 GLOBAL (11,560 classes)
+option          Pi 4 ms 1 / 2 / 4 thr   peak RSS  file     gate V002 (replay at the site; window agreement over 11,560 classes)   verdict
+neon-int8       1110 / 598 / 382        181 MB    160 MB   174/5/156 = fp32; dP -0.00 [-0.05, +0.04], dR +0.01 [-0.87, +0.83]   PASS
+ (ships)                                                   (own location: CI lower -0.04 / -0.87); 61.2 dB, Jaccard 0.9800,
+                                                           top-1 0.9807, 470 flips, max margin 0.020, max |dconf| 0.206;
+                                                           (f) rest 63.1 dB vs NA-east 53.0; 800 NA-east columns = the NA-east package
+neon-int8b      1275 / 700 / 445        202 MB    183 MB   175/5/155 (+1 TP); dP +0.01 [+0.00, +0.05], dR +0.30 [+0.00, +0.88];   PASS
+ (K068b)                                                   65.2 dB, Jaccard 0.9871, top-1 0.9882, 301 flips, max margin 0.0135
+neon-fp32       1532 / 861 / 616        564 MB    549 MB   174/5/156 = fp32, 37/37 periods identical; 106.3 dB, Jaccard 1.0000,  PASS
+                                                           top-1 0.9999, 1 flip (margin 0.0000)
+stock ORT fp32  2646 (C001, 1 thread)                      (the reference)
+=> int8 is 2.4x stock ORT at 1 thread; the global head costs +160 ms (1 thread) / +52 ms (4 threads) over NA-east.
+   The replay ran on the Mac (the GPU server went offline; its input mirror reproduces the server's NA-east replay byte
+   for byte).
+
+Pi 5 (K066, standalone with the detector running, rough): compiled int8 360.6-361.0 / fp32 343.4-343.6 ms (NA-east, 1
+  thread), 123-129 at 4 threads; global int8 424.8-428.2 / fp32 416.5-427.1; the legacy C3 .bnv3 130.6-133.4 (NA-east)
+  / 151.3-151.5 (global) on one core stayed the Pi 5 path then. Outputs on the Pi 5 are bit-identical to the Pi 4's.
+BirdNET-Go with the engine binding: a package as birdnetv3.neonweights (ONNX fallback) or birdnetv3.modelpath,
+  birdnet.threads honored; on a Pi 4 NA-east int8 at 4 threads 345 ms median, 253 MB whole-process RSS (V-BNGO).
+
+K2-B (2026-11-09/10): BirdNET v3.0 on the Cortex-A76 through the compiler (neon-fp16 packages), and threads on a Pi 5
+Packages: bnc.py compile --paths neon-fp16 (scripts/compile_models.sh v3): the dotprod + fp16 kernel family (src/rt_ops_dot.c),
+  i.e. the hand-written v3 engine's kernels and precision plan as registry ops. NA-east 131,695,104 bytes (sha256 70189524...),
+  global 540,017,536 bytes (be0c418a...); fp32 weights, packed at load.
+Body proof (bench/c3_vs_pkg.c, removed with the v3 engine): package and legacy engine fed the same image give bit-identical sigmoids and embeddings
+  (Pi 5: NA-east 32 windows, global 16, at 1 and 4 threads). End to end the package differs from the legacy engine only by the
+  front end's last bits (the generic FE_DBIMG vs frontend.c: max 2.4e-6 on the image), hence its own gate (K2B-G1 = the V002
+  criterion; candidate scored by the arm64 container build, == the Pi 5 on a 16-window sample).
+Pi 5 (K211; BirdNET-Go running and holding part of one core; ms/window at 1 / 2 / 3 / 4 threads; peak RSS; outputs
+  bit-identical for every thread count):
+option                          1 / 2 / 3 / 4 threads            peak RSS    gate
+v3.0 NA-east neon-fp16 package  127.9 / 75.3 / 59.8 / 54.4       81-91 MB    K2B-G1 PASS: 172/5/158 vs fp32 171/5/159 (+1 TP), dP +0.02 [-0.03, +0.10], dR +0.32 [-0.66, +1.37];
+                                                                             Jaccard 0.9764, top-1 0.9830, 554 flips (max margin 0.0214), 50.8 dB
+ legacy .bnv3, same session     127.6-128.4 (1 thread only)      140 MB      v3 gate PASS (above)
+v3.0 global neon-fp16 package   148.1 / 88.8 / 74.8 / 71.7       336 MB      K2B-G1 PASS: 175/5/155 vs fp32 174/5/156 (+1 TP), dP +0.02 [-0.03, +0.09], dR +0.32 [-0.66, +1.37];
+                                                                             Jaccard 0.9764, top-1 0.9752, 556 flips (max 0.0214), 58.9 dB (rest classes 60.8)
+ legacy .bnv3, same session     148.4 (1 thread only)            379-405 MB  G003 PASS (above)
+v2.4 neon-fp16 package          19.6 / 14.3 / 12.1 / 11.4        42 MB       A017 (unchanged outputs)
+BattyBirdNET EU neon-fp32       33.0 / 21.1 / 17.3 / 15.6        40 MB       bat gate (unchanged outputs)
+Perch v2 neon-fp16-s8           143.0 / 80.2 / 62.6 / 55.3       137 MB      N012 (unchanged outputs)
+=> the compiled v3.0 path equals the legacy engine on one thread and uses less memory; 4 threads give 2.1-2.6x (v2.4 1.7x:
+   its front end and dense head are serial). CPU time per window rises 21-55 % at 4 threads (results/timing/): 1 thread is the efficient setting.
+   Two models at once (v3.0 NA-east on cores 0-1, Perch on cores 2-3, 2 threads each): 106.5 and 107.3 ms, against 77.5 and
+   79.7 ms alone.
+Audit (K200, BNN_PROF=3): at one thread the A76 paths are within 10-30 % of their ceilings (int8 SDOT 77 GMAC/s, fp16 38);
+  int8 for the fp16 1x1 convs of v2.4 / Perch was screened and dropped (DEADENDS D22).
+BirdNET-Go with the engine binding loads the neon-fp16 v3.0 package through its package route unchanged (K208).

@@ -1,0 +1,193 @@
+SSW_007_20170225_110009Z.flac: 6596 windows queued (5s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+SSW_014_20170225_190012Z.flac: 6596 windows queued (10s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_007_20170225_110009Z.flac: 6596 windows packed
+SSW_017_20170225_220016Z.flac: 6596 windows queued (144s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_014_20170225_190012Z.flac: 6596 windows packed
+SSW_005_20170225_070005Z.flac: 6596 windows queued (150s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_017_20170225_220016Z.flac: 6596 windows packed
+SSW_021_20170304_110008Z.flac: 6596 windows queued (296s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_005_20170225_070005Z.flac: 6596 windows packed
+SSW_062_20170325_160010Z.flac: 6596 windows queued (303s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_021_20170304_110008Z.flac: 6596 windows packed
+SSW_050_20170325_000000Z.flac: 6596 windows queued (437s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_062_20170325_160010Z.flac: 6596 windows packed
+SSW_035_20170311_040002Z.flac: 6596 windows queued (443s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_050_20170325_000000Z.flac: 6596 windows packed
+SSW_110_20170429_110008Z.flac: 6596 windows queued (577s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_035_20170311_040002Z.flac: 6596 windows packed
+SSW_088_20170408_150010Z.flac: 6596 windows queued (585s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_110_20170429_110008Z.flac: 6596 windows packed
+SSW_080_20170401_220014Z.flac: 6596 windows queued (717s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_088_20170408_150010Z.flac: 6596 windows packed
+SSW_097_20170415_021433Z.flac: 6596 windows queued (726s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_080_20170401_220014Z.flac: 6596 windows packed
+SSW_144_20170513_090009Z.flac: 6596 windows queued (863s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_097_20170415_021433Z.flac: 6596 windows packed
+SSW_155_20170513_200015Z.flac: 6596 windows queued (871s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_144_20170513_090009Z.flac: 6596 windows packed
+SSW_135_20170506_210022Z.flac: 6596 windows queued (1067s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_155_20170513_200015Z.flac: 6596 windows packed
+SSW_143_20170513_080009Z.flac: 6596 windows queued (1084s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_135_20170506_210022Z.flac: 6596 windows packed
+SSW_169_20170603_110007Z.flac: 6596 windows queued (1323s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_143_20170513_080009Z.flac: 6596 windows packed
+SSW_176_20170603_180013Z.flac: 6596 windows queued (1340s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_176_20170603_180013Z.flac: 6596 windows packed
+SSW_179_20170603_210015Z.flac: 6596 windows queued (1544s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_169_20170603_110007Z.flac: 6596 windows packed
+SSW_165_20170603_010000Z.flac: 6596 windows queued (1573s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_179_20170603_210015Z.flac: 6596 windows packed
+SSW_235_20170708_090008Z.flac: 6596 windows queued (1812s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_165_20170603_010000Z.flac: 6596 windows packed
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+SSW_224_20170701_170018Z.flac: 6596 windows queued (1840s)
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_224_20170701_170018Z.flac: 6596 windows packed
+SSW_254_20170722_210019Z.flac: 6596 windows queued (2077s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_235_20170708_090008Z.flac: 6596 windows packed
+SSW_232_20170708_020002Z.flac: 6596 windows queued (2104s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_232_20170708_020002Z.flac: 6596 windows packed
+SSW_269_20170819_120014Z.flac: 6596 windows queued (2336s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_254_20170722_210019Z.flac: 6596 windows packed
+SSW_282_20170826_152214Z.flac: 6596 windows queued (2380s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_269_20170819_120014Z.flac: 6596 windows packed
+SSW_277_20170826_000000Z.flac: 6596 windows queued (2598s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_282_20170826_152214Z.flac: 6596 windows packed
+SSW_278_20170826_050006Z.flac: 6596 windows queued (2654s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_277_20170826_000000Z.flac: 6596 windows packed
+Recording_1: 19796 windows queued (2833s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 6596 windows of 144000 samples from 172800000 samples
+SSW_278_20170826_050006Z.flac: 6596 windows packed
+Recording_2: 7696 windows queued (2899s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 7696 windows of 144000 samples from 201600000 samples
+Recording_2: 7696 windows packed
+Recording_3: 546 windows queued (3170s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 546 windows of 144000 samples from 14400000 samples
+Recording_3: 546 windows packed
+Recording_4: 14296 windows queued (3194s)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+tflite 2.17.1, xnnpack flags 0x3, delegate threads 1, interpreter threads 1: <lab-root>/lab-data/compare-c6/dl/zenodo_15050749/x/audio-model-fp16.tflite
+input INPUT len 144000, output Identity len 6522 (1 outputs)
+scored 19796 windows of 144000 samples from 518400000 samples
+Recording_1: 19796 windows packed
+scored 14296 windows of 144000 samples from 374400000 samples
+Recording_4: 14296 windows packed
+all done 3651.9115562438965

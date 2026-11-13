@@ -1,0 +1,16 @@
+# A 2 GB arm64 evaluation container for this engine, built from YOUR checkout (gcc 14 = the Raspberry Pi OS compiler).
+# Nothing of the repository is baked in: the container mounts the checkout at /eng and builds there on demand
+# (`bnc.py check --docker <name>` builds into /root/bnc_check; scripts/cmp_suite.sh into /root/bS).
+#
+#   docker build --platform linux/arm64 -f integration/Dockerfile.eval -t bnneon-eval:local integration
+#   scripts/eval_container.sh start [NAME]      # runs it with --memory 2g and the checkout at /eng (default name: bnneon-eval-local)
+#   python -I compiler/bnc.py check model.onnx ... --docker bnneon-eval-local
+#   python -I compiler/bnc.py check model.onnx ... --docker-image bnneon-eval:local   # a throwaway container per run
+#   scripts/eval_container.sh stop [NAME]
+#
+# Any arm64 image with gcc >= 10, make and a C library works the same way (debian:trixie + `apt-get install gcc make
+# libc6-dev` is what this file does); the Python side (compiler, references) stays on the host.
+FROM --platform=linux/arm64 debian:trixie-slim
+RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends gcc make libc6-dev && rm -rf /var/lib/apt/lists/*
+WORKDIR /eng
+CMD ["sleep", "infinity"]

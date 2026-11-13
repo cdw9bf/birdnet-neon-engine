@@ -1,0 +1,99 @@
+== C006 full x86 2026-11-08T18:54:17-08:00  18:54:17 up 1 day,  5:16,  3 users,  load average: 0.48, 0.16, 0.13
+ai-edge-litert     2.3.0
+numpy              2.4.6
+onnxruntime        1.31.1
+openvino           2026.2.0
+openvino-telemetry 2025.2.0
+4ca415bfabacf0410709b4efa2ceb9aab8c1230d314d2963788365b7d0f7b589  build/tfl_bench
+583647c24583593416873bfa239d61f9c88dbe50f23288befd0af9c103febc2e  tfl_bench.c
+== session start 2026-11-08T18:54:18-08:00 |  18:54:18 up 1 day,  5:16,  3 users,  load average: 0.60, 0.19, 0.14 | model name	: Intel(R) Xeon(R) CPU E5-2620 v4 @ 2.10GHz
+v24_tflite_fp32	1	ort	50.7	50.05	182	0.71	34	1201	108353	-
+v24_fp32_dfttrunc	1	ort	42.06	41.92	196	0.71	35	1570	108412	-
+v24_fp32_foldconv	1	ort	27.58	26.89	193	0.73	34	3000	108403	-
+v24_ov_fp32_foldconv	1	ovf32	28.07	27.68	244	0.73	35	3000	108399	-
+v24_ov_fp32_dfttrunc	1	ovf32	33.16	33.0	254	0.76	35	3000	108403	-
+v24_fp32_fused	1	ort	27.52	27.44	193	0.76	35	3000	108413	-
+v24_int8arm_stock	1	ort	65.55	65.25	175	0.78	35	3000	108478	-
+v3na_fp32	1	ort	236.22	230.63	390	0.79	35	1405	108390	-
+v3na_fft3	1	ort	206.59	203.82	365	0.81	35	3000	108408	-
+v3g_fp32	1	ort	295.45	276.81	798	0.84	35	1773	108380	-
+v3g_fft3	1	ort	254.49	250.23	784	0.85	35	3000	108379	-
+perch_fp32	1	ort	292.7	270.76	871	0.88	35	2783	108297	-
+perch_nodft_fp32	1	ort	287.5	268.69	875	0.89	35	1201	108312	-
+perch_fused_fp32	1	ort	250.61	241.58	886	0.90	36	1201	108304	-
+perch_fused_int8arm	1	ort	234.31	225.23	362	0.91	35	3000	108412	-
+bat_dfttrunc	1	bat	42.3	42.1	194	0.91	35	1796	108454	-
+bat_fused_t1	1	bat	26.85	26.76	186	0.92	35	2581	108449	-
+v24_tfl_fp32	1	tfl	51.81	50.44	149	0.92	36	1200	108499	-
+v24_tfl_fp16	1	tfl	50.92	50.51	263	0.93	35	1639	108430	-
+v24_tfl_int8	1	tfl	51.33	51.16	129	1.09	36	1200	108476	-
+v3na_tfl_s0se	1	tfl	254.15	253.50	183	1.09	35	1633	108532	-
+v3na_tfl_fp32	1	tfl	246.77	246.50	301	1.09	36	2613	108487	-
+bat_tfl_fp32	1	tfl	52.12	51.98	145	1.08	36	1618	108525	-
+v3na_tfl_s0se_py	1	ort	251.85	251.11	227	1.07	35	1201	108518	-
+v3g_tfl_s0se	1	tfl	292.49	291.78	377	1.07	36	1201	108491	-
+v3g_tfl_fp32	1	tfl	323.33	322.41	1079	1.06	36	2535	108384	-
+perch_tfl_fp32	1	tfl	540.89	540.53	857	1.05	36	2919	108485	-
+v24_tflite_fp32	2	ort	49.97	49.81	182	1.05	36	3000	108526	-
+v24_fp32_dfttrunc	2	ort	42.1	41.86	197	1.04	36	1200	108479	-
+v24_fp32_foldconv	2	ort	26.93	26.83	193	1.04	36	1201	108462	-
+v24_ov_fp32_foldconv	2	ovf32	27.71	27.6	244	1.04	36	1900	108457	-
+v24_ov_fp32_dfttrunc	2	ovf32	32.87	32.56	254	1.04	36	2000	108460	-
+v24_fp32_fused	2	ort	27.54	27.47	193	1.04	36	1201	108473	-
+v24_int8arm_stock	2	ort	65.58	65.39	175	1.03	36	1201	108508	-
+v3na_fp32	2	ort	234.7	229.86	390	1.03	36	1860	108430	-
+v3na_fft3	2	ort	206.5	203.4	365	1.03	36	3000	108446	-
+v3g_fp32	2	ort	280.63	276.05	798	1.02	36	2802	108402	-
+v3g_fft3	2	ort	254.77	249.58	784	1.02	36	3000	108429	-
+perch_fp32	2	ort	291.33	271.63	871	1.02	36	3000	108334	-
+perch_nodft_fp32	2	ort	285.27	268.55	875	1.02	36	2000	108323	-
+perch_fused_fp32	2	ort	248.61	240.9	886	1.01	36	2002	108323	-
+perch_fused_int8arm	2	ort	233.88	224.94	360	1.01	36	1201	108442	-
+bat_dfttrunc	2	bat	42.17	42.0	193	1.01	36	1296	108483	-
+bat_fused_t1	2	bat	27.54	26.75	186	1.01	36	3000	108477	-
+v24_tfl_fp32	2	tfl	51.98	51.80	149	1.01	36	1201	108520	-
+v24_tfl_fp16	2	tfl	52.06	51.81	263	1.01	36	1884	108447	-
+v24_tfl_int8	2	tfl	52.26	52.05	129	1.01	36	1200	108501	-
+v3na_tfl_s0se	2	tfl	257.66	256.96	183	1.01	36	1201	108557	-
+v3na_tfl_fp32	2	tfl	252.27	251.73	301	1.01	36	2772	108521	-
+bat_tfl_fp32	2	tfl	51.53	51.38	145	1.01	36	2018	108536	-
+v3na_tfl_s0se_py	2	ort	256.43	252.17	227	1.01	37	3000	108559	-
+v3g_tfl_s0se	2	tfl	297.55	296.92	377	1.00	36	1943	108503	-
+v3g_tfl_fp32	2	tfl	328.49	321.93	1079	1.00	37	2698	108417	-
+perch_tfl_fp32	2	tfl	548.34	538.75	856	1.00	37	1201	108498	-
+v24_tflite_fp32	3	ort	50.91	50.79	182	1.00	36	2646	108535	-
+v24_fp32_dfttrunc	3	ort	43.01	42.61	196	1.00	36	3000	108497	-
+v24_fp32_foldconv	3	ort	26.84	26.72	193	1.00	37	1200	108465	-
+v24_ov_fp32_foldconv	3	ovf32	27.65	27.53	244	1.00	37	3000	108458	-
+v24_ov_fp32_dfttrunc	3	ovf32	32.9	32.8	254	1.00	37	3000	108468	-
+v24_fp32_fused	3	ort	26.66	26.57	193	1.00	36	3000	108465	-
+v24_int8arm_stock	3	ort	65.18	64.95	175	1.00	37	3000	108522	-
+v3na_fp32	3	ort	238.97	230.51	390	1.00	37	3000	108409	-
+v3na_fft3	3	ort	205.59	203.61	365	1.00	37	3000	108440	-
+v3g_fp32	3	ort	285.62	276.82	798	1.00	37	1200	108427	-
+v3g_fft3	3	ort	261.4	250.51	784	1.00	37	3000	108376	-
+perch_fp32	3	ort	281.98	270.26	871	1.00	37	3000	108309	-
+perch_nodft_fp32	3	ort	295.39	268.31	875	1.00	37	1200	108330	-
+perch_fused_fp32	3	ort	250.1	241.05	888	1.00	37	1324	108312	-
+perch_fused_int8arm	3	ort	231.02	224.57	363	1.07	37	2001	108449	-
+bat_dfttrunc	3	bat	42.31	42.15	193	1.07	37	1861	108497	-
+bat_fused_t1	3	bat	26.78	26.69	187	1.07	37	2584	108472	-
+v24_tfl_fp32	3	tfl	51.13	50.99	149	1.07	37	1200	108528	-
+v24_tfl_fp16	3	tfl	50.66	50.52	263	1.06	37	1201	108447	-
+v24_tfl_int8	3	tfl	51.30	51.19	129	1.06	37	1200	108491	-
+v3na_tfl_s0se	3	tfl	252.84	252.14	183	1.14	37	1200	108541	-
+v3na_tfl_fp32	3	tfl	247.48	246.70	301	1.21	37	1694	108505	-
+bat_tfl_fp32	3	tfl	50.55	50.38	145	1.19	37	1277	108523	-
+v3na_tfl_s0se_py	3	ort	252.27	251.36	227	1.33	37	1900	108535	-
+v3g_tfl_s0se	3	tfl	292.99	292.00	377	1.31	37	1264	108505	-
+v3g_tfl_fp32	3	tfl	323.28	322.36	1079	1.28	37	2627	108399	-
+perch_tfl_fp32	3	tfl	541.58	540.90	857	1.24	37	2575	108504	-
+== session end 2026-11-08T19:00:41-08:00 |  19:00:41 up 1 day,  5:22,  2 users,  load average: 1.24, 0.87, 0.48
+== done 2026-11-08T19:00:41-08:00
+
+-- note (Mac, after the run): a first start of this list at 18:54:05 was stopped after a few seconds (a duplicated row
+-- in the list); 4 rep-1 rows it wrote (v24_tflite_fp32, v24_fp32_dfttrunc, v24_fp32_foldconv, v24_ov_fp32_foldconv)
+-- were removed from C006_x86_runs.tsv (kept outside this repository).
+-- Two earlier partial x86 sessions on the same day (A: defaults + v2.4/v3 NA/bat TFLite rows, 17:59-18:02, load 1.2-4.2 while a model conversion ran on the other socket; B: v3 global
+-- and Perch rows, 18:17-18:19) are kept outside this repository; B's Perch default came out 4.3 %
+-- above C002 (296.8 vs 284.5 ms), so the whole C002 option set was re-run here, together with every TFLite row.

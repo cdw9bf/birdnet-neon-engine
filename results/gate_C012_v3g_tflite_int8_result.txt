@@ -1,0 +1,54 @@
+C012 BirdNET v3.0 GLOBAL as TFLite per-row dynamic int8 (v3g_fft_i8dyn_s0se.tflite) on the TFLite 2.17.1 C API - G003 gate, criterion and harness unchanged (docs/GATES.md, G003, declared before any global candidate was scored)
+candidate v3g_fft_i8dyn_s0se.tflite sha256 ba73b3fb...; scored on the Mac (arm64) by scripts/tfl_bench.c (build sha256 f68ef98b...) linked against libtensorflowlite_c 2.17.1, XNNPACK delegate at its default flags 0x3, delegate threads 1, interpreter threads 1 (BirdNET-Go's set-up); --pipe protocol
+reference fp32 ONNX Runtime 1.31.1 CPU, birdnet-v3.0-preview3.1-fp32-b1.onnx (sha256 05535c3e...), same windows, same run; 32 streams, 92,829 windows (deploy grid, overlap 2.2)
+run: full rerun 2026-11-08 19:56-22:13 PST (2 jobs). The first run (18:08) was cut off by a Mac reboot after 21 of 32 streams; its window statistics were lost (accumulated in memory), so nothing of it is used here. Its 21 top-10 caches are bit-identical to this run's (both sides).
+replay inputs: the Mac mirror of the server's v3 harness inputs (lab-data/compare-c6/v3g/server_sim_mirror); replaying the G003 caches through it reproduces gate_G003_v3global_result.txt's replay byte for byte
+
+WINDOW STATISTICS (exact, full fp32 outputs streamed; all = 11,560 classes, subset = the 800 NA-east classes, rest = the other 10,760):
+all   : 92829 windows, SQNR 59.2 dB, top-1 0.9755, max|dconf| 0.1451 (mean 2.73e-06), Jaccard@0.84 0.9766, flips 549 (<=0.005 467, <=0.02 546, >0.05 1, max 0.0739); worst ('SSW_035_20170311_040002Z.flac', 1568, 1383, 0.08746570348739624, 0.2325555980205536)
+subset: 92829 windows, SQNR 51.1 dB, top-1 0.9823, max|dconf| 0.1451 (mean 2.51e-05), Jaccard@0.84 0.9766, flips 548 (<=0.005 466, <=0.02 545, >0.05 1, max 0.0739); worst ('SSW_035_20170311_040002Z.flac', 1568, 1383, 0.08746570348739624, 0.2325555980205536)
+rest  : 92829 windows, SQNR 61.0 dB, top-1 0.9677, max|dconf| 0.1143 (mean 1.07e-06), Jaccard@0.84 0.9857, flips 1 (<=0.005 1, <=0.02 1, >0.05 0, max 0.0036); worst ('Recording_4', 754, 7967, 0.36975574493408203, 0.48403921723365784)
+
+DETECTION REPLAY (v3 harness simulate5s.py, BirdNET-Go 20261014; overlap 2.2, thr 0.84, FP L3, v3 geomodel @0.05; top-10 over all labels, float16):
+== range filter at the evaluation site (<site-lat>, <site-lon>); reference fp32 ORT global (this run)
+  fp32 ORT global (this run)       TP/FP/FN 174/5/156  precision 97.2%  recall 52.7%
+  tflite-int8-global               TP/FP/FN 174/5/156  precision 97.2%  recall 52.7%
+  paired bootstrap (2000 reps over 37 periods): dP -0.00 pp [-0.05, +0.04]  dR +0.01 pp [-0.87, +0.83]  -> (a) ok (b) ok
+  identical period-level outcomes: 35/37
+    period Recording_2 0-3600s: ref (16, 0, 13) -> tflite-int8-global (17, 0, 12)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> tflite-int8-global (9, 0, 8)
+== range filter at the evaluation site (<site-lat>, <site-lon>); reference scores_v3 cache [report-only]
+  scores_v3 cache [report-only]    TP/FP/FN 174/5/156  precision 97.2%  recall 52.7%
+  tflite-int8-global               TP/FP/FN 174/5/156  precision 97.2%  recall 52.7%
+  paired bootstrap (2000 reps over 37 periods): dP -0.00 pp [-0.05, +0.04]  dR +0.01 pp [-0.87, +0.83]  -> (a) ok (b) ok
+  identical period-level outcomes: 35/37
+    period Recording_2 0-3600s: ref (16, 0, 13) -> tflite-int8-global (17, 0, 12)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> tflite-int8-global (9, 0, 8)
+== range filter at each stream; reference fp32 ORT global (this run)
+  fp32 ORT global (this run)       TP/FP/FN 174/4/156  precision 97.8%  recall 52.7%
+  tflite-int8-global               TP/FP/FN 174/4/156  precision 97.8%  recall 52.7%
+  paired bootstrap (2000 reps over 37 periods): dP -0.00 pp [-0.04, +0.04]  dR +0.01 pp [-0.87, +0.83]  -> (a) ok (b) ok
+  identical period-level outcomes: 35/37
+    period Recording_2 0-3600s: ref (16, 0, 13) -> tflite-int8-global (17, 0, 12)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> tflite-int8-global (9, 0, 8)
+== range filter at each stream; reference scores_v3 cache [report-only]
+  scores_v3 cache [report-only]    TP/FP/FN 174/4/156  precision 97.8%  recall 52.7%
+  tflite-int8-global               TP/FP/FN 174/4/156  precision 97.8%  recall 52.7%
+  paired bootstrap (2000 reps over 37 periods): dP -0.00 pp [-0.04, +0.04]  dR +0.01 pp [-0.87, +0.83]  -> (a) ok (b) ok
+  identical period-level outcomes: 35/37
+    period Recording_2 0-3600s: ref (16, 0, 13) -> tflite-int8-global (17, 0, 12)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> tflite-int8-global (9, 0, 8)
+truth species: 65; in the v3 label set: 65; passing the range filter at site for at least one stream: 65: Red-winged Blackbird, Snow Goose, Tufted Titmouse, Cedar Waxwing, Canada Goose, Red-shouldered Hawk, Northern Cardinal, Veery, Hermit Thrush, Swainson's Thrush, Brown Creeper, Killdeer, Yellow-billed Cuckoo, Northern Flicker, Eastern Wood-Pewee, Ruby-crowned Kinglet, American Crow, Common Raven, Blue Jay, Downy Woodpecker, Hairy Woodpecker, Pileated Woodpecker, Gray Catbird, Kentucky Warbler, Common Yellowthroat, Purple Finch, Wood Thrush, Baltimore Oriole, Nashville Warbler, Belted Kingfisher, Red-bellied Woodpecker, Wild Turkey, Swamp Sparrow, Song Sparrow, Black-and-white Warbler, Brown-headed Cowbird, Great Crested Flycatcher, Black-crowned Night-Heron, Louisiana Waterthrush, Rose-breasted Grosbeak, Eastern Towhee, Scarlet Tanager, Black-capped Chickadee, Blue-gray Gnatcatcher, Common Grackle, Eastern Phoebe, Ovenbird, Bay-breasted Warbler, Hooded Warbler, Chestnut-sided Warbler, Yellow Warbler, American Redstart, Black-throated Green Warbler, White-breasted Nuthatch, Yellow-bellied Sapsucker, American Goldfinch, Barred Owl, European Starling, Carolina Wren, American Robin, Eastern Kingbird, Blue-winged Warbler, Red-eyed Vireo, Blue-headed Vireo, White-throated Sparrow
+truth species: 65; in the v3 label set: 65; passing the range filter at own for at least one stream: 65: Red-winged Blackbird, Snow Goose, Tufted Titmouse, Cedar Waxwing, Canada Goose, Red-shouldered Hawk, Northern Cardinal, Veery, Hermit Thrush, Swainson's Thrush, Brown Creeper, Killdeer, Yellow-billed Cuckoo, Northern Flicker, Eastern Wood-Pewee, Ruby-crowned Kinglet, American Crow, Common Raven, Blue Jay, Downy Woodpecker, Hairy Woodpecker, Pileated Woodpecker, Gray Catbird, Kentucky Warbler, Common Yellowthroat, Purple Finch, Wood Thrush, Baltimore Oriole, Nashville Warbler, Belted Kingfisher, Red-bellied Woodpecker, Wild Turkey, Swamp Sparrow, Song Sparrow, Black-and-white Warbler, Brown-headed Cowbird, Great Crested Flycatcher, Black-crowned Night-Heron, Louisiana Waterthrush, Rose-breasted Grosbeak, Eastern Towhee, Scarlet Tanager, Black-capped Chickadee, Blue-gray Gnatcatcher, Common Grackle, Eastern Phoebe, Ovenbird, Bay-breasted Warbler, Hooded Warbler, Chestnut-sided Warbler, Yellow Warbler, American Redstart, Black-throated Green Warbler, White-breasted Nuthatch, Yellow-bellied Sapsucker, American Goldfinch, Barred Owl, European Starling, Carolina Wren, American Robin, Eastern Kingbird, Blue-winged Warbler, Red-eyed Vireo, Blue-headed Vireo, White-throated Sparrow
+classes the detection gate cannot exercise: every class without annotated audio here, i.e. all but <= 65 of 11560 (all non-North-American and non-annotated species); the window statistics cover them
+
+VERDICT vs the declared criterion: (a) dP CI lower -0.05 (site) / -0.04 (own) > -0.5 ok; (b) dR CI lower -0.87 / -0.87 > -1.0 ok; (c) Jaccard@0.84 over all classes 0.9766 > 0.97 ok; (d) 1 flip with margin > 0.05 (max margin 0.0739) -> FAIL; (e) top-1 over all classes 0.9755 >= 0.97 ok; (f) SQNR rest 61.0 dB >= subset 51.1 - 3 ok -> FAIL (on (d) alone)
+
+THE (d) FLIP: Recording_1, window 3138 (start 4,184 s), class 9985 Setophaga virens (Black-throated Green Warbler, an NA-east
+class): fp32 0.766 -> int8 0.842 (just over the 0.84 threshold). It does not change the replayed totals: 174/5/156 on both
+sides at both locations; 35/37 periods identical (Recording_2 0-3600 s +1 TP, Recording_2 3600-4200 s -1 TP).
+
+CONTEXT (no verdict): the engine's G003 run had 0 flips > 0.05 (max margin 0.021, 553 flips). The NA-east int8 file's
+gate F6 (x86 LiteRT, a detection replay plus window statistics) had no flip-margin rule; its window max |dconf| was 0.166.
+The int8 kernels are CPU-specific (F025: Pi vs x86 53 dB, 5/178 flips), so this Mac run measures the error size of
+the file on ARM, not the Pi's exact decisions.

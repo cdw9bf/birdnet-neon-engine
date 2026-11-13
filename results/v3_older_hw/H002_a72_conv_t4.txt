@@ -1,0 +1,46 @@
+Older-hardware study of BirdNET v3.0 (2026-11-08): could v3.0 run usably on a Raspberry Pi 4 before the engine had a
+path for it? Experiments H001-H005; this directory holds their summaries (the raw per-run data are not published).
+H002: Cortex-A72 kernel calibration for a v3.0 path without dotprod or fp16 arithmetic, by bench/bench_a72_conv.c
+(section 4 at 4 threads); it led to the neon-int8 / neon-fp32 packages.
+
+bench_a72_conv: threads for section 4 = 4, best of 10 reps
+1. peak throughput (1 core; GMAC/s; per-cycle figures assume 1.5 GHz)
+  FMLA .4s (24 acc)                   5.99 GMAC/s  3.99 MAC/cycle
+  SMULL+SMLAL2+SADALP (int8->int32)    8.33 GMAC/s  5.56 MAC/cycle
+  SMLAL .4s by element (int16)         5.99 GMAC/s  3.99 MAC/cycle
+  MLA .8h (int16, peak only)           5.99 GMAC/s  3.99 MAC/cycle
+2. b1.1.exp dense 3x3, 48 -> 192, 56 x 117 (543.4 MMAC)
+  fp32 direct (gemm_f32_seg, no act)                           106.66 ms    5.09 GMAC/s (model-MAC basis: 543.4 MMAC)
+  fp32 direct + SiLU                                           112.58 ms    4.83 GMAC/s (model-MAC basis: 543.4 MMAC)
+  fp32 im2col alone                                              3.51 ms    0.00 GMAC/s (model-MAC basis: 0.0 MMAC)
+  fp32 gemm on im2col + SiLU (excl. im2col)                    118.19 ms    4.60 GMAC/s (model-MAC basis: 543.4 MMAC)
+  -> im2col + gemm total 121.70 ms
+  int8 direct SMULL/SMLAL2/SADALP 4x4, dequant                  81.78 ms    6.65 GMAC/s (model-MAC basis: 543.4 MMAC)
+  int8 direct + dequant + SiLU                                  82.10 ms    6.62 GMAC/s (model-MAC basis: 543.4 MMAC)
+  int8 input quantisation pass (58 x 119 x 48)                   0.37 ms    0.00 GMAC/s (model-MAC basis: 0.0 MMAC)
+  fp32 F(2,3): input transform                                   6.71 ms    0.00 GMAC/s (model-MAC basis: 0.0 MMAC)
+  fp32 F(2,3): 16 GEMMs (K = 48)                                58.89 ms    4.14 GMAC/s (model-MAC basis: 243.6 MMAC)
+  fp32 F(2,3): output transform + bias + SiLU                   23.48 ms    0.00 GMAC/s (model-MAC basis: 0.0 MMAC)
+  -> F(2,3) total 89.08 ms = 1.26 x the fp32 direct conv (6.1 model GMAC/s)
+  int8 F(2,3): 16 GEMMs (K = 48), fp32 out                      34.78 ms    7.00 GMAC/s (model-MAC basis: 243.6 MMAC)
+  -> int8 F(2,3) est. total (fp32 transforms + int8 GEMMs + a quant pass ~ input transform) 71.68 ms
+  fp32 F(4,3): input transform                                   8.30 ms    0.00 GMAC/s (model-MAC basis: 0.0 MMAC)
+  fp32 F(4,3): 36 GEMMs (K = 48)                                34.06 ms    4.09 GMAC/s (model-MAC basis: 139.3 MMAC)
+  fp32 F(4,3): output transform + bias + SiLU                   36.23 ms    0.00 GMAC/s (model-MAC basis: 0.0 MMAC)
+  -> F(4,3) total 78.59 ms = 1.43 x the fp32 direct conv (6.9 model GMAC/s)
+3. 1x1 conv GEMMs (M pixels, K in, N out), + SiLU epilogue
+  b1.1.pwl  M 6552 K  192 N   48 fp32                           15.75 ms    3.83 GMAC/s (model-MAC basis: 60.4 MMAC)
+  b1.1.pwl  M 6552 K  192 N   48 int8 (x1.37)                   11.47 ms    5.26 GMAC/s (model-MAC basis: 60.4 MMAC)
+  b2.1.pwl  M 1652 K  256 N   64 fp32                            6.58 ms    4.12 GMAC/s (model-MAC basis: 27.1 MMAC)
+  b2.1.pwl  M 1652 K  256 N   64 int8 (x1.42)                    4.63 ms    5.85 GMAC/s (model-MAC basis: 27.1 MMAC)
+  b4.1.pw   M  420 K  160 N  960 fp32                           15.92 ms    4.05 GMAC/s (model-MAC basis: 64.5 MMAC)
+  b4.1.pw   M  420 K  160 N  960 int8 (x1.23)                   12.99 ms    4.97 GMAC/s (model-MAC basis: 64.5 MMAC)
+  b4.1.pwl  M  420 K  960 N  160 fp32                           17.83 ms    3.62 GMAC/s (model-MAC basis: 64.5 MMAC)
+  b4.1.pwl  M  420 K  960 N  160 int8 (x2.02)                    8.84 ms    7.29 GMAC/s (model-MAC basis: 64.5 MMAC)
+  conv_head M  105 K  256 N 1280 fp32                            8.91 ms    3.86 GMAC/s (model-MAC basis: 34.4 MMAC)
+  conv_head M  105 K  256 N 1280 int8 (x1.47)                    6.08 ms    5.66 GMAC/s (model-MAC basis: 34.4 MMAC)
+4. b1.1.exp direct conv on 4 threads (rows split; wall time)
+  fp32 direct + SiLU                                            29.76 ms   18.26 GMAC/s (model-MAC basis: 543.4 MMAC)
+  -> speed-up 3.78 x on 4 threads (efficiency 95 %)
+  int8 direct + dequant + SiLU                                  21.50 ms   25.28 GMAC/s (model-MAC basis: 543.4 MMAC)
+  -> speed-up 3.82 x on 4 threads (efficiency 95 %)

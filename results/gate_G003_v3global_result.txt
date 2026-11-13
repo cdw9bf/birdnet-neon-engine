@@ -1,0 +1,53 @@
+G003 BirdNET v3.0 GLOBAL on the engine (.bnv3 C3 int8/fp16, mode 0) - gate result, criterion declared before scoring (docs/GATES.md)
+candidate weights/birdnet-v3.0-preview3.1-fp32-b1.bnv3 sha256 3a3b13bb154d5ebe...; scored by the arm64 container build (gcc 14.2, glibc 2.41) at engine 3f58e75 (src 8d8b43f219690aa8); the final d026a81 build (src 65b38f2d02b07dc8) gives bit-identical outputs (cmp, 32 windows), and so does the Pi 5
+reference fp32 ONNX Runtime 1.31.1 CPU, birdnet-v3.0-preview3.1-fp32-b1.onnx (sha256 05535c3e...), same windows, same run; 32 streams, 92,829 windows (deploy grid, overlap 2.2)
+
+WINDOW STATISTICS (exact, full fp32 outputs streamed; all = 11,560 classes, subset = the 800 NA-east classes, rest = the other 10,760):
+all   : 92829 windows, SQNR 58.9 dB, top-1 0.9747, max|dconf| 0.1881 (mean 2.79e-06), Jaccard@0.84 0.9765, flips 553 (<=0.005 491, <=0.02 552, >0.05 0, max 0.0214); worst ('SSW_179_20170603_210015Z.flac', 1593, 11321, 0.18839195370674133, 0.37652257084846497)
+subset: 92829 windows, SQNR 50.8 dB, top-1 0.9823, max|dconf| 0.1427 (mean 2.57e-05), Jaccard@0.84 0.9765, flips 551 (<=0.005 489, <=0.02 550, >0.05 0, max 0.0214); worst ('SSW_179_20170603_210015Z.flac', 1593, 11299, 0.3151432275772095, 0.17241036891937256)
+rest  : 92829 windows, SQNR 60.8 dB, top-1 0.9680, max|dconf| 0.1881 (mean 1.08e-06), Jaccard@0.84 0.9718, flips 2 (<=0.005 2, <=0.02 2, >0.05 0, max 0.0036); worst ('SSW_179_20170603_210015Z.flac', 1593, 11321, 0.18839195370674133, 0.37652257084846497)
+
+DETECTION REPLAY (v3 harness simulate5s.py, BirdNET-Go 20261014; overlap 2.2, thr 0.84, FP L3, v3 geomodel @0.05; top-10 over all labels, float16):
+== range filter at the evaluation site (<site-lat>, <site-lon>); reference fp32 ORT global (this run)
+  fp32 ORT global (this run)       TP/FP/FN 174/5/156  precision 97.2%  recall 52.7%
+  neon-global                      TP/FP/FN 174/5/156  precision 97.2%  recall 52.7%
+  paired bootstrap (2000 reps over 37 periods): dP +0.00 pp [-0.04, +0.07]  dR +0.02 pp [-0.85, +0.94]  -> (a) ok (b) ok
+  identical period-level outcomes: 35/37
+    period SSW_282_20170826_152214Z.flac 0-3600s: ref (3, 1, 3) -> neon-global (4, 1, 2)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> neon-global (9, 0, 8)
+== range filter at the evaluation site (<site-lat>, <site-lon>); reference scores_v3 cache [report-only]
+  scores_v3 cache [report-only]    TP/FP/FN 174/5/156  precision 97.2%  recall 52.7%
+  neon-global                      TP/FP/FN 174/5/156  precision 97.2%  recall 52.7%
+  paired bootstrap (2000 reps over 37 periods): dP +0.00 pp [-0.04, +0.07]  dR +0.02 pp [-0.85, +0.94]  -> (a) ok (b) ok
+  identical period-level outcomes: 35/37
+    period SSW_282_20170826_152214Z.flac 0-3600s: ref (3, 1, 3) -> neon-global (4, 1, 2)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> neon-global (9, 0, 8)
+== range filter at each stream; reference fp32 ORT global (this run)
+  fp32 ORT global (this run)       TP/FP/FN 174/4/156  precision 97.8%  recall 52.7%
+  neon-global                      TP/FP/FN 174/4/156  precision 97.8%  recall 52.7%
+  paired bootstrap (2000 reps over 37 periods): dP +0.00 pp [-0.03, +0.06]  dR +0.02 pp [-0.85, +0.94]  -> (a) ok (b) ok
+  identical period-level outcomes: 35/37
+    period SSW_282_20170826_152214Z.flac 0-3600s: ref (3, 1, 3) -> neon-global (4, 1, 2)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> neon-global (9, 0, 8)
+== range filter at each stream; reference scores_v3 cache [report-only]
+  scores_v3 cache [report-only]    TP/FP/FN 174/4/156  precision 97.8%  recall 52.7%
+  neon-global                      TP/FP/FN 174/4/156  precision 97.8%  recall 52.7%
+  paired bootstrap (2000 reps over 37 periods): dP +0.00 pp [-0.03, +0.06]  dR +0.02 pp [-0.85, +0.94]  -> (a) ok (b) ok
+  identical period-level outcomes: 35/37
+    period SSW_282_20170826_152214Z.flac 0-3600s: ref (3, 1, 3) -> neon-global (4, 1, 2)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> neon-global (9, 0, 8)
+truth species: 65; in the v3 label set: 65; passing the range filter at site for at least one stream: 65: Red-winged Blackbird, Snow Goose, Tufted Titmouse, Cedar Waxwing, Canada Goose, Red-shouldered Hawk, Northern Cardinal, Veery, Hermit Thrush, Swainson's Thrush, Brown Creeper, Killdeer, Yellow-billed Cuckoo, Northern Flicker, Eastern Wood-Pewee, Ruby-crowned Kinglet, American Crow, Common Raven, Blue Jay, Downy Woodpecker, Hairy Woodpecker, Pileated Woodpecker, Gray Catbird, Kentucky Warbler, Common Yellowthroat, Purple Finch, Wood Thrush, Baltimore Oriole, Nashville Warbler, Belted Kingfisher, Red-bellied Woodpecker, Wild Turkey, Swamp Sparrow, Song Sparrow, Black-and-white Warbler, Brown-headed Cowbird, Great Crested Flycatcher, Black-crowned Night-Heron, Louisiana Waterthrush, Rose-breasted Grosbeak, Eastern Towhee, Scarlet Tanager, Black-capped Chickadee, Blue-gray Gnatcatcher, Common Grackle, Eastern Phoebe, Ovenbird, Bay-breasted Warbler, Hooded Warbler, Chestnut-sided Warbler, Yellow Warbler, American Redstart, Black-throated Green Warbler, White-breasted Nuthatch, Yellow-bellied Sapsucker, American Goldfinch, Barred Owl, European Starling, Carolina Wren, American Robin, Eastern Kingbird, Blue-winged Warbler, Red-eyed Vireo, Blue-headed Vireo, White-throated Sparrow
+truth species: 65; in the v3 label set: 65; passing the range filter at own for at least one stream: 65: Red-winged Blackbird, Snow Goose, Tufted Titmouse, Cedar Waxwing, Canada Goose, Red-shouldered Hawk, Northern Cardinal, Veery, Hermit Thrush, Swainson's Thrush, Brown Creeper, Killdeer, Yellow-billed Cuckoo, Northern Flicker, Eastern Wood-Pewee, Ruby-crowned Kinglet, American Crow, Common Raven, Blue Jay, Downy Woodpecker, Hairy Woodpecker, Pileated Woodpecker, Gray Catbird, Kentucky Warbler, Common Yellowthroat, Purple Finch, Wood Thrush, Baltimore Oriole, Nashville Warbler, Belted Kingfisher, Red-bellied Woodpecker, Wild Turkey, Swamp Sparrow, Song Sparrow, Black-and-white Warbler, Brown-headed Cowbird, Great Crested Flycatcher, Black-crowned Night-Heron, Louisiana Waterthrush, Rose-breasted Grosbeak, Eastern Towhee, Scarlet Tanager, Black-capped Chickadee, Blue-gray Gnatcatcher, Common Grackle, Eastern Phoebe, Ovenbird, Bay-breasted Warbler, Hooded Warbler, Chestnut-sided Warbler, Yellow Warbler, American Redstart, Black-throated Green Warbler, White-breasted Nuthatch, Yellow-bellied Sapsucker, American Goldfinch, Barred Owl, European Starling, Carolina Wren, American Robin, Eastern Kingbird, Blue-winged Warbler, Red-eyed Vireo, Blue-headed Vireo, White-throated Sparrow
+classes the detection gate cannot exercise: every class without annotated audio here, i.e. all but <= 65 of 11560 (all non-North-American and non-annotated species); the window statistics cover them
+
+VERDICT vs the declared criterion: (a) dP CI lower -0.04 (site) / -0.03 (own) > -0.5 ok; (b) dR CI lower -0.85 / -0.85 > -1.0 ok; (c) Jaccard@0.84 over all classes 0.9765 > 0.97 ok; (d) max flip margin 0.0214 <= 0.05 ok (0 flips > 0.05); (e) top-1 over all classes 0.9747 >= 0.97 ok; (f) SQNR rest 60.8 dB >= subset 50.8 - 3 ok -> PASS
+
+CAVEATS (review #G3): (c)/(d) over all classes exercise North American species only - the one class outside the NA-east
+800 that crosses 0.84 is Hairy Woodpecker (all 71 'rest' hit pairs, both 'rest' flips); no non-North-American species
+reaches 0.84 (max 0.828). (f) is near-vacuous: double-clipped pairs inflate the 10,760-class SQNR (that slice's top-1
+0.968 and max |dconf| 0.188 are worse than the NA slice's). Largest deviation: SSW_179 window 1593, Grey Vireo 0.188 ->
+0.376 (Red-eyed Vireo 0.315 -> 0.172 in the same window). Report-only top-1 on the 54,488 windows whose reference top
+class exceeds 0.1: 0.9921. The fresh CPU fp32 run is the reference; the server's scores_v3 cache differs from it beyond
+fp32 noise (max 0.068 on matched top-10 pairs) but gives identical replay totals. 174 vs the NA-east gate's 171 TP:
+Hairy Woodpecker is not in the NA-east label set. The gated build is 3f58e75; the final d026a81 differs only at load time
+(version check, message) and gives bit-identical outputs.

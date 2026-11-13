@@ -1,0 +1,31 @@
+# Adds libbnneon.so (and the engine CLI) to a BirdNET-Go image built with the bnneon tag.
+#   1) a BirdNET-Go checkout with the engine binding (bnneon build tag; not published yet), project Dockerfile, final stage on the release base:
+#        docker buildx build --platform linux/arm64 -t bng-bnneon-app:dev \
+#          --build-arg EXTRA_BUILD_TAGS=bnneon --build-arg BASE_IMAGE=ghcr.io/tphakala/birdnet-go:20261014 \
+#          --build-arg BUILD_VERSION=20261014-bnneon-<commit> <birdnet-go-checkout>
+#   2) this file, context = this repository's checkout:
+#        docker buildx build --platform linux/arm64 -f integration/Dockerfile.bnneon -t bng-bnneon:dev .
+# Weights (.bnpk packages and the legacy .bn24; each carries its own license) are NOT baked in; mount them and set
+# birdnetv3.neonweights (a v3.0 package) or birdnet.backend: neon + birdnet.neonweights (v2.4). This library refuses
+# a .bnv3 (the retired v3 engine's file).
+ARG APP_IMAGE=bng-bnneon-app:dev
+
+FROM --platform=linux/arm64 golang:1.27-trixie AS bnneon
+WORKDIR /engine
+COPY Makefile ./
+COPY src ./src
+COPY bench/cli.c ./bench/cli.c
+COPY LICENSE NOTICE weights/LICENSE-WEIGHTS.txt ./
+# Native gcc 14 build; the Makefile selects -mcpu=cortex-a76 for the dotprod-family and fp16
+# kernels and baseline ARMv8-A for the rest (the dispatcher checks HWCAP at run time).
+RUN make OUT=/out
+
+FROM ${APP_IMAGE}
+COPY --from=bnneon /out/libbnneon.so /usr/lib/libbnneon.so
+COPY --from=bnneon /out/cli /usr/local/bin/bnneon-cli
+# licenses: engine Apache-2.0 (LICENSE, NOTICE); weights .bn24 CC BY-NC-SA 4.0 with the BirdNET attribution; packages carry their own
+COPY --from=bnneon /engine/LICENSE /usr/share/doc/bnneon/LICENSE
+COPY --from=bnneon /engine/NOTICE /usr/share/doc/bnneon/NOTICE
+COPY --from=bnneon /engine/LICENSE-WEIGHTS.txt /usr/share/doc/bnneon/LICENSE-WEIGHTS.txt
+RUN ldconfig
+LABEL org.opencontainers.image.description="BirdNET-Go with the optional libbnneon NEON BirdNET v2.4/v3.0 backend (birdnet.backend / birdnetv3.backend: neon)"

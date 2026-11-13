@@ -1,0 +1,24 @@
+Older-hardware study of BirdNET v3.0 (2026-11-08): could v3.0 run usably on a Raspberry Pi 4 before the engine had a
+path for it? Experiments H001-H005; this directory holds their summaries (the raw per-run data are not published).
+H004 (report only): what a lower overlap costs in detections, replaying the fp32 ONNX Runtime reference
+scores of gate G003 at other overlaps and FP filter levels, scripts/overlap_replay_v3.py.
+
+fp32 ORT BirdNET v3.0 global reference (G003 scores), range filter at the evaluation site (<site-lat>, <site-lon>)
+thr 0.84 FP L0 overlap 2.2 (step 1.33 s, min_det 1): TP/FP/FN 206/19/124  P 91.6%  R 62.4%
+thr 0.84 FP L0 overlap 1.4 (step 2.67 s, min_det 1): TP/FP/FN 196/13/134  P 93.8%  R 59.4%  vs 2.2: dP +2.22 [+0.31, +4.29]  dR -3.00 [-5.54, -0.93] pp
+thr 0.84 FP L0 overlap 0.6 (step 4.00 s, min_det 1): TP/FP/FN 188/11/142  P 94.5%  R 57.0%  vs 2.2: dP +2.91 [+0.65, +5.39]  dR -5.41 [-7.93, -3.00] pp
+thr 0.84 FP L2 overlap 2.2 (step 1.33 s, min_det 2): TP/FP/FN 189/10/141  P 95.0%  R 57.3%
+thr 0.84 FP L2 overlap 1.4 (step 2.67 s, min_det 1): TP/FP/FN 196/13/134  P 93.8%  R 59.4%  vs 2.2: dP -1.22 [-2.87, +0.12]  dR +2.11 [+0.92, +3.37] pp
+thr 0.84 FP L2 overlap 0.6 (step 4.00 s, min_det 1): TP/FP/FN 188/11/142  P 94.5%  R 57.0%  vs 2.2: dP -0.54 [-3.01, +2.02]  dR -0.29 [-2.35, +1.61] pp
+thr 0.84 FP L3 overlap 2.2 (step 1.33 s, min_det 3): TP/FP/FN 174/5/156  P 97.2%  R 52.7%
+thr 0.84 FP L3 overlap 1.4 (step 2.67 s, min_det 2): TP/FP/FN 170/5/160  P 97.1%  R 51.5%  vs 2.2: dP -0.05 [-1.60, +1.59]  dR -1.22 [-2.67, +0.00] pp
+thr 0.84 FP L3 overlap 0.6 (step 4.00 s, min_det 1): TP/FP/FN 188/11/142  P 94.5%  R 57.0%  vs 2.2: dP -2.77 [-4.86, -0.83]  dR +4.23 [+1.86, +6.74] pp
+thr 0.80 FP L0 overlap 2.2 (step 1.33 s, min_det 1): TP/FP/FN 228/23/102  P 90.8%  R 69.1%
+thr 0.80 FP L0 overlap 1.4 (step 2.67 s, min_det 1): TP/FP/FN 225/16/105  P 93.4%  R 68.2%  vs 2.2: dP +2.51 [+0.83, +4.45]  dR -0.91 [-2.15, +0.00] pp
+thr 0.80 FP L0 overlap 0.6 (step 4.00 s, min_det 1): TP/FP/FN 219/18/111  P 92.4%  R 66.4%  vs 2.2: dP +1.57 [+0.05, +3.42]  dR -2.73 [-4.47, -1.15] pp
+thr 0.80 FP L2 overlap 2.2 (step 1.33 s, min_det 2): TP/FP/FN 218/15/112  P 93.6%  R 66.1%
+thr 0.80 FP L2 overlap 1.4 (step 2.67 s, min_det 1): TP/FP/FN 225/16/105  P 93.4%  R 68.2%  vs 2.2: dP -0.19 [-1.68, +1.19]  dR +2.17 [+0.77, +4.00] pp
+thr 0.80 FP L2 overlap 0.6 (step 4.00 s, min_det 1): TP/FP/FN 219/18/111  P 92.4%  R 66.4%  vs 2.2: dP -1.12 [-3.79, +1.48]  dR +0.35 [-1.81, +2.55] pp
+thr 0.80 FP L3 overlap 2.2 (step 1.33 s, min_det 3): TP/FP/FN 200/11/130  P 94.8%  R 60.6%
+thr 0.80 FP L3 overlap 1.4 (step 2.67 s, min_det 2): TP/FP/FN 191/12/139  P 94.1%  R 57.9%  vs 2.2: dP -0.70 [-1.86, -0.07]  dR -2.70 [-4.95, -0.62] pp
+thr 0.80 FP L3 overlap 0.6 (step 4.00 s, min_det 1): TP/FP/FN 219/18/111  P 92.4%  R 66.4%  vs 2.2: dP -2.38 [-4.85, -0.40]  dR +5.79 [+3.38, +8.36] pp

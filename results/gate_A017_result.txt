@@ -1,0 +1,43 @@
+== vs TFLite FP32 (primary: the official model, BirdNET-Go's non-arm64 default)
+label A017; reference data/ref_tflite; candidate data/cand_A017
+window agreement over 227022 windows (strides 0.8+1.5 s) x 6522 classes: top-1 0.9953; hit-set Jaccard @0.8 0.9967 (fp32 hits+cand hits union 49978); flips 163 (margin <=0.005 163, <=0.02 163, >0.05 0, max 0.0044)
+max |dconf| over entries with any side conf > 0.018: 0.0163 (stream Recording_1 row 4779 class 2850 Hylocichla mustelina_Wood Thrush: fp32 0.6664 vs 0.6501)
+full-vector check on 10325 windows (12 s grid): logit SQNR 54.3 dB, max |dconf| 0.0110
+[upstream_default] overlap 0.0 threshold 0.8 FP level 0 (min det 1) range 0.01
+   ref ref_tflite               TP/FP/FN 161/16/169  P 90.96 %  R 48.79 %
+   A017                         TP/FP/FN 161/16/169  P 90.96 %  R 48.79 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 0.9931 (3882 fp32 / 3883 cand, 27 differ)
+   gate: PASS   (v3-strict: pass)
+[pi_template] overlap 2.2 threshold 0.8 FP level 2 (min det 3) range 0.05
+   ref ref_tflite               TP/FP/FN 138/3/192  P 97.87 %  R 41.82 %
+   A017                         TP/FP/FN 138/3/192  P 97.87 %  R 41.82 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 0.9789 (2863 fp32 / 2864 cand, 61 differ)
+   gate: PASS   (v3-strict: pass)
+[c4_deploy] overlap 1.5 threshold 0.8 FP level 2 (min det 2) range 0.05
+   ref ref_tflite               TP/FP/FN 137/4/193  P 97.16 %  R 41.52 %
+   A017                         TP/FP/FN 137/4/193  P 97.16 %  R 41.52 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 0.9779 (2948 fp32 / 2950 cand, 66 differ)
+   gate: PASS   (v3-strict: pass)
+OVERALL A017: PASS upstream_default=P pi_template=P c4_deploy=P
+
+== vs ONNX fp32 (BirdNET_v2.4_fp32.onnx, ORT; calibration)
+label A017; reference data/ref_fp32; candidate data/cand_A017
+window agreement over 227022 windows (strides 0.8+1.5 s) x 6522 classes: top-1 0.9926; hit-set Jaccard @0.8 0.9961 (fp32 hits+cand hits union 49994); flips 194 (margin <=0.005 183, <=0.02 194, >0.05 0, max 0.0175)
+max |dconf| over entries with any side conf > 0.018: 0.2356 (stream SSW_050_20170325_000000Z.flac row 1 class 5256 Regulus satrapa_Golden-crowned Kinglet: fp32 0.4764 vs 0.7120)
+full-vector check on 10325 windows (12 s grid): logit SQNR 46.6 dB, max |dconf| 0.0674
+[upstream_default] overlap 0.0 threshold 0.8 FP level 0 (min det 1) range 0.01
+   ref ref_fp32                 TP/FP/FN 160/16/170  P 90.91 %  R 48.48 %
+   A017                         TP/FP/FN 161/16/169  P 90.96 %  R 48.79 %
+   dP +0.06 pp [+0.00, +0.26]  dR +0.31 pp [+0.00, +1.06]  identical periods 36/37  saved-detection Jaccard 0.9918 (3881 fp32 / 3883 cand, 32 differ)
+   gate: PASS   (v3-strict: pass)
+[pi_template] overlap 2.2 threshold 0.8 FP level 2 (min det 3) range 0.05
+   ref ref_fp32                 TP/FP/FN 138/3/192  P 97.87 %  R 41.82 %
+   A017                         TP/FP/FN 138/3/192  P 97.87 %  R 41.82 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 0.9779 (2866 fp32 / 2864 cand, 64 differ)
+   gate: PASS   (v3-strict: pass)
+[c4_deploy] overlap 1.5 threshold 0.8 FP level 2 (min det 2) range 0.05
+   ref ref_fp32                 TP/FP/FN 137/4/193  P 97.16 %  R 41.52 %
+   A017                         TP/FP/FN 137/4/193  P 97.16 %  R 41.52 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 0.9819 (2950 fp32 / 2950 cand, 54 differ)
+   gate: PASS   (v3-strict: pass)
+OVERALL A017: PASS upstream_default=P pi_template=P c4_deploy=P

@@ -1,0 +1,71 @@
+board,model,slot,label,ms,window,pending,gate,windows,note,session,base_ms
+pi5,BirdNET v2.4,default,INT8_ARM ONNX,146.8,3 s,0,,,,C003,
+pi5,BirdNET v2.4,upstream,fp32 foldconv (HF),58.7,3 s,0,,,,C003,
+pi5,BirdNET v2.4,tflite,FP32 (official file),78.0,3 s,0,= the reference (official FP32 file),,,C008,146.2
+pi5,BirdNET v2.4,fused,fused fp32 ONNX,58.9,3 s,0,"PASS, 0 flips vs TFLite","227,022",,C003,
+pi5,BirdNET v2.4,neon,fp16 path,19.5,3 s,0,A017 PASS,"227,022",engine session 2026-11-10 (results/timing),P5T,
+pi5,BirdNET v3.0 NA-east,default,"fp32 ONNX, regional",642.3,5 s,0,,,,C003,
+pi5,BirdNET v3.0 NA-east,upstream,,,5 s,0,,,no faster upstream option (OpenVINO f32: 768 ms),C003,
+pi5,BirdNET v3.0 NA-east,tflite,int8 per-row,271.4,5 s,0,F6 PASS (x86 LiteRT build),"247,512",,C008,644.2
+pi5,BirdNET v3.0 NA-east,fused,FFT front-end ONNX,574.7,5 s,0,"exact rewrite, 0 flips","92,829",,C003,
+pi5,BirdNET v3.0 NA-east,neon,neon-fp16 package,126.4,5 s,0,K2B-G1 PASS,"92,829",engine session 2026-11-10 (results/timing),P5T,
+pi5,BirdNET v3.0 global,default,fp32 ONNX,754.3,5 s,0,,,,C003,
+pi5,BirdNET v3.0 global,upstream,,,5 s,0,,,no faster upstream option (OpenVINO f32: 857 ms),C003,
+pi5,BirdNET v3.0 global,tflite,int8 per-row (fails gate),316.2,5 s,0,"C012 FAIL (1 flip at 0.84 with margin > 0.05; replay totals = fp32)","92,829",,C008,750.5
+pi5,BirdNET v3.0 global,fused,FFT front-end ONNX,690.2,5 s,0,"exact rewrite, 0 flips","92,829",,C003,
+pi5,BirdNET v3.0 global,neon,neon-fp16 package,146.9,5 s,0,K2B-G1 PASS,"92,829",engine session 2026-11-10 (results/timing),P5T,
+pi5,Perch v2,default,fp32 ONNX,635.9,5 s,0,,,,C003,
+pi5,Perch v2,upstream,int8-arm (fails gate),396.0,5 s,0,,,,C003,
+pi5,Perch v2,tflite,FP32,692.2,5 s,0,C013 PASS 4/4 (identical detections),"142,293",,C008,636.2
+pi5,Perch v2,fused,fused int8-head,359.0,5 s,0,PASS (Pi kernels),"142,293",,C003,
+pi5,Perch v2,neon,fp16 + int8 head,142.0,5 s,0,N012 PASS,"142,293",engine session 2026-11-10 (results/timing),P5T,
+pi5,BattyBirdNET (EU),default,dfttrunc + head,79.9,0.56 s (256 kHz),0,,,,C003,
+pi5,BattyBirdNET (EU),upstream,,,0.56 s (256 kHz),0,,,no faster upstream option,C003,
+pi5,BattyBirdNET (EU),tflite,FP32 (fails gate),80.2,0.56 s (256 kHz),0,"C014 FAIL vs stock ONNX (= original BattyBirdNET pipeline, its floor)","26,505",,C008,78.6
+pi5,BattyBirdNET (EU),fused,fused + head,58.8,0.56 s (256 kHz),0,accepted exception (declared G2 limit exceeded on zero-padded clips only),"26,505",,C003,
+pi5,BattyBirdNET (EU),neon,fp32 path,32.8,0.56 s (256 kHz),0,PASS 11/11 heads,"26,505",engine session 2026-11-10 (results/timing),P5T,
+pi4,BirdNET v2.4,default,INT8_ARM ONNX,536.0,3 s,0,,,,C001,
+pi4,BirdNET v2.4,upstream,int8-arm foldconv (HF; fails 2 of 3 gate configs),209.6,3 s,0,,,,C001,
+pi4,BirdNET v2.4,tflite,FP32 (official file),237.5,3 s,0,= the reference (official FP32 file),,,C007,526.8
+pi4,BirdNET v2.4,fused,fused fp32 ONNX,214.4,3 s,0,"PASS, 0 flips vs TFLite","227,022",,C001,
+pi4,BirdNET v2.4,neon,fp32 path,129.5,3 s,0,"A019 PASS, 0 flips","227,022",engine session 2026-11-11 (results/timing),P4T,
+pi4,BirdNET v3.0 NA-east,default,"fp32 ONNX, regional",2321.8,5 s,0,,,,C001,
+pi4,BirdNET v3.0 NA-east,upstream,,,5 s,0,,,no faster upstream option (OpenVINO off on the Pi 4),C001,
+pi4,BirdNET v3.0 NA-east,tflite,"int8 per-row, QS8 path off",1401.0,5 s,0,F6 PASS (x86 LiteRT build); QS8 off: TFLite 2.17.1 crashes on the A72 at its default flags,"247,512",,C007,2334.3
+pi4,BirdNET v3.0 NA-east,fused,FFT front-end ONNX,2165.2,5 s,0,"exact rewrite, 0 flips","92,829",,C001,
+pi4,BirdNET v3.0 NA-east,neon,"int8 package, any AArch64",949.3,5 s,0,V002 PASS,"92,829",engine session 2026-11-11 (results/timing),P4T,
+pi4,BirdNET v3.0 global,default,fp32 ONNX,2646.0,5 s,0,,,,C001,
+pi4,BirdNET v3.0 global,upstream,,,5 s,0,,,no faster upstream option,C001,
+pi4,BirdNET v3.0 global,tflite,"int8 per-row, QS8 off (fails gate)",1583.5,5 s,0,C012 FAIL (1 flip at 0.84 with margin > 0.05; replay totals = fp32); QS8 off: TFLite 2.17.1 crashes on the A72 at its default flags,"92,829",,C007,2674.9
+pi4,BirdNET v3.0 global,fused,FFT front-end ONNX,2316.9,5 s,0,"exact rewrite, 0 flips","92,829",,C001,
+pi4,BirdNET v3.0 global,neon,"int8 package, any AArch64",1125.8,5 s,0,V002 PASS,"92,829",engine session 2026-11-11 (results/timing),P4T,
+pi4,Perch v2,default,fp32 ONNX,2210.4,5 s,0,,,,C001,
+pi4,Perch v2,upstream,int8-arm (fails gate),2047.4,5 s,0,,,,C001,
+pi4,Perch v2,tflite,FP32,2367.7,5 s,0,C013 PASS 4/4 (identical detections),"142,293",,C007,2205.4
+pi4,Perch v2,fused,fused int8-head,1599.9,5 s,0,PASS (Pi kernels),"142,293",,C001,
+pi4,Perch v2,neon,"int8 head package",1113.8,5 s,0,K110 PASS 4/4,"142,293",engine session 2026-11-11 (results/timing),P4T,
+pi4,BattyBirdNET (EU),default,dfttrunc + head,282.1,0.56 s (256 kHz),0,,,,C001,
+pi4,BattyBirdNET (EU),upstream,,,0.56 s (256 kHz),0,,,no faster upstream option,C001,
+pi4,BattyBirdNET (EU),tflite,FP32 (fails gate),237.3,0.56 s (256 kHz),0,"C014 FAIL vs stock ONNX (= original BattyBirdNET pipeline, its floor)","26,505",,C007,280.1
+pi4,BattyBirdNET (EU),fused,fused + head,220.7,0.56 s (256 kHz),0,accepted exception (declared G2 limit exceeded on zero-padded clips only),"26,505",,C001,
+pi4,BattyBirdNET (EU),neon,fp32 path,123.3,0.56 s (256 kHz),0,PASS 11/11 heads,"26,505",engine session 2026-11-11 (results/timing),P4T,
+x86,BirdNET v2.4,default,TFLite FP32 + XNNPACK,51.8,3 s,0,,,,C006,
+x86,BirdNET v2.4,upstream,fp32 foldconv (HF),26.9,3 s,0,,,,C006,
+x86,BirdNET v2.4,tflite,,,3 s,0,,,the default is already TFLite FP32 + XNNPACK,C006,
+x86,BirdNET v2.4,fused,fused fp32 ONNX,27.5,3 s,0,"PASS, 0 flips vs TFLite","227,022",,C006,
+x86,BirdNET v3.0 NA-east,default,"fp32 ONNX, regional",236.2,5 s,0,,,,C006,
+x86,BirdNET v3.0 NA-east,upstream,,,5 s,0,,,no faster upstream CPU option,C006,
+x86,BirdNET v3.0 NA-east,tflite,int8 per-row,254.2,5 s,0,F6 PASS (x86 LiteRT build),"247,512",,C006,236.2
+x86,BirdNET v3.0 NA-east,fused,FFT front-end ONNX,206.5,5 s,0,"exact rewrite, 0 flips","92,829",,C006,
+x86,BirdNET v3.0 global,default,fp32 ONNX,285.6,5 s,0,,,,C006,
+x86,BirdNET v3.0 global,upstream,,,5 s,0,,,no faster upstream CPU option,C006,
+x86,BirdNET v3.0 global,tflite,int8 per-row (fails gate),293.0,5 s,0,"C012 FAIL (1 flip at 0.84 with margin > 0.05; replay totals = fp32)","92,829",,C006,285.6
+x86,BirdNET v3.0 global,fused,FFT front-end ONNX,254.8,5 s,0,"exact rewrite, 0 flips","92,829",,C006,
+x86,Perch v2,default,fp32 ONNX,291.3,5 s,0,,,,C006,
+x86,Perch v2,upstream,,,5 s,0,,,no faster upstream option (no_dft fp32: 288 ms),C006,
+x86,Perch v2,tflite,FP32,541.6,5 s,0,C013 PASS 4/4 (identical detections),"142,293",,C006,291.3
+x86,Perch v2,fused,fused int8-head,233.9,5 s,0,PASS (Mac and Pi-kernel gates; 53.1 dB on x86),"142,293",,C006,
+x86,BattyBirdNET (EU),default,dfttrunc + head,42.3,0.56 s (256 kHz),0,,,,C006,
+x86,BattyBirdNET (EU),upstream,,,0.56 s (256 kHz),0,,,no faster upstream option,C006,
+x86,BattyBirdNET (EU),tflite,FP32 (fails gate),51.5,0.56 s (256 kHz),0,"C014 FAIL vs stock ONNX (= original BattyBirdNET pipeline, its floor)","26,505",,C006,42.3
+x86,BattyBirdNET (EU),fused,fused + head,26.9,0.56 s (256 kHz),0,accepted exception (declared G2 limit exceeded on zero-padded clips only),"26,505",,C006,

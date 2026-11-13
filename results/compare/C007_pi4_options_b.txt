@@ -1,0 +1,14 @@
+# C007 Pi 4 session B: BirdNET v3.0 global / Perch v2 TFLite files (C011-C013) and the int8 files with the XNNPACK
+# QS8 path off (--flags 0: the 2.17.1 library segfaults on the A72 at the default flags 0x3, session A).
+# id kind need_mb input model [extra]
+v3na_fp32              ort  700  win/w32k5s_v3.npy     models/birdnet-v3.0-preview3.1-north-america-east-fp32-b1.onnx  --runs 15 --warm 3
+v3g_fp32               ort  1100 win/w32k5s_v3.npy     models/birdnet-v3.0-preview3.1-fp32-b1.onnx  --runs 15 --warm 3
+perch_fp32             ort  1200 win/w32k5s_perch.npy  models/perch_v2_fp32.onnx          --runs 12 --warm 3
+v3na_tfl_s0se_q0       tfl  500  win/w32k5s_v3_16.f32  models/v3na_fft_i8dyn_s0se.tflite  16 15 3 --flags 0
+v3g_tfl_s0se           tfl  700  win/w32k5s_v3_16.f32  models/v3g_fft_i8dyn_s0se.tflite   16 15 3
+v3g_tfl_s0se_q0        tfl  700  win/w32k5s_v3_16.f32  models/v3g_fft_i8dyn_s0se.tflite   16 15 3 --flags 0
+v3g_tfl_fp32           tfl  1400 win/w32k5s_v3_16.f32  models/v3g_fft_fp32.tflite         16 15 3
+perch_tfl_fp32         tfl  1000 win/w32k5s_perch_16.f32 models/perch_v2_fp32.tflite      16 12 3 --out label
+v3na_tfl_s0se_q0_t2    tfl2 500  win/w32k5s_v3_16.f32  models/v3na_fft_i8dyn_s0se.tflite  16 15 3 --flags 0
+v3na_tfl_s0se_q0_t3    tfl3 500  win/w32k5s_v3_16.f32  models/v3na_fft_i8dyn_s0se.tflite  16 15 3 --flags 0
+v3na_tfl_s0se_q0_t4    tfl4 500  win/w32k5s_v3_16.f32  models/v3na_fft_i8dyn_s0se.tflite  16 15 3 --flags 0

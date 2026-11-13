@@ -1,0 +1,22 @@
+# C002 x86 (Xeon E5-2620 v4, AVX2): stock runtimes only (the NEON engine has no x86 path). id kind need_mb input model [extra]
+# --- BirdNET v2.4 ---
+v24_tflite_fp32        ort  500  win/w48k3s.npy  models/BirdNET_GLOBAL_6K_V2.4_Model_FP32.tflite  --runs 50 --warm 10
+v24_fp32_dfttrunc      ort  500  win/w48k3s.npy  models/BirdNET_v2.4_fp32_dfttrunc.onnx       --runs 50 --warm 10
+v24_fp32_foldconv      ort  500  win/w48k3s.npy  models/BirdNET_v2.4_fp32_foldconv.onnx       --runs 50 --warm 10
+v24_ov_fp32_foldconv   ovf32 700 win/w48k3s.npy  models/BirdNET_v2.4_fp32_foldconv.onnx       --runs 50 --warm 10
+v24_ov_fp32_dfttrunc   ovf32 700 win/w48k3s.npy  models/BirdNET_v2.4_fp32_dfttrunc.onnx       --runs 50 --warm 10
+v24_fp32_fused         ort  500  win/w48k3s.npy  models/BirdNET_v2.4_fp32_fused.onnx          --runs 50 --warm 10
+v24_int8arm_stock      ort  500  win/w48k3s.npy  models/BirdNET_INT8_ARM.onnx                 --runs 50 --warm 10
+# --- BirdNET v3.0 NA-east / global ---
+v3na_fp32              ort  700  win/w32k5s_v3.npy  models/birdnet-v3.0-preview3.1-north-america-east-fp32-b1.onnx  --runs 15 --warm 3
+v3na_fft3              ort  700  win/w32k5s_v3.npy  models/v3na_d_fft3.onnx                   --runs 15 --warm 3
+v3g_fp32               ort  1100 win/w32k5s_v3.npy  models/birdnet-v3.0-preview3.1-fp32-b1.onnx  --runs 15 --warm 3
+v3g_fft3               ort  1100 win/w32k5s_v3.npy  models/v3g_d_fft3.onnx                    --runs 15 --warm 3
+# --- Perch v2 ---
+perch_fp32             ort  1200 win/w32k5s_perch.npy models/perch_v2_fp32.onnx               --runs 15 --warm 3
+perch_nodft_fp32       ort  1200 win/w32k5s_perch.npy models/perch_v2_no_dft_fp32.onnx        --runs 15 --warm 3
+perch_fused_fp32       ort  1200 win/w32k5s_perch.npy models/perch_v2_fused_fp32.onnx         --runs 15 --warm 3
+perch_fused_int8arm    ort  700  win/w32k5s_perch.npy models/perch_v2_fused_int8_arm.onnx     --runs 15 --warm 3
+# --- BattyBirdNET ---
+bat_dfttrunc           bat  500  win/bench256k.wav models/birdnet-v2.4-embeddings-fp32-dfttrunc.onnx --head models/BattyBirdNET-EU-256kHz_fp32.onnx --runs 40 --warm 8
+bat_fused_t1           bat  500  win/bench256k.wav models/birdnet-v2.4-embeddings-fp32-fused.onnx    --head models/BattyBirdNET-EU-256kHz_fp32.onnx --runs 40 --warm 8

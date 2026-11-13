@@ -1,0 +1,30 @@
+label K110; adapter perch_v2; reference <lab-root>/kernel-lab/perch-runtime/data/ref_fp32; candidate <lab-root>/lab-data/perch-pi4/gate/cand_K110_op35
+window agreement over 142293 windows x 14795 classes: top-1 0.9962
+  @0.2 (report only): hit-set Jaccard 0.9966 (union 75161); flips 257 (margin <=0.005 257, <=0.02 257, >0.05 0, max 0.0034)
+  @0.4 (report only): hit-set Jaccard 0.9966 (union 47429); flips 163 (margin <=0.005 160, <=0.02 163, >0.05 0, max 0.0071)
+  @0.5: hit-set Jaccard 0.9963 (union 38598); flips 143 (margin <=0.005 141, <=0.02 143, >0.05 0, max 0.0057)
+  @0.6 (report only): hit-set Jaccard 0.9956 (union 30421); flips 135 (margin <=0.005 129, <=0.02 135, >0.05 0, max 0.0077)
+  @0.8: hit-set Jaccard 0.9916 (union 13028); flips 109 (margin <=0.005 109, <=0.02 109, >0.05 0, max 0.0038)
+max |dconf| over entries with both sides conf > 0.005: 0.0110 (stream SSW_169_20170603_110007Z.flac row 3340 class 4432 Dumetella carolinensis: ref 0.5411 vs 0.5301); entries stored on one side only: 16182 (largest present conf 0.0052, other side <= 0.005)
+full-vector check on 3168 windows (60 s grid): logit SQNR 53.1 dB, max |dconf| 0.0081
+[upstream_default] overlap 0.0 (stride 5.000 s) threshold 0.8 FP level 0 (min det 1) range None
+   ref ref_fp32                 TP/FP/FN 111/16/219  P 87.40 %  R 33.64 %
+   K110                         TP/FP/FN 111/16/219  P 87.40 %  R 33.64 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 0.9848 (1433 ref / 1431 cand, 22 differ)
+   gate: PASS
+[pi_template] overlap 2.2 (stride 1.333 s) threshold 0.8 FP level 2 (min det 2) range None
+   ref ref_fp32                 TP/FP/FN 104/16/226  P 86.67 %  R 31.52 %
+   K110                         TP/FP/FN 104/15/226  P 87.39 %  R 31.52 %
+   dP +0.73 pp [+0.00, +2.40]  dR +0.00 pp [+0.00, +0.00]  identical periods 36/37  saved-detection Jaccard 0.9638 (1333 ref / 1322 cand, 49 differ)
+   gate: PASS
+[c4_deploy] overlap 1.5 (stride 2.500 s) threshold 0.8 FP level 2 (min det 1) range None
+   ref ref_fp32                 TP/FP/FN 123/19/207  P 86.62 %  R 37.27 %
+   K110                         TP/FP/FN 123/19/207  P 86.62 %  R 37.27 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 0.9729 (1826 ref / 1820 cand, 50 differ)
+   gate: PASS
+[perch_override] overlap 2.2 (stride 1.333 s) threshold 0.5 FP level 2 (min det 2) range None
+   ref ref_fp32                 TP/FP/FN 175/69/155  P 71.72 %  R 53.03 %
+   K110                         TP/FP/FN 175/70/155  P 71.43 %  R 53.03 %
+   dP -0.29 pp [-0.99, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 36/37  saved-detection Jaccard 0.9866 (3182 ref / 3181 cand, 43 differ)
+   gate: PASS
+OVERALL K110: PASS upstream_default=P pi_template=P c4_deploy=P perch_override=P

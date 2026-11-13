@@ -1,0 +1,304 @@
+  0 ReduceMin  [[1, 144000]] -> [1, 1]  model/MEL_SPEC1/Min
+  1 Sub        [[1, 144000], [1, 1]] -> [1, 144000]  model/MEL_SPEC1/Sub
+  2 ReduceMax  [[1, 144000]] -> [1, 1]  model/MEL_SPEC1/Max
+  3 Add        [[1, 1], []] -> [1, 1]  model/MEL_SPEC1/add
+  4 Div        [[1, 144000], [1, 1]] -> [1, 144000]  model/MEL_SPEC1/truediv
+  5 Sub        [[1, 144000], []] -> [1, 144000]  model/MEL_SPEC1/Sub_1
+  6 Mul        [[1, 144000], []] -> [1, 144000]  model/MEL_SPEC1/Mul
+  8 Split      [[2], [2]] -> [1]  model/MEL_SPEC1/stft/frame/split
+  9 Reshape    [[1], [0]] -> []  model/MEL_SPEC1/stft/frame/Reshape
+ 10 Sub        [[], []] -> []  model/MEL_SPEC2/stft/frame/sub_2
+ 11 Div        [[], []] -> []  model/MEL_SPEC2/stft/frame/floordiv_3
+ 12 Sub        [[], []] -> []  model/MEL_SPEC1/stft/frame/sub_2
+ 13 Div        [[], []] -> []  model/MEL_SPEC1/stft/frame/floordiv_3
+ 14 Div        [[], []] -> []  model/MEL_SPEC2/stft/frame/floordiv
+ 15 Mul        [[], []] -> []  model/MEL_SPEC2/stft/frame/mul
+ 17 Div        [[], []] -> []  model/MEL_SPEC1/stft/frame/floordiv
+ 18 Mul        [[], []] -> []  model/MEL_SPEC1/stft/frame/mul
+ 20 Add        [[], []] -> []  model/MEL_SPEC2/stft/frame/add
+ 21 Reshape    [[], [1]] -> [1]  model/MEL_SPEC2/stft/frame/concat/values_1
+ 22 Add        [[], []] -> []  model/MEL_SPEC1/stft/frame/add
+ 23 Reshape    [[], [1]] -> [1]  model/MEL_SPEC1/stft/frame/concat/values_1
+ 26 Max        [[], []] -> []  model/MEL_SPEC2/stft/frame/Maximum
+ 28 Max        [[], []] -> []  model/MEL_SPEC1/stft/frame/Maximum
+ 32 Slice      [[1, 144000], [2], [2], [2], [2]] -> [1, 144000]  model/MEL_SPEC2/stft/frame/StridedSlice
+ 35 Slice      [[1, 144000], [2], [2], [2], [2]] -> [1, 144000]  model/MEL_SPEC1/stft/frame/StridedSlice
+ 36 Mul        [[511], []] -> [511]  model/MEL_SPEC2/stft/frame/mul_1
+ 38 Reshape    [[1, 144000], [3]] -> [1, 18000, 8]  model/MEL_SPEC2/stft/frame/Reshape_1
+ 39 Mul        [[511], []] -> [511]  model/MEL_SPEC1/stft/frame/mul_1
+ 41 Reshape    [[1, 144000], [3]] -> [1, 72000, 2]  model/MEL_SPEC1/stft/frame/Reshape_1
+ 44 Reshape    [[511], [2]] -> [511, 1]  model/MEL_SPEC2/stft/frame/Reshape_2
+ 45 Reshape    [[511], [2]] -> [511, 1]  model/MEL_SPEC1/stft/frame/Reshape_2
+ 46 Add        [[511, 1], [1, 128]] -> [511, 128]  model/MEL_SPEC2/stft/frame/add_1
+ 47 Add        [[511, 1], [1, 1024]] -> [511, 1024]  model/MEL_SPEC1/stft/frame/add_1
+ 48 Gather     [[1, 18000, 8], [511, 128]] -> [1, 511, 128, 8]  model/MEL_SPEC2/stft/frame/GatherV2;model/MEL_SPEC1/stft/frame/strided_slice
+ 49 Gather     [[1, 72000, 2], [511, 1024]] -> [1, 511, 1024, 2]  model/MEL_SPEC1/stft/frame/GatherV2;model/MEL_SPEC1/stft/frame/strided_slice
+ 50 Reshape    [[1, 511, 128, 8], [3]] -> [1, 511, 1024]  model/MEL_SPEC2/stft/frame/Reshape_4
+ 51 Reshape    [[1, 511, 1024, 2], [3]] -> [1, 511, 2048]  model/MEL_SPEC1/stft/frame/Reshape_4
+ 52 Mul        [[1, 511, 1024], [1024]] -> [1, 511, 1024]  model/MEL_SPEC2/stft/mul
+ 53 Mul        [[1, 511, 2048], [2048]] -> [1, 511, 2048]  model/MEL_SPEC1/stft/mul
+ 54 MatMul [1, 511, 1024] x [1024, 513] MAC 268.4M  model/MEL_SPEC2/stft/rfft2_matmul
+ 55 MatMul [1, 511, 2048] x [2048, 1025] MAC 1072.7M  model/MEL_SPEC1/stft/rfft3_matmul
+ 57 Reshape    [[1, 511, 513], [2]] -> [511, 513]  model/MEL_SPEC2/Tensordot/Reshape
+ 59 Reshape    [[1, 511, 1025], [2]] -> [511, 1025]  model/MEL_SPEC1/Tensordot/Reshape
+ 61 MatMul [511, 513] x [513, 96] MAC 25.2M  model/MEL_SPEC2/Tensordot/MatMul1
+ 63 MatMul [511, 1025] x [1025, 96] MAC 50.3M  model/MEL_SPEC1/Tensordot/MatMul2
+ 66 Reshape    [[511, 96], [3]] -> [1, 511, 96]  model/MEL_SPEC2/Tensordot
+ 67 Reshape    [[511, 96], [3]] -> [1, 511, 96]  model/MEL_SPEC1/Tensordot
+ 68 Mul        [[1, 511, 96], [1, 511, 96]] -> [1, 511, 96]  model/MEL_SPEC2/Pow;model/MEL_SPEC1/Mul/y
+ 69 Mul        [[1, 511, 96], [1, 511, 96]] -> [1, 511, 96]  model/MEL_SPEC1/Pow;model/MEL_SPEC1/Mul/y
+ 70 Pow        [[1, 511, 96], []] -> [1, 511, 96]  model/MEL_SPEC2/Pow_1
+ 71 Pow        [[1, 511, 96], []] -> [1, 511, 96]  model/MEL_SPEC1/Pow_1
+ 72 Transpose  [[1, 511, 96]] -> [96, 511, 1]  model/MEL_SPEC2/ReverseV2_Transpose__140
+ 73 Transpose  [[1, 511, 96]] -> [96, 511, 1]  model/MEL_SPEC1/ReverseV2_Transpose__191
+ 74 Slice      [[96, 511, 1], [1], [1], [1], [1]] -> [96, 511, 1]  model/MEL_SPEC1/ReverseV2_ReverseSequence__202_slice
+ 75 Slice      [[96, 511, 1], [1], [1], [1], [1]] -> [96, 511, 1]  model/MEL_SPEC2/ReverseV2_ReverseSequence__151_slice
+ 76 Unsqueeze  [[96, 511, 1], [1]] -> [96, 511, 1, 1]  model/MEL_SPEC1/ExpandDims
+ 77 Unsqueeze  [[96, 511, 1], [1]] -> [96, 511, 1, 1]  model/MEL_SPEC2/ExpandDims
+ 78 Concat     [[96, 511, 1, 1], [96, 511, 1, 1]] -> [96, 511, 1, 2]  model/concatenate/concat
+ 79 Mul        [[96, 511, 1, 2], [1, 1, 1, 2]] -> [96, 511, 1, 2]  model/BNORM_SPEC_NOQUANT/FusedBatchNormV32
+ 80 Add        [[96, 511, 1, 2], [1, 1, 1, 2]] -> [96, 511, 1, 2]  model/BNORM_SPEC_NOQUANT/FusedBatchNormV33
+ 81 Transpose  [[96, 511, 1, 2]] -> [1, 2, 96, 511]  model/ACT_0/Relu;model/BNORM_0/FusedBatchNormV3;model/CONV_0/Conv2D__207
+ 82 Conv  in [1, 2, 96, 511] w [24, 2, 4, 8] g 1 s [2, 2] p None out [1, 24, 48, 256] MAC 18.9M  model/ACT_0/Relu;model/BNORM_0/FusedBatchNormV3;model/CONV_0/Conv2D
+ 83 Relu       [[1, 24, 48, 256]] -> [1, 24, 48, 256]  Relu__13
+ 84 MaxPool    [[1, 24, 48, 256]] -> [1, 24, 48, 128]  model/POOL_0_MAX/MaxPool
+ 85 AveragePool [[1, 24, 48, 256]] -> [1, 24, 48, 128]  model/POOL_0_AVG/AvgPool
+ 86 Concat     [[1, 24, 48, 128], [1, 24, 48, 128]] -> [1, 48, 48, 128]  model/POOL_0_CONCAT/concat
+ 87 Conv  in [1, 48, 48, 128] w [24, 48, 1, 1] g 1 s [1, 1] p None out [1, 24, 48, 128] MAC 7.1M  model/POOL_0_CONV/BiasAdd;model/CONV_0/Conv2D;model/POOL_0_CONV/Conv2D;model/POOL_0_CONV/BiasAdd/ReadVariableOp/resource1
+ 88 Conv  in [1, 24, 48, 128] w [72, 24, 1, 1] g 1 s [1, 1] p None out [1, 72, 48, 128] MAC 10.6M  model/BLOCK_1-1_BN_1/FusedBatchNormV3;model/BLOCK_1-1_CONV_1/Conv2D1
+ 89 Sigmoid    [[1, 72, 48, 128]] -> [1, 72, 48, 128]  model/BLOCK_1-1_ACT_1/Sigmoid
+ 90 Mul        [[1, 72, 48, 128], [1, 72, 48, 128]] -> [1, 72, 48, 128]  model/BLOCK_1-1_ACT_1/mul
+ 91 Conv  in [1, 72, 48, 128] w [72, 1, 3, 3] g 72 s [2, 2] p [1, 1, 1, 1] out [1, 72, 24, 64] MAC 1.0M  model/BLOCK_1-1_BN_2/FusedBatchNormV3;model/BLOCK_1-1_CONV_1/Conv2D;model/BLOCK_1-1_CONV_2/depthwise1
+ 92 Sigmoid    [[1, 72, 24, 64]] -> [1, 72, 24, 64]  model/BLOCK_1-1_ACT_2/Sigmoid
+ 93 Mul        [[1, 72, 24, 64], [1, 72, 24, 64]] -> [1, 72, 24, 64]  model/BLOCK_1-1_ACT_2/mul
+ 94 Conv  in [1, 72, 24, 64] w [36, 72, 1, 1] g 1 s [1, 1] p None out [1, 36, 24, 64] MAC 4.0M  node_Conv_13
+ 95 Conv  in [1, 36, 24, 64] w [72, 36, 1, 1] g 1 s [1, 1] p None out [1, 72, 24, 64] MAC 4.0M  model/BLOCK_1-2_BN_1/FusedBatchNormV3;model/BLOCK_1-1_CONV_1/Conv2D;model/BLOCK_1-2_CONV_1/Conv2D1
+ 96 Sigmoid    [[1, 72, 24, 64]] -> [1, 72, 24, 64]  model/BLOCK_1-2_ACT_1/Sigmoid
+ 97 Mul        [[1, 72, 24, 64], [1, 72, 24, 64]] -> [1, 72, 24, 64]  model/BLOCK_1-2_ACT_1/mul
+ 98 Conv  in [1, 72, 24, 64] w [72, 1, 3, 3] g 72 s [1, 1] p None out [1, 72, 24, 64] MAC 1.0M  model/BLOCK_1-2_BN_2/FusedBatchNormV3;model/BLOCK_1-1_CONV_1/Conv2D;model/BLOCK_1-2_CONV_2/depthwise1
+ 99 Sigmoid    [[1, 72, 24, 64]] -> [1, 72, 24, 64]  model/BLOCK_1-2_ACT_2/Sigmoid
+100 Mul        [[1, 72, 24, 64], [1, 72, 24, 64]] -> [1, 72, 24, 64]  model/BLOCK_1-2_ACT_2/mul
+101 Conv  in [1, 72, 24, 64] w [36, 72, 1, 1] g 1 s [1, 1] p None out [1, 36, 24, 64] MAC 4.0M  node_Conv_14
+102 Add        [[1, 36, 24, 64], [1, 36, 24, 64]] -> [1, 36, 24, 64]  model/BLOCK_1-2_ADD/add
+103 Conv  in [1, 36, 24, 64] w [72, 36, 1, 1] g 1 s [1, 1] p None out [1, 72, 24, 64] MAC 4.0M  model/BLOCK_1-3_BN_1/FusedBatchNormV3;model/BLOCK_1-1_CONV_1/Conv2D;model/BLOCK_1-3_CONV_1/Conv2D1
+104 Sigmoid    [[1, 72, 24, 64]] -> [1, 72, 24, 64]  model/BLOCK_1-3_ACT_1/Sigmoid
+105 Mul        [[1, 72, 24, 64], [1, 72, 24, 64]] -> [1, 72, 24, 64]  model/BLOCK_1-3_ACT_1/mul
+106 Conv  in [1, 72, 24, 64] w [72, 1, 3, 3] g 72 s [1, 1] p None out [1, 72, 24, 64] MAC 1.0M  model/BLOCK_1-3_BN_2/FusedBatchNormV3;model/BLOCK_1-1_CONV_1/Conv2D;model/BLOCK_1-3_CONV_2/depthwise1
+107 Sigmoid    [[1, 72, 24, 64]] -> [1, 72, 24, 64]  model/BLOCK_1-3_ACT_2/Sigmoid
+108 Mul        [[1, 72, 24, 64], [1, 72, 24, 64]] -> [1, 72, 24, 64]  model/BLOCK_1-3_ACT_2/mul
+109 Conv  in [1, 72, 24, 64] w [36, 72, 1, 1] g 1 s [1, 1] p None out [1, 36, 24, 64] MAC 4.0M  node_Conv_15
+110 Add        [[1, 36, 24, 64], [1, 36, 24, 64]] -> [1, 36, 24, 64]  model/BLOCK_1-3_ADD/add
+111 Conv  in [1, 36, 24, 64] w [288, 36, 1, 1] g 1 s [1, 1] p None out [1, 288, 24, 64] MAC 15.9M  model/BLOCK_2-1_BN_1/FusedBatchNormV3;model/BLOCK_2-1_CONV_1/Conv2D1
+112 Sigmoid    [[1, 288, 24, 64]] -> [1, 288, 24, 64]  model/BLOCK_2-1_ACT_1/Sigmoid
+113 Mul        [[1, 288, 24, 64], [1, 288, 24, 64]] -> [1, 288, 24, 64]  model/BLOCK_2-1_ACT_1/mul
+114 Conv  in [1, 288, 24, 64] w [288, 1, 3, 3] g 288 s [2, 2] p [1, 1, 1, 1] out [1, 288, 12, 32] MAC 1.0M  model/BLOCK_2-1_BN_2/FusedBatchNormV3;model/BLOCK_2-1_CONV_1/Conv2D;model/BLOCK_2-1_CONV_2/depthwise1
+115 Sigmoid    [[1, 288, 12, 32]] -> [1, 288, 12, 32]  model/BLOCK_2-1_ACT_2/Sigmoid
+116 Mul        [[1, 288, 12, 32], [1, 288, 12, 32]] -> [1, 288, 12, 32]  model/BLOCK_2-1_ACT_2/mul
+117 ReduceMean [[1, 288, 12, 32]] -> [1, 288]  model/BLOCK_2-1_SE_AVG_POOL_1/Mean_reducemean
+118 Reshape    [[1, 288], [4]] -> [1, 288, 1, 1]  model/BLOCK_2-1_SE_CONV_1/Conv2D2__336
+119 Conv  in [1, 288, 1, 1] w [18, 288, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 18, 1, 1] MAC 0.0M  node_Conv_16
+120 Sigmoid    [[1, 18, 1, 1]] -> [1, 18, 1, 1]  model/BLOCK_2-1_SE_CONV_1/Sigmoid
+121 Mul        [[1, 18, 1, 1], [1, 18, 1, 1]] -> [1, 18, 1, 1]  model/BLOCK_2-1_SE_CONV_1/mul
+122 Conv  in [1, 18, 1, 1] w [288, 18, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 288, 1, 1] MAC 0.0M  node_Conv_17
+123 Sigmoid    [[1, 288, 1, 1]] -> [1, 288, 1, 1]  model/BLOCK_2-1_SE_CONV_2/Sigmoid
+124 Mul        [[1, 288, 12, 32], [1, 288, 1, 1]] -> [1, 288, 12, 32]  model/BLOCK_2-1_MULTIPLY/mul
+125 Conv  in [1, 288, 12, 32] w [72, 288, 1, 1] g 1 s [1, 1] p None out [1, 72, 12, 32] MAC 8.0M  node_Conv_18
+126 Conv  in [1, 72, 12, 32] w [288, 72, 1, 1] g 1 s [1, 1] p None out [1, 288, 12, 32] MAC 8.0M  model/BLOCK_2-2_BN_1/FusedBatchNormV3;model/BLOCK_2-1_CONV_1/Conv2D;model/BLOCK_2-2_CONV_1/Conv2D1
+127 Sigmoid    [[1, 288, 12, 32]] -> [1, 288, 12, 32]  model/BLOCK_2-2_ACT_1/Sigmoid
+128 Mul        [[1, 288, 12, 32], [1, 288, 12, 32]] -> [1, 288, 12, 32]  model/BLOCK_2-2_ACT_1/mul
+129 Conv  in [1, 288, 12, 32] w [288, 1, 3, 3] g 288 s [1, 1] p None out [1, 288, 12, 32] MAC 1.0M  model/BLOCK_2-2_BN_2/FusedBatchNormV3;model/BLOCK_2-1_CONV_1/Conv2D;model/BLOCK_2-2_CONV_2/depthwise1
+130 Sigmoid    [[1, 288, 12, 32]] -> [1, 288, 12, 32]  model/BLOCK_2-2_ACT_2/Sigmoid
+131 Mul        [[1, 288, 12, 32], [1, 288, 12, 32]] -> [1, 288, 12, 32]  model/BLOCK_2-2_ACT_2/mul
+132 ReduceMean [[1, 288, 12, 32]] -> [1, 288]  model/BLOCK_2-2_SE_AVG_POOL_1/Mean_reducemean
+133 Reshape    [[1, 288], [4]] -> [1, 288, 1, 1]  model/BLOCK_2-2_SE_CONV_1/Conv2D1__385
+134 Conv  in [1, 288, 1, 1] w [18, 288, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 18, 1, 1] MAC 0.0M  node_Conv_19
+135 Sigmoid    [[1, 18, 1, 1]] -> [1, 18, 1, 1]  model/BLOCK_2-2_SE_CONV_1/Sigmoid
+136 Mul        [[1, 18, 1, 1], [1, 18, 1, 1]] -> [1, 18, 1, 1]  model/BLOCK_2-2_SE_CONV_1/mul
+137 Conv  in [1, 18, 1, 1] w [288, 18, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 288, 1, 1] MAC 0.0M  node_Conv_20
+138 Sigmoid    [[1, 288, 1, 1]] -> [1, 288, 1, 1]  model/BLOCK_2-2_SE_CONV_2/Sigmoid
+139 Mul        [[1, 288, 12, 32], [1, 288, 1, 1]] -> [1, 288, 12, 32]  model/BLOCK_2-2_MULTIPLY/mul
+140 Conv  in [1, 288, 12, 32] w [72, 288, 1, 1] g 1 s [1, 1] p None out [1, 72, 12, 32] MAC 8.0M  node_Conv_21
+141 Add        [[1, 72, 12, 32], [1, 72, 12, 32]] -> [1, 72, 12, 32]  model/BLOCK_2-2_ADD/add
+142 Conv  in [1, 72, 12, 32] w [288, 72, 1, 1] g 1 s [1, 1] p None out [1, 288, 12, 32] MAC 8.0M  model/BLOCK_2-3_BN_1/FusedBatchNormV3;model/BLOCK_2-1_CONV_1/Conv2D;model/BLOCK_2-3_CONV_1/Conv2D1
+143 Sigmoid    [[1, 288, 12, 32]] -> [1, 288, 12, 32]  model/BLOCK_2-3_ACT_1/Sigmoid
+144 Mul        [[1, 288, 12, 32], [1, 288, 12, 32]] -> [1, 288, 12, 32]  model/BLOCK_2-3_ACT_1/mul
+145 Conv  in [1, 288, 12, 32] w [288, 1, 3, 3] g 288 s [1, 1] p None out [1, 288, 12, 32] MAC 1.0M  model/BLOCK_2-3_BN_2/FusedBatchNormV3;model/BLOCK_2-1_CONV_1/Conv2D;model/BLOCK_2-3_CONV_2/depthwise1
+146 Sigmoid    [[1, 288, 12, 32]] -> [1, 288, 12, 32]  model/BLOCK_2-3_ACT_2/Sigmoid
+147 Mul        [[1, 288, 12, 32], [1, 288, 12, 32]] -> [1, 288, 12, 32]  model/BLOCK_2-3_ACT_2/mul
+148 ReduceMean [[1, 288, 12, 32]] -> [1, 288]  model/BLOCK_2-3_SE_AVG_POOL_1/Mean_reducemean
+149 Reshape    [[1, 288], [4]] -> [1, 288, 1, 1]  model/BLOCK_2-3_SE_CONV_1/Conv2D1__434
+150 Conv  in [1, 288, 1, 1] w [18, 288, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 18, 1, 1] MAC 0.0M  node_Conv_22
+151 Sigmoid    [[1, 18, 1, 1]] -> [1, 18, 1, 1]  model/BLOCK_2-3_SE_CONV_1/Sigmoid
+152 Mul        [[1, 18, 1, 1], [1, 18, 1, 1]] -> [1, 18, 1, 1]  model/BLOCK_2-3_SE_CONV_1/mul
+153 Conv  in [1, 18, 1, 1] w [288, 18, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 288, 1, 1] MAC 0.0M  node_Conv_23
+154 Sigmoid    [[1, 288, 1, 1]] -> [1, 288, 1, 1]  model/BLOCK_2-3_SE_CONV_2/Sigmoid
+155 Mul        [[1, 288, 12, 32], [1, 288, 1, 1]] -> [1, 288, 12, 32]  model/BLOCK_2-3_MULTIPLY/mul
+156 Conv  in [1, 288, 12, 32] w [72, 288, 1, 1] g 1 s [1, 1] p None out [1, 72, 12, 32] MAC 8.0M  node_Conv_24
+157 Add        [[1, 72, 12, 32], [1, 72, 12, 32]] -> [1, 72, 12, 32]  model/BLOCK_2-3_ADD/add
+158 Conv  in [1, 72, 12, 32] w [288, 72, 1, 1] g 1 s [1, 1] p None out [1, 288, 12, 32] MAC 8.0M  model/BLOCK_2-4_BN_1/FusedBatchNormV3;model/BLOCK_2-1_CONV_1/Conv2D;model/BLOCK_2-4_CONV_1/Conv2D1
+159 Sigmoid    [[1, 288, 12, 32]] -> [1, 288, 12, 32]  model/BLOCK_2-4_ACT_1/Sigmoid
+160 Mul        [[1, 288, 12, 32], [1, 288, 12, 32]] -> [1, 288, 12, 32]  model/BLOCK_2-4_ACT_1/mul
+161 Conv  in [1, 288, 12, 32] w [288, 1, 3, 3] g 288 s [1, 1] p None out [1, 288, 12, 32] MAC 1.0M  model/BLOCK_2-4_BN_2/FusedBatchNormV3;model/BLOCK_2-1_CONV_1/Conv2D;model/BLOCK_2-4_CONV_2/depthwise1
+162 Sigmoid    [[1, 288, 12, 32]] -> [1, 288, 12, 32]  model/BLOCK_2-4_ACT_2/Sigmoid
+163 Mul        [[1, 288, 12, 32], [1, 288, 12, 32]] -> [1, 288, 12, 32]  model/BLOCK_2-4_ACT_2/mul
+164 ReduceMean [[1, 288, 12, 32]] -> [1, 288]  model/BLOCK_2-4_SE_AVG_POOL_1/Mean_reducemean
+165 Reshape    [[1, 288], [4]] -> [1, 288, 1, 1]  model/BLOCK_2-4_SE_CONV_1/Conv2D1__483
+166 Conv  in [1, 288, 1, 1] w [18, 288, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 18, 1, 1] MAC 0.0M  node_Conv_25
+167 Sigmoid    [[1, 18, 1, 1]] -> [1, 18, 1, 1]  model/BLOCK_2-4_SE_CONV_1/Sigmoid
+168 Mul        [[1, 18, 1, 1], [1, 18, 1, 1]] -> [1, 18, 1, 1]  model/BLOCK_2-4_SE_CONV_1/mul
+169 Conv  in [1, 18, 1, 1] w [288, 18, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 288, 1, 1] MAC 0.0M  node_Conv_26
+170 Sigmoid    [[1, 288, 1, 1]] -> [1, 288, 1, 1]  model/BLOCK_2-4_SE_CONV_2/Sigmoid
+171 Mul        [[1, 288, 12, 32], [1, 288, 1, 1]] -> [1, 288, 12, 32]  model/BLOCK_2-4_MULTIPLY/mul
+172 Conv  in [1, 288, 12, 32] w [72, 288, 1, 1] g 1 s [1, 1] p None out [1, 72, 12, 32] MAC 8.0M  node_Conv_27
+173 Add        [[1, 72, 12, 32], [1, 72, 12, 32]] -> [1, 72, 12, 32]  model/BLOCK_2-4_ADD/add
+174 Conv  in [1, 72, 12, 32] w [864, 72, 1, 1] g 1 s [1, 1] p None out [1, 864, 12, 32] MAC 23.9M  model/BLOCK_3-1_BN_1/FusedBatchNormV3;model/BLOCK_3-1_CONV_1/Conv2D1
+175 Sigmoid    [[1, 864, 12, 32]] -> [1, 864, 12, 32]  model/BLOCK_3-1_ACT_1/Sigmoid
+176 Mul        [[1, 864, 12, 32], [1, 864, 12, 32]] -> [1, 864, 12, 32]  model/BLOCK_3-1_ACT_1/mul
+177 Conv  in [1, 864, 12, 32] w [864, 1, 3, 3] g 864 s [2, 2] p [1, 1, 1, 1] out [1, 864, 6, 16] MAC 0.7M  model/BLOCK_3-1_BN_2/FusedBatchNormV3;model/BLOCK_3-1_CONV_1/Conv2D;model/BLOCK_3-1_CONV_2/depthwise1
+178 Sigmoid    [[1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-1_ACT_2/Sigmoid
+179 Mul        [[1, 864, 6, 16], [1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-1_ACT_2/mul
+180 ReduceMean [[1, 864, 6, 16]] -> [1, 864]  model/BLOCK_3-1_SE_AVG_POOL_1/Mean_reducemean
+181 Reshape    [[1, 864], [4]] -> [1, 864, 1, 1]  model/BLOCK_3-1_SE_CONV_1/Conv2D2__533
+182 Conv  in [1, 864, 1, 1] w [27, 864, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 27, 1, 1] MAC 0.0M  node_Conv_28
+183 Sigmoid    [[1, 27, 1, 1]] -> [1, 27, 1, 1]  model/BLOCK_3-1_SE_CONV_1/Sigmoid
+184 Mul        [[1, 27, 1, 1], [1, 27, 1, 1]] -> [1, 27, 1, 1]  model/BLOCK_3-1_SE_CONV_1/mul
+185 Conv  in [1, 27, 1, 1] w [864, 27, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 864, 1, 1] MAC 0.0M  node_Conv_29
+186 Sigmoid    [[1, 864, 1, 1]] -> [1, 864, 1, 1]  model/BLOCK_3-1_SE_CONV_2/Sigmoid
+187 Mul        [[1, 864, 6, 16], [1, 864, 1, 1]] -> [1, 864, 6, 16]  model/BLOCK_3-1_MULTIPLY/mul
+188 Conv  in [1, 864, 6, 16] w [108, 864, 1, 1] g 1 s [1, 1] p None out [1, 108, 6, 16] MAC 9.0M  node_Conv_30
+189 Conv  in [1, 108, 6, 16] w [864, 108, 1, 1] g 1 s [1, 1] p None out [1, 864, 6, 16] MAC 9.0M  model/BLOCK_3-2_BN_1/FusedBatchNormV3;model/BLOCK_3-1_CONV_1/Conv2D;model/BLOCK_3-2_CONV_1/Conv2D1
+190 Sigmoid    [[1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-2_ACT_1/Sigmoid
+191 Mul        [[1, 864, 6, 16], [1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-2_ACT_1/mul
+192 Conv  in [1, 864, 6, 16] w [864, 1, 3, 3] g 864 s [1, 1] p None out [1, 864, 6, 16] MAC 0.7M  model/BLOCK_3-2_BN_2/FusedBatchNormV3;model/BLOCK_3-1_CONV_1/Conv2D;model/BLOCK_3-2_CONV_2/depthwise1
+193 Sigmoid    [[1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-2_ACT_2/Sigmoid
+194 Mul        [[1, 864, 6, 16], [1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-2_ACT_2/mul
+195 ReduceMean [[1, 864, 6, 16]] -> [1, 864]  model/BLOCK_3-2_SE_AVG_POOL_1/Mean_reducemean
+196 Reshape    [[1, 864], [4]] -> [1, 864, 1, 1]  model/BLOCK_3-2_SE_CONV_1/Conv2D1__582
+197 Conv  in [1, 864, 1, 1] w [27, 864, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 27, 1, 1] MAC 0.0M  node_Conv_31
+198 Sigmoid    [[1, 27, 1, 1]] -> [1, 27, 1, 1]  model/BLOCK_3-2_SE_CONV_1/Sigmoid
+199 Mul        [[1, 27, 1, 1], [1, 27, 1, 1]] -> [1, 27, 1, 1]  model/BLOCK_3-2_SE_CONV_1/mul
+200 Conv  in [1, 27, 1, 1] w [864, 27, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 864, 1, 1] MAC 0.0M  node_Conv_32
+201 Sigmoid    [[1, 864, 1, 1]] -> [1, 864, 1, 1]  model/BLOCK_3-2_SE_CONV_2/Sigmoid
+202 Mul        [[1, 864, 6, 16], [1, 864, 1, 1]] -> [1, 864, 6, 16]  model/BLOCK_3-2_MULTIPLY/mul
+203 Conv  in [1, 864, 6, 16] w [108, 864, 1, 1] g 1 s [1, 1] p None out [1, 108, 6, 16] MAC 9.0M  node_Conv_33
+204 Add        [[1, 108, 6, 16], [1, 108, 6, 16]] -> [1, 108, 6, 16]  model/BLOCK_3-2_ADD/add
+205 Conv  in [1, 108, 6, 16] w [864, 108, 1, 1] g 1 s [1, 1] p None out [1, 864, 6, 16] MAC 9.0M  model/BLOCK_3-3_BN_1/FusedBatchNormV3;model/BLOCK_3-1_CONV_1/Conv2D;model/BLOCK_3-3_CONV_1/Conv2D1
+206 Sigmoid    [[1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-3_ACT_1/Sigmoid
+207 Mul        [[1, 864, 6, 16], [1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-3_ACT_1/mul
+208 Conv  in [1, 864, 6, 16] w [864, 1, 3, 3] g 864 s [1, 1] p None out [1, 864, 6, 16] MAC 0.7M  model/BLOCK_3-3_BN_2/FusedBatchNormV3;model/BLOCK_3-1_CONV_1/Conv2D;model/BLOCK_3-3_CONV_2/depthwise1
+209 Sigmoid    [[1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-3_ACT_2/Sigmoid
+210 Mul        [[1, 864, 6, 16], [1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-3_ACT_2/mul
+211 ReduceMean [[1, 864, 6, 16]] -> [1, 864]  model/BLOCK_3-3_SE_AVG_POOL_1/Mean_reducemean
+212 Reshape    [[1, 864], [4]] -> [1, 864, 1, 1]  model/BLOCK_3-3_SE_CONV_1/Conv2D1__631
+213 Conv  in [1, 864, 1, 1] w [27, 864, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 27, 1, 1] MAC 0.0M  node_Conv_34
+214 Sigmoid    [[1, 27, 1, 1]] -> [1, 27, 1, 1]  model/BLOCK_3-3_SE_CONV_1/Sigmoid
+215 Mul        [[1, 27, 1, 1], [1, 27, 1, 1]] -> [1, 27, 1, 1]  model/BLOCK_3-3_SE_CONV_1/mul
+216 Conv  in [1, 27, 1, 1] w [864, 27, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 864, 1, 1] MAC 0.0M  node_Conv_35
+217 Sigmoid    [[1, 864, 1, 1]] -> [1, 864, 1, 1]  model/BLOCK_3-3_SE_CONV_2/Sigmoid
+218 Mul        [[1, 864, 6, 16], [1, 864, 1, 1]] -> [1, 864, 6, 16]  model/BLOCK_3-3_MULTIPLY/mul
+219 Conv  in [1, 864, 6, 16] w [108, 864, 1, 1] g 1 s [1, 1] p None out [1, 108, 6, 16] MAC 9.0M  node_Conv_36
+220 Add        [[1, 108, 6, 16], [1, 108, 6, 16]] -> [1, 108, 6, 16]  model/BLOCK_3-3_ADD/add
+221 Conv  in [1, 108, 6, 16] w [864, 108, 1, 1] g 1 s [1, 1] p None out [1, 864, 6, 16] MAC 9.0M  model/BLOCK_3-4_BN_1/FusedBatchNormV3;model/BLOCK_3-1_CONV_1/Conv2D;model/BLOCK_3-4_CONV_1/Conv2D1
+222 Sigmoid    [[1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-4_ACT_1/Sigmoid
+223 Mul        [[1, 864, 6, 16], [1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-4_ACT_1/mul
+224 Conv  in [1, 864, 6, 16] w [864, 1, 3, 3] g 864 s [1, 1] p None out [1, 864, 6, 16] MAC 0.7M  model/BLOCK_3-4_BN_2/FusedBatchNormV3;model/BLOCK_3-1_CONV_1/Conv2D;model/BLOCK_3-4_CONV_2/depthwise1
+225 Sigmoid    [[1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-4_ACT_2/Sigmoid
+226 Mul        [[1, 864, 6, 16], [1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-4_ACT_2/mul
+227 ReduceMean [[1, 864, 6, 16]] -> [1, 864]  model/BLOCK_3-4_SE_AVG_POOL_1/Mean_reducemean
+228 Reshape    [[1, 864], [4]] -> [1, 864, 1, 1]  model/BLOCK_3-4_SE_CONV_1/Conv2D1__680
+229 Conv  in [1, 864, 1, 1] w [27, 864, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 27, 1, 1] MAC 0.0M  node_Conv_37
+230 Sigmoid    [[1, 27, 1, 1]] -> [1, 27, 1, 1]  model/BLOCK_3-4_SE_CONV_1/Sigmoid
+231 Mul        [[1, 27, 1, 1], [1, 27, 1, 1]] -> [1, 27, 1, 1]  model/BLOCK_3-4_SE_CONV_1/mul
+232 Conv  in [1, 27, 1, 1] w [864, 27, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 864, 1, 1] MAC 0.0M  node_Conv_38
+233 Sigmoid    [[1, 864, 1, 1]] -> [1, 864, 1, 1]  model/BLOCK_3-4_SE_CONV_2/Sigmoid
+234 Mul        [[1, 864, 6, 16], [1, 864, 1, 1]] -> [1, 864, 6, 16]  model/BLOCK_3-4_MULTIPLY/mul
+235 Conv  in [1, 864, 6, 16] w [108, 864, 1, 1] g 1 s [1, 1] p None out [1, 108, 6, 16] MAC 9.0M  node_Conv_39
+236 Add        [[1, 108, 6, 16], [1, 108, 6, 16]] -> [1, 108, 6, 16]  model/BLOCK_3-4_ADD/add
+237 Conv  in [1, 108, 6, 16] w [864, 108, 1, 1] g 1 s [1, 1] p None out [1, 864, 6, 16] MAC 9.0M  model/BLOCK_3-5_BN_1/FusedBatchNormV3;model/BLOCK_3-1_CONV_1/Conv2D;model/BLOCK_3-5_CONV_1/Conv2D1
+238 Sigmoid    [[1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-5_ACT_1/Sigmoid
+239 Mul        [[1, 864, 6, 16], [1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-5_ACT_1/mul
+240 Conv  in [1, 864, 6, 16] w [864, 1, 3, 3] g 864 s [1, 1] p None out [1, 864, 6, 16] MAC 0.7M  model/BLOCK_3-5_BN_2/FusedBatchNormV3;model/BLOCK_3-1_CONV_1/Conv2D;model/BLOCK_3-5_CONV_2/depthwise1
+241 Sigmoid    [[1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-5_ACT_2/Sigmoid
+242 Mul        [[1, 864, 6, 16], [1, 864, 6, 16]] -> [1, 864, 6, 16]  model/BLOCK_3-5_ACT_2/mul
+243 ReduceMean [[1, 864, 6, 16]] -> [1, 864]  model/BLOCK_3-5_SE_AVG_POOL_1/Mean_reducemean
+244 Reshape    [[1, 864], [4]] -> [1, 864, 1, 1]  model/BLOCK_3-5_SE_CONV_1/Conv2D1__729
+245 Conv  in [1, 864, 1, 1] w [27, 864, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 27, 1, 1] MAC 0.0M  node_Conv_40
+246 Sigmoid    [[1, 27, 1, 1]] -> [1, 27, 1, 1]  model/BLOCK_3-5_SE_CONV_1/Sigmoid
+247 Mul        [[1, 27, 1, 1], [1, 27, 1, 1]] -> [1, 27, 1, 1]  model/BLOCK_3-5_SE_CONV_1/mul
+248 Conv  in [1, 27, 1, 1] w [864, 27, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 864, 1, 1] MAC 0.0M  node_Conv_41
+249 Sigmoid    [[1, 864, 1, 1]] -> [1, 864, 1, 1]  model/BLOCK_3-5_SE_CONV_2/Sigmoid
+250 Mul        [[1, 864, 6, 16], [1, 864, 1, 1]] -> [1, 864, 6, 16]  model/BLOCK_3-5_MULTIPLY/mul
+251 Conv  in [1, 864, 6, 16] w [108, 864, 1, 1] g 1 s [1, 1] p None out [1, 108, 6, 16] MAC 9.0M  node_Conv_42
+252 Add        [[1, 108, 6, 16], [1, 108, 6, 16]] -> [1, 108, 6, 16]  model/BLOCK_3-5_ADD/add
+253 Conv  in [1, 108, 6, 16] w [1536, 108, 1, 1] g 1 s [1, 1] p None out [1, 1536, 6, 16] MAC 15.9M  model/BLOCK_4-1_BN_1/FusedBatchNormV3;model/BLOCK_4-1_CONV_1/Conv2D1
+254 Sigmoid    [[1, 1536, 6, 16]] -> [1, 1536, 6, 16]  model/BLOCK_4-1_ACT_1/Sigmoid
+255 Mul        [[1, 1536, 6, 16], [1, 1536, 6, 16]] -> [1, 1536, 6, 16]  model/BLOCK_4-1_ACT_1/mul
+256 Conv  in [1, 1536, 6, 16] w [1536, 1, 3, 3] g 1536 s [2, 2] p [1, 1, 1, 1] out [1, 1536, 3, 8] MAC 0.3M  model/BLOCK_4-1_BN_2/FusedBatchNormV3;model/BLOCK_4-1_CONV_1/Conv2D;model/BLOCK_4-1_CONV_2/depthwise1
+257 Sigmoid    [[1, 1536, 3, 8]] -> [1, 1536, 3, 8]  model/BLOCK_4-1_ACT_2/Sigmoid
+258 Mul        [[1, 1536, 3, 8], [1, 1536, 3, 8]] -> [1, 1536, 3, 8]  model/BLOCK_4-1_ACT_2/mul
+259 ReduceMean [[1, 1536, 3, 8]] -> [1, 1536]  model/BLOCK_4-1_SE_AVG_POOL_1/Mean_reducemean
+260 Reshape    [[1, 1536], [4]] -> [1, 1536, 1, 1]  model/BLOCK_4-1_SE_CONV_1/Conv2D2__779
+261 Conv  in [1, 1536, 1, 1] w [48, 1536, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 48, 1, 1] MAC 0.1M  node_Conv_43
+262 Sigmoid    [[1, 48, 1, 1]] -> [1, 48, 1, 1]  model/BLOCK_4-1_SE_CONV_1/Sigmoid
+263 Mul        [[1, 48, 1, 1], [1, 48, 1, 1]] -> [1, 48, 1, 1]  model/BLOCK_4-1_SE_CONV_1/mul
+264 Conv  in [1, 48, 1, 1] w [1536, 48, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 1536, 1, 1] MAC 0.1M  node_Conv_44
+265 Sigmoid    [[1, 1536, 1, 1]] -> [1, 1536, 1, 1]  model/BLOCK_4-1_SE_CONV_2/Sigmoid
+266 Mul        [[1, 1536, 3, 8], [1, 1536, 1, 1]] -> [1, 1536, 3, 8]  model/BLOCK_4-1_MULTIPLY/mul
+267 Conv  in [1, 1536, 3, 8] w [192, 1536, 1, 1] g 1 s [1, 1] p None out [1, 192, 3, 8] MAC 7.1M  node_Conv_45
+268 Conv  in [1, 192, 3, 8] w [1536, 192, 1, 1] g 1 s [1, 1] p None out [1, 1536, 3, 8] MAC 7.1M  model/BLOCK_4-2_BN_1/FusedBatchNormV3;model/BLOCK_4-1_CONV_1/Conv2D;model/BLOCK_4-2_CONV_1/Conv2D1
+269 Sigmoid    [[1, 1536, 3, 8]] -> [1, 1536, 3, 8]  model/BLOCK_4-2_ACT_1/Sigmoid
+270 Mul        [[1, 1536, 3, 8], [1, 1536, 3, 8]] -> [1, 1536, 3, 8]  model/BLOCK_4-2_ACT_1/mul
+271 Conv  in [1, 1536, 3, 8] w [1536, 1, 3, 3] g 1536 s [1, 1] p None out [1, 1536, 3, 8] MAC 0.3M  model/BLOCK_4-2_BN_2/FusedBatchNormV3;model/BLOCK_4-1_CONV_1/Conv2D;model/BLOCK_4-2_CONV_2/depthwise1
+272 Sigmoid    [[1, 1536, 3, 8]] -> [1, 1536, 3, 8]  model/BLOCK_4-2_ACT_2/Sigmoid
+273 Mul        [[1, 1536, 3, 8], [1, 1536, 3, 8]] -> [1, 1536, 3, 8]  model/BLOCK_4-2_ACT_2/mul
+274 ReduceMean [[1, 1536, 3, 8]] -> [1, 1536]  model/BLOCK_4-2_SE_AVG_POOL_1/Mean_reducemean
+275 Reshape    [[1, 1536], [4]] -> [1, 1536, 1, 1]  model/BLOCK_4-2_SE_CONV_1/Conv2D1__828
+276 Conv  in [1, 1536, 1, 1] w [48, 1536, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 48, 1, 1] MAC 0.1M  node_Conv_46
+277 Sigmoid    [[1, 48, 1, 1]] -> [1, 48, 1, 1]  model/BLOCK_4-2_SE_CONV_1/Sigmoid
+278 Mul        [[1, 48, 1, 1], [1, 48, 1, 1]] -> [1, 48, 1, 1]  model/BLOCK_4-2_SE_CONV_1/mul
+279 Conv  in [1, 48, 1, 1] w [1536, 48, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 1536, 1, 1] MAC 0.1M  node_Conv_47
+280 Sigmoid    [[1, 1536, 1, 1]] -> [1, 1536, 1, 1]  model/BLOCK_4-2_SE_CONV_2/Sigmoid
+281 Mul        [[1, 1536, 3, 8], [1, 1536, 1, 1]] -> [1, 1536, 3, 8]  model/BLOCK_4-2_MULTIPLY/mul
+282 Conv  in [1, 1536, 3, 8] w [192, 1536, 1, 1] g 1 s [1, 1] p None out [1, 192, 3, 8] MAC 7.1M  node_Conv_48
+283 Add        [[1, 192, 3, 8], [1, 192, 3, 8]] -> [1, 192, 3, 8]  model/BLOCK_4-2_ADD/add
+284 Conv  in [1, 192, 3, 8] w [1536, 192, 1, 1] g 1 s [1, 1] p None out [1, 1536, 3, 8] MAC 7.1M  model/BLOCK_4-3_BN_1/FusedBatchNormV3;model/BLOCK_4-1_CONV_1/Conv2D;model/BLOCK_4-3_CONV_1/Conv2D1
+285 Sigmoid    [[1, 1536, 3, 8]] -> [1, 1536, 3, 8]  model/BLOCK_4-3_ACT_1/Sigmoid
+286 Mul        [[1, 1536, 3, 8], [1, 1536, 3, 8]] -> [1, 1536, 3, 8]  model/BLOCK_4-3_ACT_1/mul
+287 Conv  in [1, 1536, 3, 8] w [1536, 1, 3, 3] g 1536 s [1, 1] p None out [1, 1536, 3, 8] MAC 0.3M  model/BLOCK_4-3_BN_2/FusedBatchNormV3;model/BLOCK_4-1_CONV_1/Conv2D;model/BLOCK_4-3_CONV_2/depthwise1
+288 Sigmoid    [[1, 1536, 3, 8]] -> [1, 1536, 3, 8]  model/BLOCK_4-3_ACT_2/Sigmoid
+289 Mul        [[1, 1536, 3, 8], [1, 1536, 3, 8]] -> [1, 1536, 3, 8]  model/BLOCK_4-3_ACT_2/mul
+290 ReduceMean [[1, 1536, 3, 8]] -> [1, 1536]  model/BLOCK_4-3_SE_AVG_POOL_1/Mean_reducemean
+291 Reshape    [[1, 1536], [4]] -> [1, 1536, 1, 1]  model/BLOCK_4-3_SE_CONV_1/Conv2D1__877
+292 Conv  in [1, 1536, 1, 1] w [48, 1536, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 48, 1, 1] MAC 0.1M  node_Conv_49
+293 Sigmoid    [[1, 48, 1, 1]] -> [1, 48, 1, 1]  model/BLOCK_4-3_SE_CONV_1/Sigmoid
+294 Mul        [[1, 48, 1, 1], [1, 48, 1, 1]] -> [1, 48, 1, 1]  model/BLOCK_4-3_SE_CONV_1/mul
+295 Conv  in [1, 48, 1, 1] w [1536, 48, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 1536, 1, 1] MAC 0.1M  node_Conv_50
+296 Sigmoid    [[1, 1536, 1, 1]] -> [1, 1536, 1, 1]  model/BLOCK_4-3_SE_CONV_2/Sigmoid
+297 Mul        [[1, 1536, 3, 8], [1, 1536, 1, 1]] -> [1, 1536, 3, 8]  model/BLOCK_4-3_MULTIPLY/mul
+298 Conv  in [1, 1536, 3, 8] w [192, 1536, 1, 1] g 1 s [1, 1] p None out [1, 192, 3, 8] MAC 7.1M  node_Conv_51
+299 Add        [[1, 192, 3, 8], [1, 192, 3, 8]] -> [1, 192, 3, 8]  model/BLOCK_4-3_ADD/add
+300 Conv  in [1, 192, 3, 8] w [1536, 192, 1, 1] g 1 s [1, 1] p None out [1, 1536, 3, 8] MAC 7.1M  model/BLOCK_4-4_BN_1/FusedBatchNormV3;model/BLOCK_4-1_CONV_1/Conv2D;model/BLOCK_4-4_CONV_1/Conv2D1
+301 Sigmoid    [[1, 1536, 3, 8]] -> [1, 1536, 3, 8]  model/BLOCK_4-4_ACT_1/Sigmoid
+302 Mul        [[1, 1536, 3, 8], [1, 1536, 3, 8]] -> [1, 1536, 3, 8]  model/BLOCK_4-4_ACT_1/mul
+303 Conv  in [1, 1536, 3, 8] w [1536, 1, 3, 3] g 1536 s [1, 1] p None out [1, 1536, 3, 8] MAC 0.3M  model/BLOCK_4-4_BN_2/FusedBatchNormV3;model/BLOCK_4-1_CONV_1/Conv2D;model/BLOCK_4-4_CONV_2/depthwise1
+304 Sigmoid    [[1, 1536, 3, 8]] -> [1, 1536, 3, 8]  model/BLOCK_4-4_ACT_2/Sigmoid
+305 Mul        [[1, 1536, 3, 8], [1, 1536, 3, 8]] -> [1, 1536, 3, 8]  model/BLOCK_4-4_ACT_2/mul
+306 ReduceMean [[1, 1536, 3, 8]] -> [1, 1536]  model/BLOCK_4-4_SE_AVG_POOL_1/Mean_reducemean
+307 Reshape    [[1, 1536], [4]] -> [1, 1536, 1, 1]  model/BLOCK_4-4_SE_CONV_1/Conv2D1__926
+308 Conv  in [1, 1536, 1, 1] w [48, 1536, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 48, 1, 1] MAC 0.1M  node_Conv_52
+309 Sigmoid    [[1, 48, 1, 1]] -> [1, 48, 1, 1]  model/BLOCK_4-4_SE_CONV_1/Sigmoid
+310 Mul        [[1, 48, 1, 1], [1, 48, 1, 1]] -> [1, 48, 1, 1]  model/BLOCK_4-4_SE_CONV_1/mul
+311 Conv  in [1, 48, 1, 1] w [1536, 48, 1, 1] g 1 s [1, 1] p [0, 0, 0, 0] out [1, 1536, 1, 1] MAC 0.1M  node_Conv_53
+312 Sigmoid    [[1, 1536, 1, 1]] -> [1, 1536, 1, 1]  model/BLOCK_4-4_SE_CONV_2/Sigmoid
+313 Mul        [[1, 1536, 3, 8], [1, 1536, 1, 1]] -> [1, 1536, 3, 8]  model/BLOCK_4-4_MULTIPLY/mul
+314 Conv  in [1, 1536, 3, 8] w [192, 1536, 1, 1] g 1 s [1, 1] p None out [1, 192, 3, 8] MAC 7.1M  node_Conv_54
+315 Add        [[1, 192, 3, 8], [1, 192, 3, 8]] -> [1, 192, 3, 8]  model/BLOCK_4-4_ADD/add
+316 Mul        [[1, 192, 3, 8], [1, 192, 1, 1]] -> [1, 192, 3, 8]  model/BNORM_POST_NOQUANT/FusedBatchNormV32
+317 Add        [[1, 192, 3, 8], [1, 192, 1, 1]] -> [1, 192, 3, 8]  model/ACT_POST/Relu;model/BNORM_POST_NOQUANT/FusedBatchNormV3
+318 Relu       [[1, 192, 3, 8]] -> [1, 192, 3, 8]  Relu__92
+319 Conv  in [1, 192, 3, 8] w [1024, 192, 3, 3] g 1 s [1, 1] p None out [1, 1024, 1, 6] MAC 10.6M  model/POST_ACT_1/Relu;model/POST_BN_1/FusedBatchNormV3;model/POST_CONV_1/Conv2D
+320 Relu       [[1, 1024, 1, 6]] -> [1, 1024, 1, 6]  Relu__95
+321 ReduceMean [[1, 1024, 1, 6]] -> [1, 1024]  model/GLOBAL_AVG_POOL/Mean_reducemean
+322 MatMul [1, 1024] x [1024, 6522] MAC 6.7M  Identity
+323 Add        [[1, 6522], [6522]] -> [1, 6522]  Add__100
+total MAC 1.745 G

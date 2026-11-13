@@ -1,0 +1,1138 @@
+  0 Reshape    [[1, 160000], [4]] -> [1, 1, 160000, 1]  jit(infer_fn)/MultiHeadClassifier/embedding_model/frontend/reshape1
+  1 Conv  in [1, 1, 160000, 1] w [640, 1, 640, 1] g 1 s [320, 1] p [160, 0, 160, 0] out [1, 640, 500, 1] MAC 204.8M  node_Conv_7
+  2 Transpose  [[1, 640, 500, 1]] -> [1, 500, 1, 640]  jit(infer_fn)/MultiHeadClassifier/embedding_model/frontend/conv_general_dilated3__222
+  3 Reshape    [[1, 500, 1, 640], [3]] -> [1, 500, 640]  jit(infer_fn)/MultiHeadClassifier/embedding_model/frontend/conv_general_dilated4
+  4 Mul        [[1, 1, 640], [1, 500, 640]] -> [1, 500, 640]  jit(infer_fn)/MultiHeadClassifier/embedding_model/frontend/mul2
+  5 Pad        [[1, 500, 640], [6]] -> [1, 500, 1024]  pad
+  6 Reshape    [[1, 500, 1024], [4]] -> [1, 500, 1024, 1]  input_expanded__290
+  7 DFT        [[1, 500, 1024, 1], []] -> [1, 500, 513, 2]  dft_width__305
+  8 ReduceL2   [[1, 500, 513, 2], [1]] -> [1, 500, 513]  ReduceL2_0
+  9 MatMul [1, 500, 513] x [513, 128] MAC 32.8M  jit(infer_fn)/MultiHeadClassifier/embedding_model/frontend/dot_general5
+ 10 Max        [[1, 500, 128], []] -> [1, 500, 128]  jit(infer_fn)/MultiHeadClassifier/embedding_model/magnitude_scaling/max2
+ 11 Log        [[1, 500, 128]] -> [1, 500, 128]  jit(infer_fn)/MultiHeadClassifier/embedding_model/magnitude_scaling/log
+ 12 Mul        [[], [1, 500, 128]] -> [1, 500, 128]  StatefulPartitionedCall:3
+ 13 Unsqueeze  [[1, 500, 128], [1]] -> [1, 1, 500, 128]  jit(infer_fn)/MultiHeadClassifier/embedding_model/broadcast_in_dim1
+ 14 Conv  in [1, 1, 500, 128] w [40, 1, 3, 3] g 1 s [2, 2] p None out [1, 40, 249, 63] MAC 5.6M  node_Conv_8
+ 15 Transpose  [[1, 40, 249, 63]] -> [1, 249, 63, 40]  Transpose__7206
+ 16 Mul        [[1, 249, 63, 40], [1, 1, 1, 40]] -> [1, 249, 63, 40]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/Stem_0/BatchNorm_0/mul1
+ 17 Add        [[1, 249, 63, 40], [1, 1, 1, 40]] -> [1, 249, 63, 40]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/Stem_0/BatchNorm_0/add1
+ 18 Neg        [[1, 249, 63, 40]] -> [1, 249, 63, 40]  neg
+ 19 Exp        [[1, 249, 63, 40]] -> [1, 249, 63, 40]  exp
+ 20 Add        [[], [1, 249, 63, 40]] -> [1, 249, 63, 40]  add1
+ 21 Div        [[], [1, 249, 63, 40]] -> [1, 249, 63, 40]  div
+ 22 Mul        [[1, 249, 63, 40], [1, 249, 63, 40]] -> [1, 249, 63, 40]  mul
+ 23 Transpose  [[1, 249, 63, 40]] -> [1, 40, 249, 63]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/DepthwiseConv/conv_general_dilated__716
+ 24 Conv  in [1, 40, 249, 63] w [40, 1, 3, 3] g 40 s [1, 1] p [1, 1, 1, 1] out [1, 40, 249, 63] MAC 5.6M  node_Conv_9
+ 25 Transpose  [[1, 40, 249, 63]] -> [1, 249, 63, 40]  Transpose__7214
+ 26 Mul        [[1, 249, 63, 40], [1, 1, 1, 40]] -> [1, 249, 63, 40]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/DepthwiseBatchNorm/mul1
+ 27 Add        [[1, 249, 63, 40], [1, 1, 1, 40]] -> [1, 249, 63, 40]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/DepthwiseBatchNorm/add1
+ 28 Neg        [[1, 249, 63, 40]] -> [1, 249, 63, 40]  neg1
+ 29 Exp        [[1, 249, 63, 40]] -> [1, 249, 63, 40]  exp1
+ 30 Add        [[], [1, 249, 63, 40]] -> [1, 249, 63, 40]  add2
+ 31 Div        [[], [1, 249, 63, 40]] -> [1, 249, 63, 40]  div1
+ 32 Mul        [[1, 249, 63, 40], [1, 249, 63, 40]] -> [1, 249, 63, 40]  mul1
+ 33 ReduceSum  [[1, 249, 63, 40], [2]] -> [1, 40]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/SqueezeAndExcitation_0/reduce_sum
+ 34 Div        [[1, 40], []] -> [1, 40]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/SqueezeAndExcitation_0/div2
+ 35 MatMul [1, 40] x [40, 10] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/SqueezeAndExcitation_0/Reduce/dot_general5
+ 36 Add        [[1, 10], [1, 10]] -> [1, 10]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/SqueezeAndExcitation_0/Reduce/add2
+ 37 Neg        [[1, 10]] -> [1, 10]  neg2
+ 38 Exp        [[1, 10]] -> [1, 10]  exp2
+ 39 Add        [[], [1, 10]] -> [1, 10]  add4
+ 40 Div        [[], [1, 10]] -> [1, 10]  div2
+ 41 Mul        [[1, 10], [1, 10]] -> [1, 10]  mul2
+ 42 MatMul [1, 10] x [10, 40] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/SqueezeAndExcitation_0/Expand/dot_general5
+ 43 Add        [[1, 40], [1, 40]] -> [1, 40]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/SqueezeAndExcitation_0/Expand/add1
+ 44 Neg        [[1, 40]] -> [1, 40]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/SqueezeAndExcitation_0/neg
+ 45 Exp        [[1, 40]] -> [1, 40]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/SqueezeAndExcitation_0/exp
+ 46 Add        [[], [1, 40]] -> [1, 40]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/SqueezeAndExcitation_0/add1
+ 47 Div        [[], [1, 40]] -> [1, 40]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/SqueezeAndExcitation_0/div3
+ 48 Unsqueeze  [[1, 40], [2]] -> [1, 1, 1, 40]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/SqueezeAndExcitation_0/mul
+ 49 Mul        [[1, 249, 63, 40], [1, 1, 1, 40]] -> [1, 249, 63, 40]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/SqueezeAndExcitation_0/mul3
+ 50 Transpose  [[1, 249, 63, 40]] -> [1, 40, 249, 63]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/ProjectConv/conv_general_dilated__951
+ 51 Conv  in [1, 40, 249, 63] w [24, 40, 1, 1] g 1 s [1, 1] p None out [1, 24, 249, 63] MAC 15.1M  node_Conv_10
+ 52 Transpose  [[1, 24, 249, 63]] -> [1, 249, 63, 24]  Transpose__7222
+ 53 Mul        [[1, 249, 63, 24], [1, 1, 1, 24]] -> [1, 249, 63, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/ProjectBatchNorm/mul1
+ 54 Add        [[1, 249, 63, 24], [1, 1, 1, 24]] -> [1, 249, 63, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_0/ProjectBatchNorm/add1
+ 55 Transpose  [[1, 249, 63, 24]] -> [1, 24, 249, 63]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/DepthwiseConv/conv_general_dilated__956
+ 56 Conv  in [1, 24, 249, 63] w [24, 1, 3, 3] g 24 s [1, 1] p [1, 1, 1, 1] out [1, 24, 249, 63] MAC 3.4M  node_Conv_11
+ 57 Transpose  [[1, 24, 249, 63]] -> [1, 249, 63, 24]  Transpose__7230
+ 58 Mul        [[1, 249, 63, 24], [1, 1, 1, 24]] -> [1, 249, 63, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/DepthwiseBatchNorm/mul1
+ 59 Add        [[1, 249, 63, 24], [1, 1, 1, 24]] -> [1, 249, 63, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/DepthwiseBatchNorm/add1
+ 60 Neg        [[1, 249, 63, 24]] -> [1, 249, 63, 24]  neg3
+ 61 Exp        [[1, 249, 63, 24]] -> [1, 249, 63, 24]  exp3
+ 62 Add        [[], [1, 249, 63, 24]] -> [1, 249, 63, 24]  add6
+ 63 Div        [[], [1, 249, 63, 24]] -> [1, 249, 63, 24]  div3
+ 64 Mul        [[1, 249, 63, 24], [1, 249, 63, 24]] -> [1, 249, 63, 24]  mul3
+ 65 ReduceSum  [[1, 249, 63, 24], [2]] -> [1, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/SqueezeAndExcitation_0/reduce_sum
+ 66 Div        [[1, 24], []] -> [1, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/SqueezeAndExcitation_0/div2
+ 67 MatMul [1, 24] x [24, 6] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/SqueezeAndExcitation_0/Reduce/dot_general5
+ 68 Add        [[1, 6], [1, 6]] -> [1, 6]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/SqueezeAndExcitation_0/Reduce/add2
+ 69 Neg        [[1, 6]] -> [1, 6]  neg4
+ 70 Exp        [[1, 6]] -> [1, 6]  exp4
+ 71 Add        [[], [1, 6]] -> [1, 6]  add8
+ 72 Div        [[], [1, 6]] -> [1, 6]  div4
+ 73 Mul        [[1, 6], [1, 6]] -> [1, 6]  mul4
+ 74 MatMul [1, 6] x [6, 24] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/SqueezeAndExcitation_0/Expand/dot_general5
+ 75 Add        [[1, 24], [1, 24]] -> [1, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/SqueezeAndExcitation_0/Expand/add1
+ 76 Neg        [[1, 24]] -> [1, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/SqueezeAndExcitation_0/neg
+ 77 Exp        [[1, 24]] -> [1, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/SqueezeAndExcitation_0/exp
+ 78 Add        [[], [1, 24]] -> [1, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/SqueezeAndExcitation_0/add1
+ 79 Div        [[], [1, 24]] -> [1, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/SqueezeAndExcitation_0/div3
+ 80 Unsqueeze  [[1, 24], [2]] -> [1, 1, 1, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/SqueezeAndExcitation_0/mul
+ 81 Mul        [[1, 249, 63, 24], [1, 1, 1, 24]] -> [1, 249, 63, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/SqueezeAndExcitation_0/mul3
+ 82 Transpose  [[1, 249, 63, 24]] -> [1, 24, 249, 63]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/ProjectConv/conv_general_dilated__1191
+ 83 Conv  in [1, 24, 249, 63] w [24, 24, 1, 1] g 1 s [1, 1] p None out [1, 24, 249, 63] MAC 9.0M  node_Conv_12
+ 84 Transpose  [[1, 24, 249, 63]] -> [1, 249, 63, 24]  Transpose__7238
+ 85 Mul        [[1, 249, 63, 24], [1, 1, 1, 24]] -> [1, 249, 63, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/ProjectBatchNorm/mul1
+ 86 Add        [[1, 249, 63, 24], [1, 1, 1, 24]] -> [1, 249, 63, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_1/ProjectBatchNorm/add1
+ 87 Add        [[1, 249, 63, 24], [1, 249, 63, 24]] -> [1, 249, 63, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add
+ 88 Transpose  [[1, 249, 63, 24]] -> [1, 24, 249, 63]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/ExpandConv/conv_general_dilated__1196
+ 89 Conv  in [1, 24, 249, 63] w [144, 24, 1, 1] g 1 s [1, 1] p None out [1, 144, 249, 63] MAC 54.2M  node_Conv_13
+ 90 Transpose  [[1, 144, 249, 63]] -> [1, 249, 63, 144]  Transpose__7246
+ 91 Mul        [[1, 249, 63, 144], [1, 1, 1, 144]] -> [1, 249, 63, 144]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/ExpandBatchNorm/mul1
+ 92 Add        [[1, 249, 63, 144], [1, 1, 1, 144]] -> [1, 249, 63, 144]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/ExpandBatchNorm/add1
+ 93 Neg        [[1, 249, 63, 144]] -> [1, 249, 63, 144]  neg5
+ 94 Exp        [[1, 249, 63, 144]] -> [1, 249, 63, 144]  exp5
+ 95 Add        [[], [1, 249, 63, 144]] -> [1, 249, 63, 144]  add10
+ 96 Div        [[], [1, 249, 63, 144]] -> [1, 249, 63, 144]  div5
+ 97 Mul        [[1, 249, 63, 144], [1, 249, 63, 144]] -> [1, 249, 63, 144]  mul5
+ 98 Transpose  [[1, 249, 63, 144]] -> [1, 144, 249, 63]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/DepthwiseConv/conv_general_dilated__1201
+ 99 Conv  in [1, 144, 249, 63] w [144, 1, 3, 3] g 144 s [2, 2] p [1, 1, 1, 1] out [1, 144, 125, 32] MAC 5.2M  node_Conv_14
+100 Transpose  [[1, 144, 125, 32]] -> [1, 125, 32, 144]  Transpose__7254
+101 Mul        [[1, 125, 32, 144], [1, 1, 1, 144]] -> [1, 125, 32, 144]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/DepthwiseBatchNorm/mul1
+102 Add        [[1, 125, 32, 144], [1, 1, 1, 144]] -> [1, 125, 32, 144]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/DepthwiseBatchNorm/add1
+103 Neg        [[1, 125, 32, 144]] -> [1, 125, 32, 144]  neg6
+104 Exp        [[1, 125, 32, 144]] -> [1, 125, 32, 144]  exp6
+105 Add        [[], [1, 125, 32, 144]] -> [1, 125, 32, 144]  add12
+106 Div        [[], [1, 125, 32, 144]] -> [1, 125, 32, 144]  div6
+107 Mul        [[1, 125, 32, 144], [1, 125, 32, 144]] -> [1, 125, 32, 144]  mul6
+108 ReduceSum  [[1, 125, 32, 144], [2]] -> [1, 144]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/SqueezeAndExcitation_0/reduce_sum
+109 Div        [[1, 144], []] -> [1, 144]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/SqueezeAndExcitation_0/div2
+110 MatMul [1, 144] x [144, 6] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/SqueezeAndExcitation_0/Reduce/dot_general5
+111 Add        [[1, 6], [1, 6]] -> [1, 6]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/SqueezeAndExcitation_0/Reduce/add1
+112 Neg        [[1, 6]] -> [1, 6]  neg7
+113 Exp        [[1, 6]] -> [1, 6]  exp7
+114 Add        [[], [1, 6]] -> [1, 6]  add13
+115 Div        [[], [1, 6]] -> [1, 6]  div7
+116 Mul        [[1, 6], [1, 6]] -> [1, 6]  mul7
+117 MatMul [1, 6] x [6, 144] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/SqueezeAndExcitation_0/Expand/dot_general5
+118 Add        [[1, 144], [1, 144]] -> [1, 144]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/SqueezeAndExcitation_0/Expand/add1
+119 Neg        [[1, 144]] -> [1, 144]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/SqueezeAndExcitation_0/neg
+120 Exp        [[1, 144]] -> [1, 144]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/SqueezeAndExcitation_0/exp
+121 Add        [[], [1, 144]] -> [1, 144]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/SqueezeAndExcitation_0/add1
+122 Div        [[], [1, 144]] -> [1, 144]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/SqueezeAndExcitation_0/div3
+123 Unsqueeze  [[1, 144], [2]] -> [1, 1, 1, 144]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/SqueezeAndExcitation_0/mul
+124 Mul        [[1, 125, 32, 144], [1, 1, 1, 144]] -> [1, 125, 32, 144]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/SqueezeAndExcitation_0/mul3
+125 Transpose  [[1, 125, 32, 144]] -> [1, 144, 125, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/ProjectConv/conv_general_dilated__1436
+126 Conv  in [1, 144, 125, 32] w [32, 144, 1, 1] g 1 s [1, 1] p None out [1, 32, 125, 32] MAC 18.4M  node_Conv_15
+127 Transpose  [[1, 32, 125, 32]] -> [1, 125, 32, 32]  Transpose__7262
+128 Mul        [[1, 125, 32, 32], [1, 1, 1, 32]] -> [1, 125, 32, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/ProjectBatchNorm/mul1
+129 Add        [[1, 125, 32, 32], [1, 1, 1, 32]] -> [1, 125, 32, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_2/ProjectBatchNorm/add1
+130 Transpose  [[1, 125, 32, 32]] -> [1, 32, 125, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/ExpandConv/conv_general_dilated__1441
+131 Conv  in [1, 32, 125, 32] w [192, 32, 1, 1] g 1 s [1, 1] p None out [1, 192, 125, 32] MAC 24.6M  node_Conv_16
+132 Transpose  [[1, 192, 125, 32]] -> [1, 125, 32, 192]  Transpose__7270
+133 Mul        [[1, 125, 32, 192], [1, 1, 1, 192]] -> [1, 125, 32, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/ExpandBatchNorm/mul1
+134 Add        [[1, 125, 32, 192], [1, 1, 1, 192]] -> [1, 125, 32, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/ExpandBatchNorm/add1
+135 Neg        [[1, 125, 32, 192]] -> [1, 125, 32, 192]  neg8
+136 Exp        [[1, 125, 32, 192]] -> [1, 125, 32, 192]  exp8
+137 Add        [[], [1, 125, 32, 192]] -> [1, 125, 32, 192]  add15
+138 Div        [[], [1, 125, 32, 192]] -> [1, 125, 32, 192]  div8
+139 Mul        [[1, 125, 32, 192], [1, 125, 32, 192]] -> [1, 125, 32, 192]  mul8
+140 Transpose  [[1, 125, 32, 192]] -> [1, 192, 125, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/DepthwiseConv/conv_general_dilated__1446
+141 Conv  in [1, 192, 125, 32] w [192, 1, 3, 3] g 192 s [1, 1] p [1, 1, 1, 1] out [1, 192, 125, 32] MAC 6.9M  node_Conv_17
+142 Transpose  [[1, 192, 125, 32]] -> [1, 125, 32, 192]  Transpose__7278
+143 Mul        [[1, 125, 32, 192], [1, 1, 1, 192]] -> [1, 125, 32, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/DepthwiseBatchNorm/mul1
+144 Add        [[1, 125, 32, 192], [1, 1, 1, 192]] -> [1, 125, 32, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/DepthwiseBatchNorm/add1
+145 Neg        [[1, 125, 32, 192]] -> [1, 125, 32, 192]  neg9
+146 Exp        [[1, 125, 32, 192]] -> [1, 125, 32, 192]  exp9
+147 Add        [[], [1, 125, 32, 192]] -> [1, 125, 32, 192]  add16
+148 Div        [[], [1, 125, 32, 192]] -> [1, 125, 32, 192]  div9
+149 Mul        [[1, 125, 32, 192], [1, 125, 32, 192]] -> [1, 125, 32, 192]  mul9
+150 ReduceSum  [[1, 125, 32, 192], [2]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/SqueezeAndExcitation_0/reduce_sum
+151 Div        [[1, 192], []] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/SqueezeAndExcitation_0/div2
+152 MatMul [1, 192] x [192, 8] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/SqueezeAndExcitation_0/Reduce/dot_general5
+153 Add        [[1, 8], [1, 8]] -> [1, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/SqueezeAndExcitation_0/Reduce/add2
+154 Neg        [[1, 8]] -> [1, 8]  neg10
+155 Exp        [[1, 8]] -> [1, 8]  exp10
+156 Add        [[], [1, 8]] -> [1, 8]  add18
+157 Div        [[], [1, 8]] -> [1, 8]  div10
+158 Mul        [[1, 8], [1, 8]] -> [1, 8]  mul10
+159 MatMul [1, 8] x [8, 192] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/SqueezeAndExcitation_0/Expand/dot_general5
+160 Add        [[1, 192], [1, 192]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/SqueezeAndExcitation_0/Expand/add1
+161 Neg        [[1, 192]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/SqueezeAndExcitation_0/neg
+162 Exp        [[1, 192]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/SqueezeAndExcitation_0/exp
+163 Add        [[], [1, 192]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/SqueezeAndExcitation_0/add1
+164 Div        [[], [1, 192]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/SqueezeAndExcitation_0/div3
+165 Unsqueeze  [[1, 192], [2]] -> [1, 1, 1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/SqueezeAndExcitation_0/mul
+166 Mul        [[1, 125, 32, 192], [1, 1, 1, 192]] -> [1, 125, 32, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/SqueezeAndExcitation_0/mul3
+167 Transpose  [[1, 125, 32, 192]] -> [1, 192, 125, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/ProjectConv/conv_general_dilated__1681
+168 Conv  in [1, 192, 125, 32] w [32, 192, 1, 1] g 1 s [1, 1] p None out [1, 32, 125, 32] MAC 24.6M  node_Conv_18
+169 Transpose  [[1, 32, 125, 32]] -> [1, 125, 32, 32]  Transpose__7286
+170 Mul        [[1, 125, 32, 32], [1, 1, 1, 32]] -> [1, 125, 32, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/ProjectBatchNorm/mul1
+171 Add        [[1, 125, 32, 32], [1, 1, 1, 32]] -> [1, 125, 32, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_3/ProjectBatchNorm/add1
+172 Add        [[1, 125, 32, 32], [1, 125, 32, 32]] -> [1, 125, 32, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add1
+173 Transpose  [[1, 125, 32, 32]] -> [1, 32, 125, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/ExpandConv/conv_general_dilated__1686
+174 Conv  in [1, 32, 125, 32] w [192, 32, 1, 1] g 1 s [1, 1] p None out [1, 192, 125, 32] MAC 24.6M  node_Conv_19
+175 Transpose  [[1, 192, 125, 32]] -> [1, 125, 32, 192]  Transpose__7294
+176 Mul        [[1, 125, 32, 192], [1, 1, 1, 192]] -> [1, 125, 32, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/ExpandBatchNorm/mul1
+177 Add        [[1, 125, 32, 192], [1, 1, 1, 192]] -> [1, 125, 32, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/ExpandBatchNorm/add1
+178 Neg        [[1, 125, 32, 192]] -> [1, 125, 32, 192]  neg11
+179 Exp        [[1, 125, 32, 192]] -> [1, 125, 32, 192]  exp11
+180 Add        [[], [1, 125, 32, 192]] -> [1, 125, 32, 192]  add19
+181 Div        [[], [1, 125, 32, 192]] -> [1, 125, 32, 192]  div11
+182 Mul        [[1, 125, 32, 192], [1, 125, 32, 192]] -> [1, 125, 32, 192]  mul11
+183 Transpose  [[1, 125, 32, 192]] -> [1, 192, 125, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/DepthwiseConv/conv_general_dilated__1691
+184 Conv  in [1, 192, 125, 32] w [192, 1, 3, 3] g 192 s [1, 1] p [1, 1, 1, 1] out [1, 192, 125, 32] MAC 6.9M  node_Conv_20
+185 Transpose  [[1, 192, 125, 32]] -> [1, 125, 32, 192]  Transpose__7302
+186 Mul        [[1, 125, 32, 192], [1, 1, 1, 192]] -> [1, 125, 32, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/DepthwiseBatchNorm/mul1
+187 Add        [[1, 125, 32, 192], [1, 1, 1, 192]] -> [1, 125, 32, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/DepthwiseBatchNorm/add1
+188 Neg        [[1, 125, 32, 192]] -> [1, 125, 32, 192]  neg12
+189 Exp        [[1, 125, 32, 192]] -> [1, 125, 32, 192]  exp12
+190 Add        [[], [1, 125, 32, 192]] -> [1, 125, 32, 192]  add20
+191 Div        [[], [1, 125, 32, 192]] -> [1, 125, 32, 192]  div12
+192 Mul        [[1, 125, 32, 192], [1, 125, 32, 192]] -> [1, 125, 32, 192]  mul12
+193 ReduceSum  [[1, 125, 32, 192], [2]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/SqueezeAndExcitation_0/reduce_sum
+194 Div        [[1, 192], []] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/SqueezeAndExcitation_0/div
+195 MatMul [1, 192] x [192, 8] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/SqueezeAndExcitation_0/Reduce/dot_general5
+196 Add        [[1, 8], [1, 8]] -> [1, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/SqueezeAndExcitation_0/Reduce/add1
+197 Neg        [[1, 8]] -> [1, 8]  neg13
+198 Exp        [[1, 8]] -> [1, 8]  exp13
+199 Add        [[], [1, 8]] -> [1, 8]  add21
+200 Div        [[], [1, 8]] -> [1, 8]  div13
+201 Mul        [[1, 8], [1, 8]] -> [1, 8]  mul13
+202 MatMul [1, 8] x [8, 192] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/SqueezeAndExcitation_0/Expand/dot_general5
+203 Add        [[1, 192], [1, 192]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/SqueezeAndExcitation_0/Expand/add1
+204 Neg        [[1, 192]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/SqueezeAndExcitation_0/neg
+205 Exp        [[1, 192]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/SqueezeAndExcitation_0/exp
+206 Add        [[], [1, 192]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/SqueezeAndExcitation_0/add
+207 Div        [[], [1, 192]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/SqueezeAndExcitation_0/div1
+208 Unsqueeze  [[1, 192], [2]] -> [1, 1, 1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/SqueezeAndExcitation_0/mul
+209 Mul        [[1, 125, 32, 192], [1, 1, 1, 192]] -> [1, 125, 32, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/SqueezeAndExcitation_0/mul3
+210 Transpose  [[1, 125, 32, 192]] -> [1, 192, 125, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/ProjectConv/conv_general_dilated__1926
+211 Conv  in [1, 192, 125, 32] w [32, 192, 1, 1] g 1 s [1, 1] p None out [1, 32, 125, 32] MAC 24.6M  node_Conv_21
+212 Transpose  [[1, 32, 125, 32]] -> [1, 125, 32, 32]  Transpose__7310
+213 Mul        [[1, 125, 32, 32], [1, 1, 1, 32]] -> [1, 125, 32, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/ProjectBatchNorm/mul1
+214 Add        [[1, 125, 32, 32], [1, 1, 1, 32]] -> [1, 125, 32, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_4/ProjectBatchNorm/add1
+215 Add        [[1, 125, 32, 32], [1, 125, 32, 32]] -> [1, 125, 32, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add2
+216 Transpose  [[1, 125, 32, 32]] -> [1, 32, 125, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/ExpandConv/conv_general_dilated__1931
+217 Conv  in [1, 32, 125, 32] w [192, 32, 1, 1] g 1 s [1, 1] p None out [1, 192, 125, 32] MAC 24.6M  node_Conv_22
+218 Transpose  [[1, 192, 125, 32]] -> [1, 125, 32, 192]  Transpose__7318
+219 Mul        [[1, 125, 32, 192], [1, 1, 1, 192]] -> [1, 125, 32, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/ExpandBatchNorm/mul1
+220 Add        [[1, 125, 32, 192], [1, 1, 1, 192]] -> [1, 125, 32, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/ExpandBatchNorm/add1
+221 Neg        [[1, 125, 32, 192]] -> [1, 125, 32, 192]  neg14
+222 Exp        [[1, 125, 32, 192]] -> [1, 125, 32, 192]  exp14
+223 Add        [[], [1, 125, 32, 192]] -> [1, 125, 32, 192]  add22
+224 Div        [[], [1, 125, 32, 192]] -> [1, 125, 32, 192]  div14
+225 Mul        [[1, 125, 32, 192], [1, 125, 32, 192]] -> [1, 125, 32, 192]  mul14
+226 Transpose  [[1, 125, 32, 192]] -> [1, 192, 125, 32]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/DepthwiseConv/conv_general_dilated__1936
+227 Conv  in [1, 192, 125, 32] w [192, 1, 5, 5] g 192 s [2, 2] p [2, 1, 2, 2] out [1, 192, 63, 16] MAC 4.8M  node_Conv_23
+228 Transpose  [[1, 192, 63, 16]] -> [1, 63, 16, 192]  Transpose__7326
+229 Mul        [[1, 63, 16, 192], [1, 1, 1, 192]] -> [1, 63, 16, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/DepthwiseBatchNorm/mul1
+230 Add        [[1, 63, 16, 192], [1, 1, 1, 192]] -> [1, 63, 16, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/DepthwiseBatchNorm/add1
+231 Neg        [[1, 63, 16, 192]] -> [1, 63, 16, 192]  neg15
+232 Exp        [[1, 63, 16, 192]] -> [1, 63, 16, 192]  exp15
+233 Add        [[], [1, 63, 16, 192]] -> [1, 63, 16, 192]  add24
+234 Div        [[], [1, 63, 16, 192]] -> [1, 63, 16, 192]  div15
+235 Mul        [[1, 63, 16, 192], [1, 63, 16, 192]] -> [1, 63, 16, 192]  mul15
+236 ReduceSum  [[1, 63, 16, 192], [2]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/SqueezeAndExcitation_0/reduce_sum
+237 Div        [[1, 192], []] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/SqueezeAndExcitation_0/div1
+238 MatMul [1, 192] x [192, 8] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/SqueezeAndExcitation_0/Reduce/dot_general5
+239 Add        [[1, 8], [1, 8]] -> [1, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/SqueezeAndExcitation_0/Reduce/add1
+240 Neg        [[1, 8]] -> [1, 8]  neg16
+241 Exp        [[1, 8]] -> [1, 8]  exp16
+242 Add        [[], [1, 8]] -> [1, 8]  add25
+243 Div        [[], [1, 8]] -> [1, 8]  div16
+244 Mul        [[1, 8], [1, 8]] -> [1, 8]  mul16
+245 MatMul [1, 8] x [8, 192] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/SqueezeAndExcitation_0/Expand/dot_general5
+246 Add        [[1, 192], [1, 192]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/SqueezeAndExcitation_0/Expand/add1
+247 Neg        [[1, 192]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/SqueezeAndExcitation_0/neg
+248 Exp        [[1, 192]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/SqueezeAndExcitation_0/exp
+249 Add        [[], [1, 192]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/SqueezeAndExcitation_0/add
+250 Div        [[], [1, 192]] -> [1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/SqueezeAndExcitation_0/div2
+251 Unsqueeze  [[1, 192], [2]] -> [1, 1, 1, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/SqueezeAndExcitation_0/mul
+252 Mul        [[1, 63, 16, 192], [1, 1, 1, 192]] -> [1, 63, 16, 192]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/SqueezeAndExcitation_0/mul3
+253 Transpose  [[1, 63, 16, 192]] -> [1, 192, 63, 16]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/ProjectConv/conv_general_dilated__2171
+254 Conv  in [1, 192, 63, 16] w [48, 192, 1, 1] g 1 s [1, 1] p None out [1, 48, 63, 16] MAC 9.3M  node_Conv_24
+255 Transpose  [[1, 48, 63, 16]] -> [1, 63, 16, 48]  Transpose__7334
+256 Mul        [[1, 63, 16, 48], [1, 1, 1, 48]] -> [1, 63, 16, 48]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/ProjectBatchNorm/mul1
+257 Add        [[1, 63, 16, 48], [1, 1, 1, 48]] -> [1, 63, 16, 48]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_5/ProjectBatchNorm/add1
+258 Transpose  [[1, 63, 16, 48]] -> [1, 48, 63, 16]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/ExpandConv/conv_general_dilated__2176
+259 Conv  in [1, 48, 63, 16] w [288, 48, 1, 1] g 1 s [1, 1] p None out [1, 288, 63, 16] MAC 13.9M  node_Conv_25
+260 Transpose  [[1, 288, 63, 16]] -> [1, 63, 16, 288]  Transpose__7342
+261 Mul        [[1, 63, 16, 288], [1, 1, 1, 288]] -> [1, 63, 16, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/ExpandBatchNorm/mul1
+262 Add        [[1, 63, 16, 288], [1, 1, 1, 288]] -> [1, 63, 16, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/ExpandBatchNorm/add1
+263 Neg        [[1, 63, 16, 288]] -> [1, 63, 16, 288]  neg17
+264 Exp        [[1, 63, 16, 288]] -> [1, 63, 16, 288]  exp17
+265 Add        [[], [1, 63, 16, 288]] -> [1, 63, 16, 288]  add27
+266 Div        [[], [1, 63, 16, 288]] -> [1, 63, 16, 288]  div17
+267 Mul        [[1, 63, 16, 288], [1, 63, 16, 288]] -> [1, 63, 16, 288]  mul17
+268 Transpose  [[1, 63, 16, 288]] -> [1, 288, 63, 16]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/DepthwiseConv/conv_general_dilated__2181
+269 Conv  in [1, 288, 63, 16] w [288, 1, 5, 5] g 288 s [1, 1] p [2, 2, 2, 2] out [1, 288, 63, 16] MAC 7.3M  node_Conv_26
+270 Transpose  [[1, 288, 63, 16]] -> [1, 63, 16, 288]  Transpose__7350
+271 Mul        [[1, 63, 16, 288], [1, 1, 1, 288]] -> [1, 63, 16, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/DepthwiseBatchNorm/mul1
+272 Add        [[1, 63, 16, 288], [1, 1, 1, 288]] -> [1, 63, 16, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/DepthwiseBatchNorm/add1
+273 Neg        [[1, 63, 16, 288]] -> [1, 63, 16, 288]  neg18
+274 Exp        [[1, 63, 16, 288]] -> [1, 63, 16, 288]  exp18
+275 Add        [[], [1, 63, 16, 288]] -> [1, 63, 16, 288]  add28
+276 Div        [[], [1, 63, 16, 288]] -> [1, 63, 16, 288]  div18
+277 Mul        [[1, 63, 16, 288], [1, 63, 16, 288]] -> [1, 63, 16, 288]  mul18
+278 ReduceSum  [[1, 63, 16, 288], [2]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/SqueezeAndExcitation_0/reduce_sum
+279 Div        [[1, 288], []] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/SqueezeAndExcitation_0/div2
+280 MatMul [1, 288] x [288, 12] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/SqueezeAndExcitation_0/Reduce/dot_general5
+281 Add        [[1, 12], [1, 12]] -> [1, 12]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/SqueezeAndExcitation_0/Reduce/add2
+282 Neg        [[1, 12]] -> [1, 12]  neg19
+283 Exp        [[1, 12]] -> [1, 12]  exp19
+284 Add        [[], [1, 12]] -> [1, 12]  add30
+285 Div        [[], [1, 12]] -> [1, 12]  div19
+286 Mul        [[1, 12], [1, 12]] -> [1, 12]  mul19
+287 MatMul [1, 12] x [12, 288] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/SqueezeAndExcitation_0/Expand/dot_general5
+288 Add        [[1, 288], [1, 288]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/SqueezeAndExcitation_0/Expand/add1
+289 Neg        [[1, 288]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/SqueezeAndExcitation_0/neg
+290 Exp        [[1, 288]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/SqueezeAndExcitation_0/exp
+291 Add        [[], [1, 288]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/SqueezeAndExcitation_0/add1
+292 Div        [[], [1, 288]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/SqueezeAndExcitation_0/div3
+293 Unsqueeze  [[1, 288], [2]] -> [1, 1, 1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/SqueezeAndExcitation_0/mul
+294 Mul        [[1, 63, 16, 288], [1, 1, 1, 288]] -> [1, 63, 16, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/SqueezeAndExcitation_0/mul3
+295 Transpose  [[1, 63, 16, 288]] -> [1, 288, 63, 16]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/ProjectConv/conv_general_dilated__2416
+296 Conv  in [1, 288, 63, 16] w [48, 288, 1, 1] g 1 s [1, 1] p None out [1, 48, 63, 16] MAC 13.9M  node_Conv_27
+297 Transpose  [[1, 48, 63, 16]] -> [1, 63, 16, 48]  Transpose__7358
+298 Mul        [[1, 63, 16, 48], [1, 1, 1, 48]] -> [1, 63, 16, 48]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/ProjectBatchNorm/mul1
+299 Add        [[1, 63, 16, 48], [1, 1, 1, 48]] -> [1, 63, 16, 48]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_6/ProjectBatchNorm/add1
+300 Add        [[1, 63, 16, 48], [1, 63, 16, 48]] -> [1, 63, 16, 48]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add3
+301 Transpose  [[1, 63, 16, 48]] -> [1, 48, 63, 16]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/ExpandConv/conv_general_dilated__2421
+302 Conv  in [1, 48, 63, 16] w [288, 48, 1, 1] g 1 s [1, 1] p None out [1, 288, 63, 16] MAC 13.9M  node_Conv_28
+303 Transpose  [[1, 288, 63, 16]] -> [1, 63, 16, 288]  Transpose__7366
+304 Mul        [[1, 63, 16, 288], [1, 1, 1, 288]] -> [1, 63, 16, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/ExpandBatchNorm/mul1
+305 Add        [[1, 63, 16, 288], [1, 1, 1, 288]] -> [1, 63, 16, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/ExpandBatchNorm/add1
+306 Neg        [[1, 63, 16, 288]] -> [1, 63, 16, 288]  neg20
+307 Exp        [[1, 63, 16, 288]] -> [1, 63, 16, 288]  exp20
+308 Add        [[], [1, 63, 16, 288]] -> [1, 63, 16, 288]  add31
+309 Div        [[], [1, 63, 16, 288]] -> [1, 63, 16, 288]  div20
+310 Mul        [[1, 63, 16, 288], [1, 63, 16, 288]] -> [1, 63, 16, 288]  mul20
+311 Transpose  [[1, 63, 16, 288]] -> [1, 288, 63, 16]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/DepthwiseConv/conv_general_dilated__2426
+312 Conv  in [1, 288, 63, 16] w [288, 1, 5, 5] g 288 s [1, 1] p [2, 2, 2, 2] out [1, 288, 63, 16] MAC 7.3M  node_Conv_29
+313 Transpose  [[1, 288, 63, 16]] -> [1, 63, 16, 288]  Transpose__7374
+314 Mul        [[1, 63, 16, 288], [1, 1, 1, 288]] -> [1, 63, 16, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/DepthwiseBatchNorm/mul1
+315 Add        [[1, 63, 16, 288], [1, 1, 1, 288]] -> [1, 63, 16, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/DepthwiseBatchNorm/add1
+316 Neg        [[1, 63, 16, 288]] -> [1, 63, 16, 288]  neg21
+317 Exp        [[1, 63, 16, 288]] -> [1, 63, 16, 288]  exp21
+318 Add        [[], [1, 63, 16, 288]] -> [1, 63, 16, 288]  add32
+319 Div        [[], [1, 63, 16, 288]] -> [1, 63, 16, 288]  div21
+320 Mul        [[1, 63, 16, 288], [1, 63, 16, 288]] -> [1, 63, 16, 288]  mul21
+321 ReduceSum  [[1, 63, 16, 288], [2]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/SqueezeAndExcitation_0/reduce_sum
+322 Div        [[1, 288], []] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/SqueezeAndExcitation_0/div
+323 MatMul [1, 288] x [288, 12] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/SqueezeAndExcitation_0/Reduce/dot_general5
+324 Add        [[1, 12], [1, 12]] -> [1, 12]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/SqueezeAndExcitation_0/Reduce/add1
+325 Neg        [[1, 12]] -> [1, 12]  neg22
+326 Exp        [[1, 12]] -> [1, 12]  exp22
+327 Add        [[], [1, 12]] -> [1, 12]  add33
+328 Div        [[], [1, 12]] -> [1, 12]  div22
+329 Mul        [[1, 12], [1, 12]] -> [1, 12]  mul22
+330 MatMul [1, 12] x [12, 288] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/SqueezeAndExcitation_0/Expand/dot_general5
+331 Add        [[1, 288], [1, 288]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/SqueezeAndExcitation_0/Expand/add1
+332 Neg        [[1, 288]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/SqueezeAndExcitation_0/neg
+333 Exp        [[1, 288]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/SqueezeAndExcitation_0/exp
+334 Add        [[], [1, 288]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/SqueezeAndExcitation_0/add
+335 Div        [[], [1, 288]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/SqueezeAndExcitation_0/div1
+336 Unsqueeze  [[1, 288], [2]] -> [1, 1, 1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/SqueezeAndExcitation_0/mul
+337 Mul        [[1, 63, 16, 288], [1, 1, 1, 288]] -> [1, 63, 16, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/SqueezeAndExcitation_0/mul3
+338 Transpose  [[1, 63, 16, 288]] -> [1, 288, 63, 16]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/ProjectConv/conv_general_dilated__2661
+339 Conv  in [1, 288, 63, 16] w [48, 288, 1, 1] g 1 s [1, 1] p None out [1, 48, 63, 16] MAC 13.9M  node_Conv_30
+340 Transpose  [[1, 48, 63, 16]] -> [1, 63, 16, 48]  Transpose__7382
+341 Mul        [[1, 63, 16, 48], [1, 1, 1, 48]] -> [1, 63, 16, 48]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/ProjectBatchNorm/mul1
+342 Add        [[1, 63, 16, 48], [1, 1, 1, 48]] -> [1, 63, 16, 48]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_7/ProjectBatchNorm/add1
+343 Add        [[1, 63, 16, 48], [1, 63, 16, 48]] -> [1, 63, 16, 48]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add4
+344 Transpose  [[1, 63, 16, 48]] -> [1, 48, 63, 16]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/ExpandConv/conv_general_dilated__2666
+345 Conv  in [1, 48, 63, 16] w [288, 48, 1, 1] g 1 s [1, 1] p None out [1, 288, 63, 16] MAC 13.9M  node_Conv_31
+346 Transpose  [[1, 288, 63, 16]] -> [1, 63, 16, 288]  Transpose__7390
+347 Mul        [[1, 63, 16, 288], [1, 1, 1, 288]] -> [1, 63, 16, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/ExpandBatchNorm/mul1
+348 Add        [[1, 63, 16, 288], [1, 1, 1, 288]] -> [1, 63, 16, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/ExpandBatchNorm/add1
+349 Neg        [[1, 63, 16, 288]] -> [1, 63, 16, 288]  neg23
+350 Exp        [[1, 63, 16, 288]] -> [1, 63, 16, 288]  exp23
+351 Add        [[], [1, 63, 16, 288]] -> [1, 63, 16, 288]  add34
+352 Div        [[], [1, 63, 16, 288]] -> [1, 63, 16, 288]  div23
+353 Mul        [[1, 63, 16, 288], [1, 63, 16, 288]] -> [1, 63, 16, 288]  mul23
+354 Transpose  [[1, 63, 16, 288]] -> [1, 288, 63, 16]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/DepthwiseConv/conv_general_dilated__2671
+355 Conv  in [1, 288, 63, 16] w [288, 1, 3, 3] g 288 s [2, 2] p [1, 0, 1, 1] out [1, 288, 32, 8] MAC 0.7M  node_Conv_32
+356 Transpose  [[1, 288, 32, 8]] -> [1, 32, 8, 288]  Transpose__7398
+357 Mul        [[1, 32, 8, 288], [1, 1, 1, 288]] -> [1, 32, 8, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/DepthwiseBatchNorm/mul1
+358 Add        [[1, 32, 8, 288], [1, 1, 1, 288]] -> [1, 32, 8, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/DepthwiseBatchNorm/add1
+359 Neg        [[1, 32, 8, 288]] -> [1, 32, 8, 288]  neg24
+360 Exp        [[1, 32, 8, 288]] -> [1, 32, 8, 288]  exp24
+361 Add        [[], [1, 32, 8, 288]] -> [1, 32, 8, 288]  add36
+362 Div        [[], [1, 32, 8, 288]] -> [1, 32, 8, 288]  div24
+363 Mul        [[1, 32, 8, 288], [1, 32, 8, 288]] -> [1, 32, 8, 288]  mul24
+364 ReduceSum  [[1, 32, 8, 288], [2]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/SqueezeAndExcitation_0/reduce_sum
+365 Div        [[1, 288], []] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/SqueezeAndExcitation_0/div1
+366 MatMul [1, 288] x [288, 12] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/SqueezeAndExcitation_0/Reduce/dot_general5
+367 Add        [[1, 12], [1, 12]] -> [1, 12]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/SqueezeAndExcitation_0/Reduce/add1
+368 Neg        [[1, 12]] -> [1, 12]  neg25
+369 Exp        [[1, 12]] -> [1, 12]  exp25
+370 Add        [[], [1, 12]] -> [1, 12]  add37
+371 Div        [[], [1, 12]] -> [1, 12]  div25
+372 Mul        [[1, 12], [1, 12]] -> [1, 12]  mul25
+373 MatMul [1, 12] x [12, 288] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/SqueezeAndExcitation_0/Expand/dot_general5
+374 Add        [[1, 288], [1, 288]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/SqueezeAndExcitation_0/Expand/add1
+375 Neg        [[1, 288]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/SqueezeAndExcitation_0/neg
+376 Exp        [[1, 288]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/SqueezeAndExcitation_0/exp
+377 Add        [[], [1, 288]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/SqueezeAndExcitation_0/add
+378 Div        [[], [1, 288]] -> [1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/SqueezeAndExcitation_0/div2
+379 Unsqueeze  [[1, 288], [2]] -> [1, 1, 1, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/SqueezeAndExcitation_0/mul
+380 Mul        [[1, 32, 8, 288], [1, 1, 1, 288]] -> [1, 32, 8, 288]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/SqueezeAndExcitation_0/mul3
+381 Transpose  [[1, 32, 8, 288]] -> [1, 288, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/ProjectConv/conv_general_dilated__2906
+382 Conv  in [1, 288, 32, 8] w [96, 288, 1, 1] g 1 s [1, 1] p None out [1, 96, 32, 8] MAC 7.1M  node_Conv_33
+383 Transpose  [[1, 96, 32, 8]] -> [1, 32, 8, 96]  Transpose__7406
+384 Mul        [[1, 32, 8, 96], [1, 1, 1, 96]] -> [1, 32, 8, 96]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/ProjectBatchNorm/mul1
+385 Add        [[1, 32, 8, 96], [1, 1, 1, 96]] -> [1, 32, 8, 96]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_8/ProjectBatchNorm/add1
+386 Transpose  [[1, 32, 8, 96]] -> [1, 96, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/ExpandConv/conv_general_dilated__2911
+387 Conv  in [1, 96, 32, 8] w [576, 96, 1, 1] g 1 s [1, 1] p None out [1, 576, 32, 8] MAC 14.2M  node_Conv_34
+388 Transpose  [[1, 576, 32, 8]] -> [1, 32, 8, 576]  Transpose__7414
+389 Mul        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/ExpandBatchNorm/mul1
+390 Add        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/ExpandBatchNorm/add1
+391 Neg        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  neg26
+392 Exp        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  exp26
+393 Add        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  add39
+394 Div        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  div26
+395 Mul        [[1, 32, 8, 576], [1, 32, 8, 576]] -> [1, 32, 8, 576]  mul26
+396 Transpose  [[1, 32, 8, 576]] -> [1, 576, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/DepthwiseConv/conv_general_dilated__2916
+397 Conv  in [1, 576, 32, 8] w [576, 1, 3, 3] g 576 s [1, 1] p [1, 1, 1, 1] out [1, 576, 32, 8] MAC 1.3M  node_Conv_35
+398 Transpose  [[1, 576, 32, 8]] -> [1, 32, 8, 576]  Transpose__7422
+399 Mul        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/DepthwiseBatchNorm/mul1
+400 Add        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/DepthwiseBatchNorm/add1
+401 Neg        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  neg27
+402 Exp        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  exp27
+403 Add        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  add40
+404 Div        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  div27
+405 Mul        [[1, 32, 8, 576], [1, 32, 8, 576]] -> [1, 32, 8, 576]  mul27
+406 ReduceSum  [[1, 32, 8, 576], [2]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/SqueezeAndExcitation_0/reduce_sum
+407 Div        [[1, 576], []] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/SqueezeAndExcitation_0/div2
+408 MatMul [1, 576] x [576, 24] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/SqueezeAndExcitation_0/Reduce/dot_general5
+409 Add        [[1, 24], [1, 24]] -> [1, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/SqueezeAndExcitation_0/Reduce/add1
+410 Neg        [[1, 24]] -> [1, 24]  neg28
+411 Exp        [[1, 24]] -> [1, 24]  exp28
+412 Add        [[], [1, 24]] -> [1, 24]  add41
+413 Div        [[], [1, 24]] -> [1, 24]  div28
+414 Mul        [[1, 24], [1, 24]] -> [1, 24]  mul28
+415 MatMul [1, 24] x [24, 576] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/SqueezeAndExcitation_0/Expand/dot_general5
+416 Add        [[1, 576], [1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/SqueezeAndExcitation_0/Expand/add1
+417 Neg        [[1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/SqueezeAndExcitation_0/neg
+418 Exp        [[1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/SqueezeAndExcitation_0/exp
+419 Add        [[], [1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/SqueezeAndExcitation_0/add1
+420 Div        [[], [1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/SqueezeAndExcitation_0/div3
+421 Unsqueeze  [[1, 576], [2]] -> [1, 1, 1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/SqueezeAndExcitation_0/mul
+422 Mul        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/SqueezeAndExcitation_0/mul3
+423 Transpose  [[1, 32, 8, 576]] -> [1, 576, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/ProjectConv/conv_general_dilated__3151
+424 Conv  in [1, 576, 32, 8] w [96, 576, 1, 1] g 1 s [1, 1] p None out [1, 96, 32, 8] MAC 14.2M  node_Conv_36
+425 Transpose  [[1, 96, 32, 8]] -> [1, 32, 8, 96]  Transpose__7430
+426 Mul        [[1, 32, 8, 96], [1, 1, 1, 96]] -> [1, 32, 8, 96]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/ProjectBatchNorm/mul1
+427 Add        [[1, 32, 8, 96], [1, 1, 1, 96]] -> [1, 32, 8, 96]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_9/ProjectBatchNorm/add1
+428 Add        [[1, 32, 8, 96], [1, 32, 8, 96]] -> [1, 32, 8, 96]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add5
+429 Transpose  [[1, 32, 8, 96]] -> [1, 96, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/ExpandConv/conv_general_dilated__3156
+430 Conv  in [1, 96, 32, 8] w [576, 96, 1, 1] g 1 s [1, 1] p None out [1, 576, 32, 8] MAC 14.2M  node_Conv_37
+431 Transpose  [[1, 576, 32, 8]] -> [1, 32, 8, 576]  Transpose__7438
+432 Mul        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/ExpandBatchNorm/mul1
+433 Add        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/ExpandBatchNorm/add1
+434 Neg        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  neg29
+435 Exp        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  exp29
+436 Add        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  add42
+437 Div        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  div29
+438 Mul        [[1, 32, 8, 576], [1, 32, 8, 576]] -> [1, 32, 8, 576]  mul29
+439 Transpose  [[1, 32, 8, 576]] -> [1, 576, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/DepthwiseConv/conv_general_dilated__3161
+440 Conv  in [1, 576, 32, 8] w [576, 1, 3, 3] g 576 s [1, 1] p [1, 1, 1, 1] out [1, 576, 32, 8] MAC 1.3M  node_Conv_38
+441 Transpose  [[1, 576, 32, 8]] -> [1, 32, 8, 576]  Transpose__7446
+442 Mul        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/DepthwiseBatchNorm/mul1
+443 Add        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/DepthwiseBatchNorm/add1
+444 Neg        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  neg30
+445 Exp        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  exp30
+446 Add        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  add43
+447 Div        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  div30
+448 Mul        [[1, 32, 8, 576], [1, 32, 8, 576]] -> [1, 32, 8, 576]  mul30
+449 ReduceSum  [[1, 32, 8, 576], [2]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/SqueezeAndExcitation_0/reduce_sum
+450 Div        [[1, 576], []] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/SqueezeAndExcitation_0/div
+451 MatMul [1, 576] x [576, 24] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/SqueezeAndExcitation_0/Reduce/dot_general5
+452 Add        [[1, 24], [1, 24]] -> [1, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/SqueezeAndExcitation_0/Reduce/add1
+453 Neg        [[1, 24]] -> [1, 24]  neg31
+454 Exp        [[1, 24]] -> [1, 24]  exp31
+455 Add        [[], [1, 24]] -> [1, 24]  add44
+456 Div        [[], [1, 24]] -> [1, 24]  div31
+457 Mul        [[1, 24], [1, 24]] -> [1, 24]  mul31
+458 MatMul [1, 24] x [24, 576] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/SqueezeAndExcitation_0/Expand/dot_general5
+459 Add        [[1, 576], [1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/SqueezeAndExcitation_0/Expand/add1
+460 Neg        [[1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/SqueezeAndExcitation_0/neg
+461 Exp        [[1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/SqueezeAndExcitation_0/exp
+462 Add        [[], [1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/SqueezeAndExcitation_0/add
+463 Div        [[], [1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/SqueezeAndExcitation_0/div1
+464 Unsqueeze  [[1, 576], [2]] -> [1, 1, 1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/SqueezeAndExcitation_0/mul
+465 Mul        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/SqueezeAndExcitation_0/mul3
+466 Transpose  [[1, 32, 8, 576]] -> [1, 576, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/ProjectConv/conv_general_dilated__3396
+467 Conv  in [1, 576, 32, 8] w [96, 576, 1, 1] g 1 s [1, 1] p None out [1, 96, 32, 8] MAC 14.2M  node_Conv_39
+468 Transpose  [[1, 96, 32, 8]] -> [1, 32, 8, 96]  Transpose__7454
+469 Mul        [[1, 32, 8, 96], [1, 1, 1, 96]] -> [1, 32, 8, 96]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/ProjectBatchNorm/mul1
+470 Add        [[1, 32, 8, 96], [1, 1, 1, 96]] -> [1, 32, 8, 96]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_10/ProjectBatchNorm/add1
+471 Add        [[1, 32, 8, 96], [1, 32, 8, 96]] -> [1, 32, 8, 96]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add6
+472 Transpose  [[1, 32, 8, 96]] -> [1, 96, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/ExpandConv/conv_general_dilated__3401
+473 Conv  in [1, 96, 32, 8] w [576, 96, 1, 1] g 1 s [1, 1] p None out [1, 576, 32, 8] MAC 14.2M  node_Conv_40
+474 Transpose  [[1, 576, 32, 8]] -> [1, 32, 8, 576]  Transpose__7462
+475 Mul        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/ExpandBatchNorm/mul1
+476 Add        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/ExpandBatchNorm/add1
+477 Neg        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  neg32
+478 Exp        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  exp32
+479 Add        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  add45
+480 Div        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  div32
+481 Mul        [[1, 32, 8, 576], [1, 32, 8, 576]] -> [1, 32, 8, 576]  mul32
+482 Transpose  [[1, 32, 8, 576]] -> [1, 576, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/DepthwiseConv/conv_general_dilated__3406
+483 Conv  in [1, 576, 32, 8] w [576, 1, 3, 3] g 576 s [1, 1] p [1, 1, 1, 1] out [1, 576, 32, 8] MAC 1.3M  node_Conv_41
+484 Transpose  [[1, 576, 32, 8]] -> [1, 32, 8, 576]  Transpose__7470
+485 Mul        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/DepthwiseBatchNorm/mul1
+486 Add        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/DepthwiseBatchNorm/add1
+487 Neg        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  neg33
+488 Exp        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  exp33
+489 Add        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  add46
+490 Div        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  div33
+491 Mul        [[1, 32, 8, 576], [1, 32, 8, 576]] -> [1, 32, 8, 576]  mul33
+492 ReduceSum  [[1, 32, 8, 576], [2]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/SqueezeAndExcitation_0/reduce_sum
+493 Div        [[1, 576], []] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/SqueezeAndExcitation_0/div
+494 MatMul [1, 576] x [576, 24] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/SqueezeAndExcitation_0/Reduce/dot_general5
+495 Add        [[1, 24], [1, 24]] -> [1, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/SqueezeAndExcitation_0/Reduce/add1
+496 Neg        [[1, 24]] -> [1, 24]  neg34
+497 Exp        [[1, 24]] -> [1, 24]  exp34
+498 Add        [[], [1, 24]] -> [1, 24]  add47
+499 Div        [[], [1, 24]] -> [1, 24]  div34
+500 Mul        [[1, 24], [1, 24]] -> [1, 24]  mul34
+501 MatMul [1, 24] x [24, 576] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/SqueezeAndExcitation_0/Expand/dot_general5
+502 Add        [[1, 576], [1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/SqueezeAndExcitation_0/Expand/add1
+503 Neg        [[1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/SqueezeAndExcitation_0/neg
+504 Exp        [[1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/SqueezeAndExcitation_0/exp
+505 Add        [[], [1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/SqueezeAndExcitation_0/add
+506 Div        [[], [1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/SqueezeAndExcitation_0/div1
+507 Unsqueeze  [[1, 576], [2]] -> [1, 1, 1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/SqueezeAndExcitation_0/mul
+508 Mul        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/SqueezeAndExcitation_0/mul3
+509 Transpose  [[1, 32, 8, 576]] -> [1, 576, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/ProjectConv/conv_general_dilated__3641
+510 Conv  in [1, 576, 32, 8] w [96, 576, 1, 1] g 1 s [1, 1] p None out [1, 96, 32, 8] MAC 14.2M  node_Conv_42
+511 Transpose  [[1, 96, 32, 8]] -> [1, 32, 8, 96]  Transpose__7478
+512 Mul        [[1, 32, 8, 96], [1, 1, 1, 96]] -> [1, 32, 8, 96]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/ProjectBatchNorm/mul1
+513 Add        [[1, 32, 8, 96], [1, 1, 1, 96]] -> [1, 32, 8, 96]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_11/ProjectBatchNorm/add1
+514 Add        [[1, 32, 8, 96], [1, 32, 8, 96]] -> [1, 32, 8, 96]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add7
+515 Transpose  [[1, 32, 8, 96]] -> [1, 96, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/ExpandConv/conv_general_dilated__3646
+516 Conv  in [1, 96, 32, 8] w [576, 96, 1, 1] g 1 s [1, 1] p None out [1, 576, 32, 8] MAC 14.2M  node_Conv_43
+517 Transpose  [[1, 576, 32, 8]] -> [1, 32, 8, 576]  Transpose__7486
+518 Mul        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/ExpandBatchNorm/mul1
+519 Add        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/ExpandBatchNorm/add1
+520 Neg        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  neg35
+521 Exp        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  exp35
+522 Add        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  add48
+523 Div        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  div35
+524 Mul        [[1, 32, 8, 576], [1, 32, 8, 576]] -> [1, 32, 8, 576]  mul35
+525 Transpose  [[1, 32, 8, 576]] -> [1, 576, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/DepthwiseConv/conv_general_dilated__3651
+526 Conv  in [1, 576, 32, 8] w [576, 1, 3, 3] g 576 s [1, 1] p [1, 1, 1, 1] out [1, 576, 32, 8] MAC 1.3M  node_Conv_44
+527 Transpose  [[1, 576, 32, 8]] -> [1, 32, 8, 576]  Transpose__7494
+528 Mul        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/DepthwiseBatchNorm/mul1
+529 Add        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/DepthwiseBatchNorm/add1
+530 Neg        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  neg36
+531 Exp        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  exp36
+532 Add        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  add49
+533 Div        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  div36
+534 Mul        [[1, 32, 8, 576], [1, 32, 8, 576]] -> [1, 32, 8, 576]  mul36
+535 ReduceSum  [[1, 32, 8, 576], [2]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/SqueezeAndExcitation_0/reduce_sum
+536 Div        [[1, 576], []] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/SqueezeAndExcitation_0/div
+537 MatMul [1, 576] x [576, 24] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/SqueezeAndExcitation_0/Reduce/dot_general5
+538 Add        [[1, 24], [1, 24]] -> [1, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/SqueezeAndExcitation_0/Reduce/add1
+539 Neg        [[1, 24]] -> [1, 24]  neg37
+540 Exp        [[1, 24]] -> [1, 24]  exp37
+541 Add        [[], [1, 24]] -> [1, 24]  add50
+542 Div        [[], [1, 24]] -> [1, 24]  div37
+543 Mul        [[1, 24], [1, 24]] -> [1, 24]  mul37
+544 MatMul [1, 24] x [24, 576] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/SqueezeAndExcitation_0/Expand/dot_general5
+545 Add        [[1, 576], [1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/SqueezeAndExcitation_0/Expand/add1
+546 Neg        [[1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/SqueezeAndExcitation_0/neg
+547 Exp        [[1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/SqueezeAndExcitation_0/exp
+548 Add        [[], [1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/SqueezeAndExcitation_0/add
+549 Div        [[], [1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/SqueezeAndExcitation_0/div1
+550 Unsqueeze  [[1, 576], [2]] -> [1, 1, 1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/SqueezeAndExcitation_0/mul
+551 Mul        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/SqueezeAndExcitation_0/mul3
+552 Transpose  [[1, 32, 8, 576]] -> [1, 576, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/ProjectConv/conv_general_dilated__3886
+553 Conv  in [1, 576, 32, 8] w [96, 576, 1, 1] g 1 s [1, 1] p None out [1, 96, 32, 8] MAC 14.2M  node_Conv_45
+554 Transpose  [[1, 96, 32, 8]] -> [1, 32, 8, 96]  Transpose__7502
+555 Mul        [[1, 32, 8, 96], [1, 1, 1, 96]] -> [1, 32, 8, 96]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/ProjectBatchNorm/mul1
+556 Add        [[1, 32, 8, 96], [1, 1, 1, 96]] -> [1, 32, 8, 96]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_12/ProjectBatchNorm/add1
+557 Add        [[1, 32, 8, 96], [1, 32, 8, 96]] -> [1, 32, 8, 96]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add8
+558 Transpose  [[1, 32, 8, 96]] -> [1, 96, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/ExpandConv/conv_general_dilated__3891
+559 Conv  in [1, 96, 32, 8] w [576, 96, 1, 1] g 1 s [1, 1] p None out [1, 576, 32, 8] MAC 14.2M  node_Conv_46
+560 Transpose  [[1, 576, 32, 8]] -> [1, 32, 8, 576]  Transpose__7510
+561 Mul        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/ExpandBatchNorm/mul1
+562 Add        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/ExpandBatchNorm/add1
+563 Neg        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  neg38
+564 Exp        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  exp38
+565 Add        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  add51
+566 Div        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  div38
+567 Mul        [[1, 32, 8, 576], [1, 32, 8, 576]] -> [1, 32, 8, 576]  mul38
+568 Transpose  [[1, 32, 8, 576]] -> [1, 576, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/DepthwiseConv/conv_general_dilated__3896
+569 Conv  in [1, 576, 32, 8] w [576, 1, 5, 5] g 576 s [1, 1] p [2, 2, 2, 2] out [1, 576, 32, 8] MAC 3.7M  node_Conv_47
+570 Transpose  [[1, 576, 32, 8]] -> [1, 32, 8, 576]  Transpose__7518
+571 Mul        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/DepthwiseBatchNorm/mul1
+572 Add        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/DepthwiseBatchNorm/add1
+573 Neg        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  neg39
+574 Exp        [[1, 32, 8, 576]] -> [1, 32, 8, 576]  exp39
+575 Add        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  add52
+576 Div        [[], [1, 32, 8, 576]] -> [1, 32, 8, 576]  div39
+577 Mul        [[1, 32, 8, 576], [1, 32, 8, 576]] -> [1, 32, 8, 576]  mul39
+578 ReduceSum  [[1, 32, 8, 576], [2]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/SqueezeAndExcitation_0/reduce_sum
+579 Div        [[1, 576], []] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/SqueezeAndExcitation_0/div
+580 MatMul [1, 576] x [576, 24] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/SqueezeAndExcitation_0/Reduce/dot_general5
+581 Add        [[1, 24], [1, 24]] -> [1, 24]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/SqueezeAndExcitation_0/Reduce/add1
+582 Neg        [[1, 24]] -> [1, 24]  neg40
+583 Exp        [[1, 24]] -> [1, 24]  exp40
+584 Add        [[], [1, 24]] -> [1, 24]  add53
+585 Div        [[], [1, 24]] -> [1, 24]  div40
+586 Mul        [[1, 24], [1, 24]] -> [1, 24]  mul40
+587 MatMul [1, 24] x [24, 576] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/SqueezeAndExcitation_0/Expand/dot_general5
+588 Add        [[1, 576], [1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/SqueezeAndExcitation_0/Expand/add1
+589 Neg        [[1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/SqueezeAndExcitation_0/neg
+590 Exp        [[1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/SqueezeAndExcitation_0/exp
+591 Add        [[], [1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/SqueezeAndExcitation_0/add
+592 Div        [[], [1, 576]] -> [1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/SqueezeAndExcitation_0/div1
+593 Unsqueeze  [[1, 576], [2]] -> [1, 1, 1, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/SqueezeAndExcitation_0/mul
+594 Mul        [[1, 32, 8, 576], [1, 1, 1, 576]] -> [1, 32, 8, 576]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/SqueezeAndExcitation_0/mul3
+595 Transpose  [[1, 32, 8, 576]] -> [1, 576, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/ProjectConv/conv_general_dilated__4131
+596 Conv  in [1, 576, 32, 8] w [136, 576, 1, 1] g 1 s [1, 1] p None out [1, 136, 32, 8] MAC 20.1M  node_Conv_48
+597 Transpose  [[1, 136, 32, 8]] -> [1, 32, 8, 136]  Transpose__7526
+598 Mul        [[1, 32, 8, 136], [1, 1, 1, 136]] -> [1, 32, 8, 136]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/ProjectBatchNorm/mul1
+599 Add        [[1, 32, 8, 136], [1, 1, 1, 136]] -> [1, 32, 8, 136]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_13/ProjectBatchNorm/add1
+600 Transpose  [[1, 32, 8, 136]] -> [1, 136, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/ExpandConv/conv_general_dilated__4136
+601 Conv  in [1, 136, 32, 8] w [816, 136, 1, 1] g 1 s [1, 1] p None out [1, 816, 32, 8] MAC 28.4M  node_Conv_49
+602 Transpose  [[1, 816, 32, 8]] -> [1, 32, 8, 816]  Transpose__7534
+603 Mul        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/ExpandBatchNorm/mul1
+604 Add        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/ExpandBatchNorm/add1
+605 Neg        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  neg41
+606 Exp        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  exp41
+607 Add        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  add55
+608 Div        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  div41
+609 Mul        [[1, 32, 8, 816], [1, 32, 8, 816]] -> [1, 32, 8, 816]  mul41
+610 Transpose  [[1, 32, 8, 816]] -> [1, 816, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/DepthwiseConv/conv_general_dilated__4141
+611 Conv  in [1, 816, 32, 8] w [816, 1, 5, 5] g 816 s [1, 1] p [2, 2, 2, 2] out [1, 816, 32, 8] MAC 5.2M  node_Conv_50
+612 Transpose  [[1, 816, 32, 8]] -> [1, 32, 8, 816]  Transpose__7542
+613 Mul        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/DepthwiseBatchNorm/mul1
+614 Add        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/DepthwiseBatchNorm/add1
+615 Neg        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  neg42
+616 Exp        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  exp42
+617 Add        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  add56
+618 Div        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  div42
+619 Mul        [[1, 32, 8, 816], [1, 32, 8, 816]] -> [1, 32, 8, 816]  mul42
+620 ReduceSum  [[1, 32, 8, 816], [2]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/SqueezeAndExcitation_0/reduce_sum
+621 Div        [[1, 816], []] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/SqueezeAndExcitation_0/div2
+622 MatMul [1, 816] x [816, 34] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/SqueezeAndExcitation_0/Reduce/dot_general5
+623 Add        [[1, 34], [1, 34]] -> [1, 34]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/SqueezeAndExcitation_0/Reduce/add2
+624 Neg        [[1, 34]] -> [1, 34]  neg43
+625 Exp        [[1, 34]] -> [1, 34]  exp43
+626 Add        [[], [1, 34]] -> [1, 34]  add58
+627 Div        [[], [1, 34]] -> [1, 34]  div43
+628 Mul        [[1, 34], [1, 34]] -> [1, 34]  mul43
+629 MatMul [1, 34] x [34, 816] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/SqueezeAndExcitation_0/Expand/dot_general5
+630 Add        [[1, 816], [1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/SqueezeAndExcitation_0/Expand/add1
+631 Neg        [[1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/SqueezeAndExcitation_0/neg
+632 Exp        [[1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/SqueezeAndExcitation_0/exp
+633 Add        [[], [1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/SqueezeAndExcitation_0/add1
+634 Div        [[], [1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/SqueezeAndExcitation_0/div3
+635 Unsqueeze  [[1, 816], [2]] -> [1, 1, 1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/SqueezeAndExcitation_0/mul
+636 Mul        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/SqueezeAndExcitation_0/mul3
+637 Transpose  [[1, 32, 8, 816]] -> [1, 816, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/ProjectConv/conv_general_dilated__4376
+638 Conv  in [1, 816, 32, 8] w [136, 816, 1, 1] g 1 s [1, 1] p None out [1, 136, 32, 8] MAC 28.4M  node_Conv_51
+639 Transpose  [[1, 136, 32, 8]] -> [1, 32, 8, 136]  Transpose__7550
+640 Mul        [[1, 32, 8, 136], [1, 1, 1, 136]] -> [1, 32, 8, 136]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/ProjectBatchNorm/mul1
+641 Add        [[1, 32, 8, 136], [1, 1, 1, 136]] -> [1, 32, 8, 136]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_14/ProjectBatchNorm/add1
+642 Add        [[1, 32, 8, 136], [1, 32, 8, 136]] -> [1, 32, 8, 136]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add9
+643 Transpose  [[1, 32, 8, 136]] -> [1, 136, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/ExpandConv/conv_general_dilated__4381
+644 Conv  in [1, 136, 32, 8] w [816, 136, 1, 1] g 1 s [1, 1] p None out [1, 816, 32, 8] MAC 28.4M  node_Conv_52
+645 Transpose  [[1, 816, 32, 8]] -> [1, 32, 8, 816]  Transpose__7558
+646 Mul        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/ExpandBatchNorm/mul1
+647 Add        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/ExpandBatchNorm/add1
+648 Neg        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  neg44
+649 Exp        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  exp44
+650 Add        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  add59
+651 Div        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  div44
+652 Mul        [[1, 32, 8, 816], [1, 32, 8, 816]] -> [1, 32, 8, 816]  mul44
+653 Transpose  [[1, 32, 8, 816]] -> [1, 816, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/DepthwiseConv/conv_general_dilated__4386
+654 Conv  in [1, 816, 32, 8] w [816, 1, 5, 5] g 816 s [1, 1] p [2, 2, 2, 2] out [1, 816, 32, 8] MAC 5.2M  node_Conv_53
+655 Transpose  [[1, 816, 32, 8]] -> [1, 32, 8, 816]  Transpose__7566
+656 Mul        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/DepthwiseBatchNorm/mul1
+657 Add        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/DepthwiseBatchNorm/add1
+658 Neg        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  neg45
+659 Exp        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  exp45
+660 Add        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  add60
+661 Div        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  div45
+662 Mul        [[1, 32, 8, 816], [1, 32, 8, 816]] -> [1, 32, 8, 816]  mul45
+663 ReduceSum  [[1, 32, 8, 816], [2]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/SqueezeAndExcitation_0/reduce_sum
+664 Div        [[1, 816], []] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/SqueezeAndExcitation_0/div
+665 MatMul [1, 816] x [816, 34] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/SqueezeAndExcitation_0/Reduce/dot_general5
+666 Add        [[1, 34], [1, 34]] -> [1, 34]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/SqueezeAndExcitation_0/Reduce/add1
+667 Neg        [[1, 34]] -> [1, 34]  neg46
+668 Exp        [[1, 34]] -> [1, 34]  exp46
+669 Add        [[], [1, 34]] -> [1, 34]  add61
+670 Div        [[], [1, 34]] -> [1, 34]  div46
+671 Mul        [[1, 34], [1, 34]] -> [1, 34]  mul46
+672 MatMul [1, 34] x [34, 816] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/SqueezeAndExcitation_0/Expand/dot_general5
+673 Add        [[1, 816], [1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/SqueezeAndExcitation_0/Expand/add1
+674 Neg        [[1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/SqueezeAndExcitation_0/neg
+675 Exp        [[1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/SqueezeAndExcitation_0/exp
+676 Add        [[], [1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/SqueezeAndExcitation_0/add
+677 Div        [[], [1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/SqueezeAndExcitation_0/div1
+678 Unsqueeze  [[1, 816], [2]] -> [1, 1, 1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/SqueezeAndExcitation_0/mul
+679 Mul        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/SqueezeAndExcitation_0/mul3
+680 Transpose  [[1, 32, 8, 816]] -> [1, 816, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/ProjectConv/conv_general_dilated__4621
+681 Conv  in [1, 816, 32, 8] w [136, 816, 1, 1] g 1 s [1, 1] p None out [1, 136, 32, 8] MAC 28.4M  node_Conv_54
+682 Transpose  [[1, 136, 32, 8]] -> [1, 32, 8, 136]  Transpose__7574
+683 Mul        [[1, 32, 8, 136], [1, 1, 1, 136]] -> [1, 32, 8, 136]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/ProjectBatchNorm/mul1
+684 Add        [[1, 32, 8, 136], [1, 1, 1, 136]] -> [1, 32, 8, 136]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_15/ProjectBatchNorm/add1
+685 Add        [[1, 32, 8, 136], [1, 32, 8, 136]] -> [1, 32, 8, 136]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add10
+686 Transpose  [[1, 32, 8, 136]] -> [1, 136, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/ExpandConv/conv_general_dilated__4626
+687 Conv  in [1, 136, 32, 8] w [816, 136, 1, 1] g 1 s [1, 1] p None out [1, 816, 32, 8] MAC 28.4M  node_Conv_55
+688 Transpose  [[1, 816, 32, 8]] -> [1, 32, 8, 816]  Transpose__7582
+689 Mul        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/ExpandBatchNorm/mul1
+690 Add        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/ExpandBatchNorm/add1
+691 Neg        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  neg47
+692 Exp        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  exp47
+693 Add        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  add62
+694 Div        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  div47
+695 Mul        [[1, 32, 8, 816], [1, 32, 8, 816]] -> [1, 32, 8, 816]  mul47
+696 Transpose  [[1, 32, 8, 816]] -> [1, 816, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/DepthwiseConv/conv_general_dilated__4631
+697 Conv  in [1, 816, 32, 8] w [816, 1, 5, 5] g 816 s [1, 1] p [2, 2, 2, 2] out [1, 816, 32, 8] MAC 5.2M  node_Conv_56
+698 Transpose  [[1, 816, 32, 8]] -> [1, 32, 8, 816]  Transpose__7590
+699 Mul        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/DepthwiseBatchNorm/mul1
+700 Add        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/DepthwiseBatchNorm/add1
+701 Neg        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  neg48
+702 Exp        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  exp48
+703 Add        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  add63
+704 Div        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  div48
+705 Mul        [[1, 32, 8, 816], [1, 32, 8, 816]] -> [1, 32, 8, 816]  mul48
+706 ReduceSum  [[1, 32, 8, 816], [2]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/SqueezeAndExcitation_0/reduce_sum
+707 Div        [[1, 816], []] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/SqueezeAndExcitation_0/div
+708 MatMul [1, 816] x [816, 34] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/SqueezeAndExcitation_0/Reduce/dot_general5
+709 Add        [[1, 34], [1, 34]] -> [1, 34]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/SqueezeAndExcitation_0/Reduce/add1
+710 Neg        [[1, 34]] -> [1, 34]  neg49
+711 Exp        [[1, 34]] -> [1, 34]  exp49
+712 Add        [[], [1, 34]] -> [1, 34]  add64
+713 Div        [[], [1, 34]] -> [1, 34]  div49
+714 Mul        [[1, 34], [1, 34]] -> [1, 34]  mul49
+715 MatMul [1, 34] x [34, 816] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/SqueezeAndExcitation_0/Expand/dot_general5
+716 Add        [[1, 816], [1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/SqueezeAndExcitation_0/Expand/add1
+717 Neg        [[1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/SqueezeAndExcitation_0/neg
+718 Exp        [[1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/SqueezeAndExcitation_0/exp
+719 Add        [[], [1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/SqueezeAndExcitation_0/add
+720 Div        [[], [1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/SqueezeAndExcitation_0/div1
+721 Unsqueeze  [[1, 816], [2]] -> [1, 1, 1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/SqueezeAndExcitation_0/mul
+722 Mul        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/SqueezeAndExcitation_0/mul3
+723 Transpose  [[1, 32, 8, 816]] -> [1, 816, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/ProjectConv/conv_general_dilated__4866
+724 Conv  in [1, 816, 32, 8] w [136, 816, 1, 1] g 1 s [1, 1] p None out [1, 136, 32, 8] MAC 28.4M  node_Conv_57
+725 Transpose  [[1, 136, 32, 8]] -> [1, 32, 8, 136]  Transpose__7598
+726 Mul        [[1, 32, 8, 136], [1, 1, 1, 136]] -> [1, 32, 8, 136]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/ProjectBatchNorm/mul1
+727 Add        [[1, 32, 8, 136], [1, 1, 1, 136]] -> [1, 32, 8, 136]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_16/ProjectBatchNorm/add1
+728 Add        [[1, 32, 8, 136], [1, 32, 8, 136]] -> [1, 32, 8, 136]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add11
+729 Transpose  [[1, 32, 8, 136]] -> [1, 136, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/ExpandConv/conv_general_dilated__4871
+730 Conv  in [1, 136, 32, 8] w [816, 136, 1, 1] g 1 s [1, 1] p None out [1, 816, 32, 8] MAC 28.4M  node_Conv_58
+731 Transpose  [[1, 816, 32, 8]] -> [1, 32, 8, 816]  Transpose__7606
+732 Mul        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/ExpandBatchNorm/mul1
+733 Add        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/ExpandBatchNorm/add1
+734 Neg        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  neg50
+735 Exp        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  exp50
+736 Add        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  add65
+737 Div        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  div50
+738 Mul        [[1, 32, 8, 816], [1, 32, 8, 816]] -> [1, 32, 8, 816]  mul50
+739 Transpose  [[1, 32, 8, 816]] -> [1, 816, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/DepthwiseConv/conv_general_dilated__4876
+740 Conv  in [1, 816, 32, 8] w [816, 1, 5, 5] g 816 s [1, 1] p [2, 2, 2, 2] out [1, 816, 32, 8] MAC 5.2M  node_Conv_59
+741 Transpose  [[1, 816, 32, 8]] -> [1, 32, 8, 816]  Transpose__7614
+742 Mul        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/DepthwiseBatchNorm/mul1
+743 Add        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/DepthwiseBatchNorm/add1
+744 Neg        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  neg51
+745 Exp        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  exp51
+746 Add        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  add66
+747 Div        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  div51
+748 Mul        [[1, 32, 8, 816], [1, 32, 8, 816]] -> [1, 32, 8, 816]  mul51
+749 ReduceSum  [[1, 32, 8, 816], [2]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/SqueezeAndExcitation_0/reduce_sum
+750 Div        [[1, 816], []] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/SqueezeAndExcitation_0/div
+751 MatMul [1, 816] x [816, 34] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/SqueezeAndExcitation_0/Reduce/dot_general5
+752 Add        [[1, 34], [1, 34]] -> [1, 34]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/SqueezeAndExcitation_0/Reduce/add1
+753 Neg        [[1, 34]] -> [1, 34]  neg52
+754 Exp        [[1, 34]] -> [1, 34]  exp52
+755 Add        [[], [1, 34]] -> [1, 34]  add67
+756 Div        [[], [1, 34]] -> [1, 34]  div52
+757 Mul        [[1, 34], [1, 34]] -> [1, 34]  mul52
+758 MatMul [1, 34] x [34, 816] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/SqueezeAndExcitation_0/Expand/dot_general5
+759 Add        [[1, 816], [1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/SqueezeAndExcitation_0/Expand/add1
+760 Neg        [[1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/SqueezeAndExcitation_0/neg
+761 Exp        [[1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/SqueezeAndExcitation_0/exp
+762 Add        [[], [1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/SqueezeAndExcitation_0/add
+763 Div        [[], [1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/SqueezeAndExcitation_0/div1
+764 Unsqueeze  [[1, 816], [2]] -> [1, 1, 1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/SqueezeAndExcitation_0/mul
+765 Mul        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/SqueezeAndExcitation_0/mul3
+766 Transpose  [[1, 32, 8, 816]] -> [1, 816, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/ProjectConv/conv_general_dilated__5111
+767 Conv  in [1, 816, 32, 8] w [136, 816, 1, 1] g 1 s [1, 1] p None out [1, 136, 32, 8] MAC 28.4M  node_Conv_60
+768 Transpose  [[1, 136, 32, 8]] -> [1, 32, 8, 136]  Transpose__7622
+769 Mul        [[1, 32, 8, 136], [1, 1, 1, 136]] -> [1, 32, 8, 136]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/ProjectBatchNorm/mul1
+770 Add        [[1, 32, 8, 136], [1, 1, 1, 136]] -> [1, 32, 8, 136]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_17/ProjectBatchNorm/add1
+771 Add        [[1, 32, 8, 136], [1, 32, 8, 136]] -> [1, 32, 8, 136]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add12
+772 Transpose  [[1, 32, 8, 136]] -> [1, 136, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/ExpandConv/conv_general_dilated__5116
+773 Conv  in [1, 136, 32, 8] w [816, 136, 1, 1] g 1 s [1, 1] p None out [1, 816, 32, 8] MAC 28.4M  node_Conv_61
+774 Transpose  [[1, 816, 32, 8]] -> [1, 32, 8, 816]  Transpose__7630
+775 Mul        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/ExpandBatchNorm/mul1
+776 Add        [[1, 32, 8, 816], [1, 1, 1, 816]] -> [1, 32, 8, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/ExpandBatchNorm/add1
+777 Neg        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  neg53
+778 Exp        [[1, 32, 8, 816]] -> [1, 32, 8, 816]  exp53
+779 Add        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  add68
+780 Div        [[], [1, 32, 8, 816]] -> [1, 32, 8, 816]  div53
+781 Mul        [[1, 32, 8, 816], [1, 32, 8, 816]] -> [1, 32, 8, 816]  mul53
+782 Transpose  [[1, 32, 8, 816]] -> [1, 816, 32, 8]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/DepthwiseConv/conv_general_dilated__5121
+783 Conv  in [1, 816, 32, 8] w [816, 1, 5, 5] g 816 s [2, 2] p [1, 1, 2, 2] out [1, 816, 16, 4] MAC 1.3M  node_Conv_62
+784 Transpose  [[1, 816, 16, 4]] -> [1, 16, 4, 816]  Transpose__7638
+785 Mul        [[1, 16, 4, 816], [1, 1, 1, 816]] -> [1, 16, 4, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/DepthwiseBatchNorm/mul1
+786 Add        [[1, 16, 4, 816], [1, 1, 1, 816]] -> [1, 16, 4, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/DepthwiseBatchNorm/add1
+787 Neg        [[1, 16, 4, 816]] -> [1, 16, 4, 816]  neg54
+788 Exp        [[1, 16, 4, 816]] -> [1, 16, 4, 816]  exp54
+789 Add        [[], [1, 16, 4, 816]] -> [1, 16, 4, 816]  add70
+790 Div        [[], [1, 16, 4, 816]] -> [1, 16, 4, 816]  div54
+791 Mul        [[1, 16, 4, 816], [1, 16, 4, 816]] -> [1, 16, 4, 816]  mul54
+792 ReduceSum  [[1, 16, 4, 816], [2]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/SqueezeAndExcitation_0/reduce_sum
+793 Div        [[1, 816], []] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/SqueezeAndExcitation_0/div1
+794 MatMul [1, 816] x [816, 34] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/SqueezeAndExcitation_0/Reduce/dot_general5
+795 Add        [[1, 34], [1, 34]] -> [1, 34]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/SqueezeAndExcitation_0/Reduce/add1
+796 Neg        [[1, 34]] -> [1, 34]  neg55
+797 Exp        [[1, 34]] -> [1, 34]  exp55
+798 Add        [[], [1, 34]] -> [1, 34]  add71
+799 Div        [[], [1, 34]] -> [1, 34]  div55
+800 Mul        [[1, 34], [1, 34]] -> [1, 34]  mul55
+801 MatMul [1, 34] x [34, 816] MAC 0.0M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/SqueezeAndExcitation_0/Expand/dot_general5
+802 Add        [[1, 816], [1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/SqueezeAndExcitation_0/Expand/add1
+803 Neg        [[1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/SqueezeAndExcitation_0/neg
+804 Exp        [[1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/SqueezeAndExcitation_0/exp
+805 Add        [[], [1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/SqueezeAndExcitation_0/add
+806 Div        [[], [1, 816]] -> [1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/SqueezeAndExcitation_0/div2
+807 Unsqueeze  [[1, 816], [2]] -> [1, 1, 1, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/SqueezeAndExcitation_0/mul
+808 Mul        [[1, 16, 4, 816], [1, 1, 1, 816]] -> [1, 16, 4, 816]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/SqueezeAndExcitation_0/mul3
+809 Transpose  [[1, 16, 4, 816]] -> [1, 816, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/ProjectConv/conv_general_dilated__5356
+810 Conv  in [1, 816, 16, 4] w [232, 816, 1, 1] g 1 s [1, 1] p None out [1, 232, 16, 4] MAC 12.1M  node_Conv_63
+811 Transpose  [[1, 232, 16, 4]] -> [1, 16, 4, 232]  Transpose__7646
+812 Mul        [[1, 16, 4, 232], [1, 1, 1, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/ProjectBatchNorm/mul1
+813 Add        [[1, 16, 4, 232], [1, 1, 1, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_18/ProjectBatchNorm/add1
+814 Transpose  [[1, 16, 4, 232]] -> [1, 232, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/ExpandConv/conv_general_dilated__5361
+815 Conv  in [1, 232, 16, 4] w [1392, 232, 1, 1] g 1 s [1, 1] p None out [1, 1392, 16, 4] MAC 20.7M  node_Conv_64
+816 Transpose  [[1, 1392, 16, 4]] -> [1, 16, 4, 1392]  Transpose__7654
+817 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/ExpandBatchNorm/mul1
+818 Add        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/ExpandBatchNorm/add1
+819 Neg        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  neg56
+820 Exp        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  exp56
+821 Add        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  add73
+822 Div        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  div56
+823 Mul        [[1, 16, 4, 1392], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  mul56
+824 Transpose  [[1, 16, 4, 1392]] -> [1, 1392, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/DepthwiseConv/conv_general_dilated__5366
+825 Conv  in [1, 1392, 16, 4] w [1392, 1, 5, 5] g 1392 s [1, 1] p [2, 2, 2, 2] out [1, 1392, 16, 4] MAC 2.2M  node_Conv_65
+826 Transpose  [[1, 1392, 16, 4]] -> [1, 16, 4, 1392]  Transpose__7662
+827 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/DepthwiseBatchNorm/mul1
+828 Add        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/DepthwiseBatchNorm/add1
+829 Neg        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  neg57
+830 Exp        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  exp57
+831 Add        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  add74
+832 Div        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  div57
+833 Mul        [[1, 16, 4, 1392], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  mul57
+834 ReduceSum  [[1, 16, 4, 1392], [2]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/SqueezeAndExcitation_0/reduce_sum
+835 Div        [[1, 1392], []] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/SqueezeAndExcitation_0/div2
+836 MatMul [1, 1392] x [1392, 58] MAC 0.1M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/SqueezeAndExcitation_0/Reduce/dot_general5
+837 Add        [[1, 58], [1, 58]] -> [1, 58]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/SqueezeAndExcitation_0/Reduce/add2
+838 Neg        [[1, 58]] -> [1, 58]  neg58
+839 Exp        [[1, 58]] -> [1, 58]  exp58
+840 Add        [[], [1, 58]] -> [1, 58]  add76
+841 Div        [[], [1, 58]] -> [1, 58]  div58
+842 Mul        [[1, 58], [1, 58]] -> [1, 58]  mul58
+843 MatMul [1, 58] x [58, 1392] MAC 0.1M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/SqueezeAndExcitation_0/Expand/dot_general5
+844 Add        [[1, 1392], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/SqueezeAndExcitation_0/Expand/add1
+845 Neg        [[1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/SqueezeAndExcitation_0/neg
+846 Exp        [[1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/SqueezeAndExcitation_0/exp
+847 Add        [[], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/SqueezeAndExcitation_0/add1
+848 Div        [[], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/SqueezeAndExcitation_0/div3
+849 Unsqueeze  [[1, 1392], [2]] -> [1, 1, 1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/SqueezeAndExcitation_0/mul
+850 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/SqueezeAndExcitation_0/mul3
+851 Transpose  [[1, 16, 4, 1392]] -> [1, 1392, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/ProjectConv/conv_general_dilated__5601
+852 Conv  in [1, 1392, 16, 4] w [232, 1392, 1, 1] g 1 s [1, 1] p None out [1, 232, 16, 4] MAC 20.7M  node_Conv_66
+853 Transpose  [[1, 232, 16, 4]] -> [1, 16, 4, 232]  Transpose__7670
+854 Mul        [[1, 16, 4, 232], [1, 1, 1, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/ProjectBatchNorm/mul1
+855 Add        [[1, 16, 4, 232], [1, 1, 1, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_19/ProjectBatchNorm/add1
+856 Add        [[1, 16, 4, 232], [1, 16, 4, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add13
+857 Transpose  [[1, 16, 4, 232]] -> [1, 232, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/ExpandConv/conv_general_dilated__5606
+858 Conv  in [1, 232, 16, 4] w [1392, 232, 1, 1] g 1 s [1, 1] p None out [1, 1392, 16, 4] MAC 20.7M  node_Conv_67
+859 Transpose  [[1, 1392, 16, 4]] -> [1, 16, 4, 1392]  Transpose__7678
+860 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/ExpandBatchNorm/mul1
+861 Add        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/ExpandBatchNorm/add1
+862 Neg        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  neg59
+863 Exp        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  exp59
+864 Add        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  add77
+865 Div        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  div59
+866 Mul        [[1, 16, 4, 1392], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  mul59
+867 Transpose  [[1, 16, 4, 1392]] -> [1, 1392, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/DepthwiseConv/conv_general_dilated__5611
+868 Conv  in [1, 1392, 16, 4] w [1392, 1, 5, 5] g 1392 s [1, 1] p [2, 2, 2, 2] out [1, 1392, 16, 4] MAC 2.2M  node_Conv_68
+869 Transpose  [[1, 1392, 16, 4]] -> [1, 16, 4, 1392]  Transpose__7686
+870 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/DepthwiseBatchNorm/mul1
+871 Add        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/DepthwiseBatchNorm/add1
+872 Neg        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  neg60
+873 Exp        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  exp60
+874 Add        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  add78
+875 Div        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  div60
+876 Mul        [[1, 16, 4, 1392], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  mul60
+877 ReduceSum  [[1, 16, 4, 1392], [2]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/SqueezeAndExcitation_0/reduce_sum
+878 Div        [[1, 1392], []] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/SqueezeAndExcitation_0/div
+879 MatMul [1, 1392] x [1392, 58] MAC 0.1M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/SqueezeAndExcitation_0/Reduce/dot_general5
+880 Add        [[1, 58], [1, 58]] -> [1, 58]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/SqueezeAndExcitation_0/Reduce/add1
+881 Neg        [[1, 58]] -> [1, 58]  neg61
+882 Exp        [[1, 58]] -> [1, 58]  exp61
+883 Add        [[], [1, 58]] -> [1, 58]  add79
+884 Div        [[], [1, 58]] -> [1, 58]  div61
+885 Mul        [[1, 58], [1, 58]] -> [1, 58]  mul61
+886 MatMul [1, 58] x [58, 1392] MAC 0.1M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/SqueezeAndExcitation_0/Expand/dot_general5
+887 Add        [[1, 1392], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/SqueezeAndExcitation_0/Expand/add1
+888 Neg        [[1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/SqueezeAndExcitation_0/neg
+889 Exp        [[1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/SqueezeAndExcitation_0/exp
+890 Add        [[], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/SqueezeAndExcitation_0/add
+891 Div        [[], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/SqueezeAndExcitation_0/div1
+892 Unsqueeze  [[1, 1392], [2]] -> [1, 1, 1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/SqueezeAndExcitation_0/mul
+893 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/SqueezeAndExcitation_0/mul3
+894 Transpose  [[1, 16, 4, 1392]] -> [1, 1392, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/ProjectConv/conv_general_dilated__5846
+895 Conv  in [1, 1392, 16, 4] w [232, 1392, 1, 1] g 1 s [1, 1] p None out [1, 232, 16, 4] MAC 20.7M  node_Conv_69
+896 Transpose  [[1, 232, 16, 4]] -> [1, 16, 4, 232]  Transpose__7694
+897 Mul        [[1, 16, 4, 232], [1, 1, 1, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/ProjectBatchNorm/mul1
+898 Add        [[1, 16, 4, 232], [1, 1, 1, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_20/ProjectBatchNorm/add1
+899 Add        [[1, 16, 4, 232], [1, 16, 4, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add14
+900 Transpose  [[1, 16, 4, 232]] -> [1, 232, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/ExpandConv/conv_general_dilated__5851
+901 Conv  in [1, 232, 16, 4] w [1392, 232, 1, 1] g 1 s [1, 1] p None out [1, 1392, 16, 4] MAC 20.7M  node_Conv_70
+902 Transpose  [[1, 1392, 16, 4]] -> [1, 16, 4, 1392]  Transpose__7702
+903 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/ExpandBatchNorm/mul1
+904 Add        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/ExpandBatchNorm/add1
+905 Neg        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  neg62
+906 Exp        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  exp62
+907 Add        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  add80
+908 Div        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  div62
+909 Mul        [[1, 16, 4, 1392], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  mul62
+910 Transpose  [[1, 16, 4, 1392]] -> [1, 1392, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/DepthwiseConv/conv_general_dilated__5856
+911 Conv  in [1, 1392, 16, 4] w [1392, 1, 5, 5] g 1392 s [1, 1] p [2, 2, 2, 2] out [1, 1392, 16, 4] MAC 2.2M  node_Conv_71
+912 Transpose  [[1, 1392, 16, 4]] -> [1, 16, 4, 1392]  Transpose__7710
+913 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/DepthwiseBatchNorm/mul1
+914 Add        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/DepthwiseBatchNorm/add1
+915 Neg        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  neg63
+916 Exp        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  exp63
+917 Add        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  add81
+918 Div        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  div63
+919 Mul        [[1, 16, 4, 1392], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  mul63
+920 ReduceSum  [[1, 16, 4, 1392], [2]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/SqueezeAndExcitation_0/reduce_sum
+921 Div        [[1, 1392], []] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/SqueezeAndExcitation_0/div
+922 MatMul [1, 1392] x [1392, 58] MAC 0.1M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/SqueezeAndExcitation_0/Reduce/dot_general5
+923 Add        [[1, 58], [1, 58]] -> [1, 58]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/SqueezeAndExcitation_0/Reduce/add1
+924 Neg        [[1, 58]] -> [1, 58]  neg64
+925 Exp        [[1, 58]] -> [1, 58]  exp64
+926 Add        [[], [1, 58]] -> [1, 58]  add82
+927 Div        [[], [1, 58]] -> [1, 58]  div64
+928 Mul        [[1, 58], [1, 58]] -> [1, 58]  mul64
+929 MatMul [1, 58] x [58, 1392] MAC 0.1M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/SqueezeAndExcitation_0/Expand/dot_general5
+930 Add        [[1, 1392], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/SqueezeAndExcitation_0/Expand/add1
+931 Neg        [[1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/SqueezeAndExcitation_0/neg
+932 Exp        [[1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/SqueezeAndExcitation_0/exp
+933 Add        [[], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/SqueezeAndExcitation_0/add
+934 Div        [[], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/SqueezeAndExcitation_0/div1
+935 Unsqueeze  [[1, 1392], [2]] -> [1, 1, 1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/SqueezeAndExcitation_0/mul
+936 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/SqueezeAndExcitation_0/mul3
+937 Transpose  [[1, 16, 4, 1392]] -> [1, 1392, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/ProjectConv/conv_general_dilated__6091
+938 Conv  in [1, 1392, 16, 4] w [232, 1392, 1, 1] g 1 s [1, 1] p None out [1, 232, 16, 4] MAC 20.7M  node_Conv_72
+939 Transpose  [[1, 232, 16, 4]] -> [1, 16, 4, 232]  Transpose__7718
+940 Mul        [[1, 16, 4, 232], [1, 1, 1, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/ProjectBatchNorm/mul1
+941 Add        [[1, 16, 4, 232], [1, 1, 1, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_21/ProjectBatchNorm/add1
+942 Add        [[1, 16, 4, 232], [1, 16, 4, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add15
+943 Transpose  [[1, 16, 4, 232]] -> [1, 232, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/ExpandConv/conv_general_dilated__6096
+944 Conv  in [1, 232, 16, 4] w [1392, 232, 1, 1] g 1 s [1, 1] p None out [1, 1392, 16, 4] MAC 20.7M  node_Conv_73
+945 Transpose  [[1, 1392, 16, 4]] -> [1, 16, 4, 1392]  Transpose__7726
+946 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/ExpandBatchNorm/mul1
+947 Add        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/ExpandBatchNorm/add1
+948 Neg        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  neg65
+949 Exp        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  exp65
+950 Add        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  add83
+951 Div        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  div65
+952 Mul        [[1, 16, 4, 1392], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  mul65
+953 Transpose  [[1, 16, 4, 1392]] -> [1, 1392, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/DepthwiseConv/conv_general_dilated__6101
+954 Conv  in [1, 1392, 16, 4] w [1392, 1, 5, 5] g 1392 s [1, 1] p [2, 2, 2, 2] out [1, 1392, 16, 4] MAC 2.2M  node_Conv_74
+955 Transpose  [[1, 1392, 16, 4]] -> [1, 16, 4, 1392]  Transpose__7734
+956 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/DepthwiseBatchNorm/mul1
+957 Add        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/DepthwiseBatchNorm/add1
+958 Neg        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  neg66
+959 Exp        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  exp66
+960 Add        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  add84
+961 Div        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  div66
+962 Mul        [[1, 16, 4, 1392], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  mul66
+963 ReduceSum  [[1, 16, 4, 1392], [2]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/SqueezeAndExcitation_0/reduce_sum
+964 Div        [[1, 1392], []] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/SqueezeAndExcitation_0/div
+965 MatMul [1, 1392] x [1392, 58] MAC 0.1M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/SqueezeAndExcitation_0/Reduce/dot_general5
+966 Add        [[1, 58], [1, 58]] -> [1, 58]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/SqueezeAndExcitation_0/Reduce/add1
+967 Neg        [[1, 58]] -> [1, 58]  neg67
+968 Exp        [[1, 58]] -> [1, 58]  exp67
+969 Add        [[], [1, 58]] -> [1, 58]  add85
+970 Div        [[], [1, 58]] -> [1, 58]  div67
+971 Mul        [[1, 58], [1, 58]] -> [1, 58]  mul67
+972 MatMul [1, 58] x [58, 1392] MAC 0.1M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/SqueezeAndExcitation_0/Expand/dot_general5
+973 Add        [[1, 1392], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/SqueezeAndExcitation_0/Expand/add1
+974 Neg        [[1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/SqueezeAndExcitation_0/neg
+975 Exp        [[1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/SqueezeAndExcitation_0/exp
+976 Add        [[], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/SqueezeAndExcitation_0/add
+977 Div        [[], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/SqueezeAndExcitation_0/div1
+978 Unsqueeze  [[1, 1392], [2]] -> [1, 1, 1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/SqueezeAndExcitation_0/mul
+979 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/SqueezeAndExcitation_0/mul3
+980 Transpose  [[1, 16, 4, 1392]] -> [1, 1392, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/ProjectConv/conv_general_dilated__6336
+981 Conv  in [1, 1392, 16, 4] w [232, 1392, 1, 1] g 1 s [1, 1] p None out [1, 232, 16, 4] MAC 20.7M  node_Conv_75
+982 Transpose  [[1, 232, 16, 4]] -> [1, 16, 4, 232]  Transpose__7742
+983 Mul        [[1, 16, 4, 232], [1, 1, 1, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/ProjectBatchNorm/mul1
+984 Add        [[1, 16, 4, 232], [1, 1, 1, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_22/ProjectBatchNorm/add1
+985 Add        [[1, 16, 4, 232], [1, 16, 4, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add16
+986 Transpose  [[1, 16, 4, 232]] -> [1, 232, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/ExpandConv/conv_general_dilated__6341
+987 Conv  in [1, 232, 16, 4] w [1392, 232, 1, 1] g 1 s [1, 1] p None out [1, 1392, 16, 4] MAC 20.7M  node_Conv_76
+988 Transpose  [[1, 1392, 16, 4]] -> [1, 16, 4, 1392]  Transpose__7750
+989 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/ExpandBatchNorm/mul1
+990 Add        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/ExpandBatchNorm/add1
+991 Neg        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  neg68
+992 Exp        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  exp68
+993 Add        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  add86
+994 Div        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  div68
+995 Mul        [[1, 16, 4, 1392], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  mul68
+996 Transpose  [[1, 16, 4, 1392]] -> [1, 1392, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/DepthwiseConv/conv_general_dilated__6346
+997 Conv  in [1, 1392, 16, 4] w [1392, 1, 5, 5] g 1392 s [1, 1] p [2, 2, 2, 2] out [1, 1392, 16, 4] MAC 2.2M  node_Conv_77
+998 Transpose  [[1, 1392, 16, 4]] -> [1, 16, 4, 1392]  Transpose__7758
+999 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/DepthwiseBatchNorm/mul1
+1000 Add        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/DepthwiseBatchNorm/add1
+1001 Neg        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  neg69
+1002 Exp        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  exp69
+1003 Add        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  add87
+1004 Div        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  div69
+1005 Mul        [[1, 16, 4, 1392], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  mul69
+1006 ReduceSum  [[1, 16, 4, 1392], [2]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/SqueezeAndExcitation_0/reduce_sum
+1007 Div        [[1, 1392], []] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/SqueezeAndExcitation_0/div
+1008 MatMul [1, 1392] x [1392, 58] MAC 0.1M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/SqueezeAndExcitation_0/Reduce/dot_general5
+1009 Add        [[1, 58], [1, 58]] -> [1, 58]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/SqueezeAndExcitation_0/Reduce/add1
+1010 Neg        [[1, 58]] -> [1, 58]  neg70
+1011 Exp        [[1, 58]] -> [1, 58]  exp70
+1012 Add        [[], [1, 58]] -> [1, 58]  add88
+1013 Div        [[], [1, 58]] -> [1, 58]  div70
+1014 Mul        [[1, 58], [1, 58]] -> [1, 58]  mul70
+1015 MatMul [1, 58] x [58, 1392] MAC 0.1M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/SqueezeAndExcitation_0/Expand/dot_general5
+1016 Add        [[1, 1392], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/SqueezeAndExcitation_0/Expand/add1
+1017 Neg        [[1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/SqueezeAndExcitation_0/neg
+1018 Exp        [[1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/SqueezeAndExcitation_0/exp
+1019 Add        [[], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/SqueezeAndExcitation_0/add
+1020 Div        [[], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/SqueezeAndExcitation_0/div1
+1021 Unsqueeze  [[1, 1392], [2]] -> [1, 1, 1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/SqueezeAndExcitation_0/mul
+1022 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/SqueezeAndExcitation_0/mul3
+1023 Transpose  [[1, 16, 4, 1392]] -> [1, 1392, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/ProjectConv/conv_general_dilated__6581
+1024 Conv  in [1, 1392, 16, 4] w [232, 1392, 1, 1] g 1 s [1, 1] p None out [1, 232, 16, 4] MAC 20.7M  node_Conv_78
+1025 Transpose  [[1, 232, 16, 4]] -> [1, 16, 4, 232]  Transpose__7766
+1026 Mul        [[1, 16, 4, 232], [1, 1, 1, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/ProjectBatchNorm/mul1
+1027 Add        [[1, 16, 4, 232], [1, 1, 1, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_23/ProjectBatchNorm/add1
+1028 Add        [[1, 16, 4, 232], [1, 16, 4, 232]] -> [1, 16, 4, 232]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add17
+1029 Transpose  [[1, 16, 4, 232]] -> [1, 232, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/ExpandConv/conv_general_dilated__6586
+1030 Conv  in [1, 232, 16, 4] w [1392, 232, 1, 1] g 1 s [1, 1] p None out [1, 1392, 16, 4] MAC 20.7M  node_Conv_79
+1031 Transpose  [[1, 1392, 16, 4]] -> [1, 16, 4, 1392]  Transpose__7774
+1032 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/ExpandBatchNorm/mul1
+1033 Add        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/ExpandBatchNorm/add1
+1034 Neg        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  neg71
+1035 Exp        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  exp71
+1036 Add        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  add89
+1037 Div        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  div71
+1038 Mul        [[1, 16, 4, 1392], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  mul71
+1039 Transpose  [[1, 16, 4, 1392]] -> [1, 1392, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/DepthwiseConv/conv_general_dilated__6591
+1040 Conv  in [1, 1392, 16, 4] w [1392, 1, 3, 3] g 1392 s [1, 1] p [1, 1, 1, 1] out [1, 1392, 16, 4] MAC 0.8M  node_Conv_80
+1041 Transpose  [[1, 1392, 16, 4]] -> [1, 16, 4, 1392]  Transpose__7782
+1042 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/DepthwiseBatchNorm/mul1
+1043 Add        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/DepthwiseBatchNorm/add1
+1044 Neg        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  neg72
+1045 Exp        [[1, 16, 4, 1392]] -> [1, 16, 4, 1392]  exp72
+1046 Add        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  add90
+1047 Div        [[], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  div72
+1048 Mul        [[1, 16, 4, 1392], [1, 16, 4, 1392]] -> [1, 16, 4, 1392]  mul72
+1049 ReduceSum  [[1, 16, 4, 1392], [2]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/SqueezeAndExcitation_0/reduce_sum
+1050 Div        [[1, 1392], []] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/SqueezeAndExcitation_0/div
+1051 MatMul [1, 1392] x [1392, 58] MAC 0.1M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/SqueezeAndExcitation_0/Reduce/dot_general5
+1052 Add        [[1, 58], [1, 58]] -> [1, 58]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/SqueezeAndExcitation_0/Reduce/add1
+1053 Neg        [[1, 58]] -> [1, 58]  neg73
+1054 Exp        [[1, 58]] -> [1, 58]  exp73
+1055 Add        [[], [1, 58]] -> [1, 58]  add91
+1056 Div        [[], [1, 58]] -> [1, 58]  div73
+1057 Mul        [[1, 58], [1, 58]] -> [1, 58]  mul73
+1058 MatMul [1, 58] x [58, 1392] MAC 0.1M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/SqueezeAndExcitation_0/Expand/dot_general5
+1059 Add        [[1, 1392], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/SqueezeAndExcitation_0/Expand/add1
+1060 Neg        [[1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/SqueezeAndExcitation_0/neg
+1061 Exp        [[1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/SqueezeAndExcitation_0/exp
+1062 Add        [[], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/SqueezeAndExcitation_0/add
+1063 Div        [[], [1, 1392]] -> [1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/SqueezeAndExcitation_0/div1
+1064 Unsqueeze  [[1, 1392], [2]] -> [1, 1, 1, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/SqueezeAndExcitation_0/mul
+1065 Mul        [[1, 16, 4, 1392], [1, 1, 1, 1392]] -> [1, 16, 4, 1392]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/SqueezeAndExcitation_0/mul3
+1066 Transpose  [[1, 16, 4, 1392]] -> [1, 1392, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/ProjectConv/conv_general_dilated__6826
+1067 Conv  in [1, 1392, 16, 4] w [384, 1392, 1, 1] g 1 s [1, 1] p None out [1, 384, 16, 4] MAC 34.2M  node_Conv_81
+1068 Transpose  [[1, 384, 16, 4]] -> [1, 16, 4, 384]  Transpose__7790
+1069 Mul        [[1, 16, 4, 384], [1, 1, 1, 384]] -> [1, 16, 4, 384]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/ProjectBatchNorm/mul1
+1070 Add        [[1, 16, 4, 384], [1, 1, 1, 384]] -> [1, 16, 4, 384]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_24/ProjectBatchNorm/add1
+1071 Transpose  [[1, 16, 4, 384]] -> [1, 384, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/ExpandConv/conv_general_dilated__6831
+1072 Conv  in [1, 384, 16, 4] w [2304, 384, 1, 1] g 1 s [1, 1] p None out [1, 2304, 16, 4] MAC 56.6M  node_Conv_82
+1073 Transpose  [[1, 2304, 16, 4]] -> [1, 16, 4, 2304]  Transpose__7798
+1074 Mul        [[1, 16, 4, 2304], [1, 1, 1, 2304]] -> [1, 16, 4, 2304]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/ExpandBatchNorm/mul1
+1075 Add        [[1, 16, 4, 2304], [1, 1, 1, 2304]] -> [1, 16, 4, 2304]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/ExpandBatchNorm/add1
+1076 Neg        [[1, 16, 4, 2304]] -> [1, 16, 4, 2304]  neg74
+1077 Exp        [[1, 16, 4, 2304]] -> [1, 16, 4, 2304]  exp74
+1078 Add        [[], [1, 16, 4, 2304]] -> [1, 16, 4, 2304]  add93
+1079 Div        [[], [1, 16, 4, 2304]] -> [1, 16, 4, 2304]  div74
+1080 Mul        [[1, 16, 4, 2304], [1, 16, 4, 2304]] -> [1, 16, 4, 2304]  mul74
+1081 Transpose  [[1, 16, 4, 2304]] -> [1, 2304, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/DepthwiseConv/conv_general_dilated__6836
+1082 Conv  in [1, 2304, 16, 4] w [2304, 1, 3, 3] g 2304 s [1, 1] p [1, 1, 1, 1] out [1, 2304, 16, 4] MAC 1.3M  node_Conv_83
+1083 Transpose  [[1, 2304, 16, 4]] -> [1, 16, 4, 2304]  Transpose__7806
+1084 Mul        [[1, 16, 4, 2304], [1, 1, 1, 2304]] -> [1, 16, 4, 2304]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/DepthwiseBatchNorm/mul1
+1085 Add        [[1, 16, 4, 2304], [1, 1, 1, 2304]] -> [1, 16, 4, 2304]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/DepthwiseBatchNorm/add1
+1086 Neg        [[1, 16, 4, 2304]] -> [1, 16, 4, 2304]  neg75
+1087 Exp        [[1, 16, 4, 2304]] -> [1, 16, 4, 2304]  exp75
+1088 Add        [[], [1, 16, 4, 2304]] -> [1, 16, 4, 2304]  add94
+1089 Div        [[], [1, 16, 4, 2304]] -> [1, 16, 4, 2304]  div75
+1090 Mul        [[1, 16, 4, 2304], [1, 16, 4, 2304]] -> [1, 16, 4, 2304]  mul75
+1091 ReduceSum  [[1, 16, 4, 2304], [2]] -> [1, 2304]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/SqueezeAndExcitation_0/reduce_sum
+1092 Div        [[1, 2304], []] -> [1, 2304]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/SqueezeAndExcitation_0/div2
+1093 MatMul [1, 2304] x [2304, 96] MAC 0.2M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/SqueezeAndExcitation_0/Reduce/dot_general5
+1094 Add        [[1, 96], [1, 96]] -> [1, 96]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/SqueezeAndExcitation_0/Reduce/add2
+1095 Neg        [[1, 96]] -> [1, 96]  neg76
+1096 Exp        [[1, 96]] -> [1, 96]  exp76
+1097 Add        [[], [1, 96]] -> [1, 96]  add96
+1098 Div        [[], [1, 96]] -> [1, 96]  div76
+1099 Mul        [[1, 96], [1, 96]] -> [1, 96]  mul76
+1100 MatMul [1, 96] x [96, 2304] MAC 0.2M  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/SqueezeAndExcitation_0/Expand/dot_general5
+1101 Add        [[1, 2304], [1, 2304]] -> [1, 2304]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/SqueezeAndExcitation_0/Expand/add1
+1102 Neg        [[1, 2304]] -> [1, 2304]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/SqueezeAndExcitation_0/neg
+1103 Exp        [[1, 2304]] -> [1, 2304]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/SqueezeAndExcitation_0/exp
+1104 Add        [[], [1, 2304]] -> [1, 2304]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/SqueezeAndExcitation_0/add1
+1105 Div        [[], [1, 2304]] -> [1, 2304]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/SqueezeAndExcitation_0/div3
+1106 Unsqueeze  [[1, 2304], [2]] -> [1, 1, 1, 2304]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/SqueezeAndExcitation_0/mul
+1107 Mul        [[1, 16, 4, 2304], [1, 1, 1, 2304]] -> [1, 16, 4, 2304]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/SqueezeAndExcitation_0/mul3
+1108 Transpose  [[1, 16, 4, 2304]] -> [1, 2304, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/ProjectConv/conv_general_dilated__7071
+1109 Conv  in [1, 2304, 16, 4] w [384, 2304, 1, 1] g 1 s [1, 1] p None out [1, 384, 16, 4] MAC 56.6M  node_Conv_84
+1110 Transpose  [[1, 384, 16, 4]] -> [1, 16, 4, 384]  Transpose__7814
+1111 Mul        [[1, 16, 4, 384], [1, 1, 1, 384]] -> [1, 16, 4, 384]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/ProjectBatchNorm/mul1
+1112 Add        [[1, 16, 4, 384], [1, 1, 1, 384]] -> [1, 16, 4, 384]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/MBConv_25/ProjectBatchNorm/add1
+1113 Add        [[1, 16, 4, 384], [1, 16, 4, 384]] -> [1, 16, 4, 384]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/add18
+1114 Transpose  [[1, 16, 4, 384]] -> [1, 384, 16, 4]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/Head_0/Conv_0/conv_general_dilated__7076
+1115 Conv  in [1, 384, 16, 4] w [1536, 384, 1, 1] g 1 s [1, 1] p None out [1, 1536, 16, 4] MAC 37.7M  node_Conv_85
+1116 Transpose  [[1, 1536, 16, 4]] -> [1, 16, 4, 1536]  Transpose__7822
+1117 Mul        [[1, 16, 4, 1536], [1, 1, 1, 1536]] -> [1, 16, 4, 1536]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/Head_0/BatchNorm_0/mul1
+1118 Add        [[1, 16, 4, 1536], [1, 1, 1, 1536]] -> [1, 16, 4, 1536]  jit(infer_fn)/MultiHeadClassifier/embedding_model/backbone/Head_0/BatchNorm_0/add1
+1119 Neg        [[1, 16, 4, 1536]] -> [1, 16, 4, 1536]  neg77
+1120 Exp        [[1, 16, 4, 1536]] -> [1, 16, 4, 1536]  exp77
+1121 Add        [[], [1, 16, 4, 1536]] -> [1, 16, 4, 1536]  add98
+1122 Div        [[], [1, 16, 4, 1536]] -> [1, 16, 4, 1536]  div77
+1123 Mul        [[1, 16, 4, 1536], [1, 16, 4, 1536]] -> [1, 16, 4, 1536]  StatefulPartitionedCall:2
+1124 Mul        [[1, 16, 4, 1536], [1, 16, 4, 1536]] -> [1, 16, 4, 1536]  mul78
+1125 ReduceSum  [[1, 16, 4, 1536], [1]] -> [1, 16, 4, 1]  reduce_sum1
+1126 Sqrt       [[1, 16, 4, 1]] -> [1, 16, 4, 1]  sqrt
+1127 Add        [[1, 16, 4, 1], []] -> [1, 16, 4, 1]  jit(infer_fn)/MultiHeadClassifier/MultiHeadClassifier._call_model/heads_protopnet_logits/add1
+1128 Div        [[1, 16, 4, 1536], [1, 16, 4, 1]] -> [1, 16, 4, 1536]  jit(infer_fn)/MultiHeadClassifier/MultiHeadClassifier._call_model/heads_protopnet_logits/div2
+1129 MatMul [1, 16, 4, 1536] x [1536, 59180] MAC 5817.6M  jit(infer_fn)/MultiHeadClassifier/MultiHeadClassifier._call_model/heads_protopnet_logits/dot_general7
+1130 Reshape    [[1, 16, 4, 59180], [5]] -> [1, 16, 4, 14795, 4]  jit(infer_fn)/MultiHeadClassifier/MultiHeadClassifier._call_model/heads_protopnet_logits/dot_general10
+1131 ReduceMax  [[1, 16, 4, 14795, 4], [2]] -> [1, 14795, 4]  jit(infer_fn)/MultiHeadClassifier/MultiHeadClassifier._call_model/heads_protopnet_logits/reduce_max
+1132 Mul        [[1, 14795, 4], [1, 14795, 4]] -> [1, 14795, 4]  jit(infer_fn)/MultiHeadClassifier/MultiHeadClassifier._call_model/heads_protopnet_logits/mul2
+1133 ReduceSum  [[1, 14795, 4], [1]] -> [1, 14795]  jit(infer_fn)/MultiHeadClassifier/MultiHeadClassifier._call_model/heads_protopnet_logits/reduce_sum
+1134 Add        [[1, 14795], [1, 14795]] -> [1, 14795]  StatefulPartitionedCall:1
+1135 ReduceSum  [[1, 16, 4, 1536], [2]] -> [1, 1536]  jit(infer_fn)/MultiHeadClassifier/embedding_model/reduce_sum
+1136 Div        [[1, 1536], []] -> [1, 1536]  StatefulPartitionedCall:0
+total MAC 7.289 G

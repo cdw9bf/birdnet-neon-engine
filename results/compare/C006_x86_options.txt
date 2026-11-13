@@ -1,0 +1,29 @@
+# C006 x86 full session (supersedes the partial sessions A/B): every C002 option + the TFLite + XNNPACK rows. id kind need_mb input model [extra]
+v24_tflite_fp32        ort  500  win/w48k3s.npy  models/BirdNET_GLOBAL_6K_V2.4_Model_FP32.tflite  --runs 50 --warm 10
+v24_fp32_dfttrunc      ort  500  win/w48k3s.npy  models/BirdNET_v2.4_fp32_dfttrunc.onnx       --runs 50 --warm 10
+v24_fp32_foldconv      ort  500  win/w48k3s.npy  models/BirdNET_v2.4_fp32_foldconv.onnx       --runs 50 --warm 10
+v24_ov_fp32_foldconv   ovf32 700 win/w48k3s.npy  models/BirdNET_v2.4_fp32_foldconv.onnx       --runs 50 --warm 10
+v24_ov_fp32_dfttrunc   ovf32 700 win/w48k3s.npy  models/BirdNET_v2.4_fp32_dfttrunc.onnx       --runs 50 --warm 10
+v24_fp32_fused         ort  500  win/w48k3s.npy  models/BirdNET_v2.4_fp32_fused.onnx          --runs 50 --warm 10
+v24_int8arm_stock      ort  500  win/w48k3s.npy  models/BirdNET_INT8_ARM.onnx                 --runs 50 --warm 10
+v3na_fp32              ort  700  win/w32k5s_v3.npy  models/birdnet-v3.0-preview3.1-north-america-east-fp32-b1.onnx  --runs 15 --warm 3
+v3na_fft3              ort  700  win/w32k5s_v3.npy  models/v3na_d_fft3.onnx                   --runs 15 --warm 3
+v3g_fp32               ort  1100 win/w32k5s_v3.npy  models/birdnet-v3.0-preview3.1-fp32-b1.onnx  --runs 15 --warm 3
+v3g_fft3               ort  1100 win/w32k5s_v3.npy  models/v3g_d_fft3.onnx                    --runs 15 --warm 3
+perch_fp32             ort  1200 win/w32k5s_perch.npy models/perch_v2_fp32.onnx               --runs 15 --warm 3
+perch_nodft_fp32       ort  1200 win/w32k5s_perch.npy models/perch_v2_no_dft_fp32.onnx        --runs 15 --warm 3
+perch_fused_fp32       ort  1200 win/w32k5s_perch.npy models/perch_v2_fused_fp32.onnx         --runs 15 --warm 3
+perch_fused_int8arm    ort  700  win/w32k5s_perch.npy models/perch_v2_fused_int8_arm.onnx     --runs 15 --warm 3
+bat_dfttrunc           bat  500  win/bench256k.wav models/birdnet-v2.4-embeddings-fp32-dfttrunc.onnx --head models/BattyBirdNET-EU-256kHz_fp32.onnx --runs 40 --warm 8
+bat_fused_t1           bat  500  win/bench256k.wav models/birdnet-v2.4-embeddings-fp32-fused.onnx    --head models/BattyBirdNET-EU-256kHz_fp32.onnx --runs 40 --warm 8
+# --- TFLite + XNNPACK, C API 2.17.1, 1 thread ---
+v24_tfl_fp32           tfl  500  win/w48k3s_16.f32     models/BirdNET_GLOBAL_6K_V2.4_Model_FP32.tflite  16 50 10
+v24_tfl_fp16           tfl  500  win/w48k3s_16.f32     models/audio-model-fp16.tflite     16 50 10
+v24_tfl_int8           tfl  500  win/w48k3s_16.f32     models/audio-model-int8.tflite     16 50 10
+v3na_tfl_s0se          tfl  500  win/w32k5s_v3_16.f32  models/v3na_fft_i8dyn_s0se.tflite  16 15 3
+v3na_tfl_fp32          tfl  650  win/w32k5s_v3_16.f32  models/v3na_fft_fp32.tflite        16 15 3
+bat_tfl_fp32           tfl  500  win/bat256k_8.f32     models/BirdNET_GLOBAL_6K_V2.4_Model_FP32_emb.tflite  8 40 8 --head models/BattyBirdNET-EU-256kHz.tflite --emb model/GLOBAL_AVG_POOL/Mean
+v3na_tfl_s0se_py       ort  500  win/w32k5s_v3.npy     models/v3na_fft_i8dyn_s0se.tflite  --runs 15 --warm 3
+v3g_tfl_s0se           tfl  700  win/w32k5s_v3_16.f32  models/v3g_fft_i8dyn_s0se.tflite   16 15 3
+v3g_tfl_fp32           tfl  1400 win/w32k5s_v3_16.f32  models/v3g_fft_fp32.tflite         16 15 3
+perch_tfl_fp32         tfl  1000 win/w32k5s_perch_16.f32 models/perch_v2_fp32.tflite      16 15 3 --out label

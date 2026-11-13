@@ -1,0 +1,31 @@
+Older-hardware study of BirdNET v3.0 (2026-11-08): could v3.0 run usably on a Raspberry Pi 4 before the engine had a
+path for it? Experiments H001-H005; this directory holds their summaries (the raw per-run data are not published).
+H003: 10-minute sustained runs on the Pi 4 at the overlap-2.2 cadence, scripts/stock_cadence_bench.py.
+
+H003 Pi 4 sustained runs at the overlap-2.2 cadence (one window every 4/3 s, 10 min each), scripts/stock_cadence_bench.py
+== 2026-11-08 18:33:19 start cadence | load 3.34 3.13 2.25 | temp 32 C | throttled=0x0 | MemAvailable: 1679348 kB
+  {'t_s': 60, 'median_ms': 1314.4, 'temp_c': 34.076, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 4.33154296875}
+  {'t_s': 120, 'median_ms': 1323.9, 'temp_c': 34.076, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 4.04296875}
+  {'t_s': 181, 'median_ms': 915.2, 'temp_c': 32.615, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 3.4306640625}
+  {'t_s': 243, 'median_ms': 914.1, 'temp_c': 34.076, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 2.7705078125}
+  {'t_s': 304, 'median_ms': 915.0, 'temp_c': 33.589, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 2.45068359375}
+  {'t_s': 364, 'median_ms': 915.8, 'temp_c': 33.102, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 2.4921875}
+  {'t_s': 425, 'median_ms': 915.0, 'temp_c': 33.102, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 2.7900390625}
+  {'t_s': 487, 'median_ms': 915.9, 'temp_c': 33.102, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 2.90966796875}
+  {'t_s': 547, 'median_ms': 915.9, 'temp_c': 33.589, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 2.8359375}
+birdnet-v3.0-preview3.1-north-america-east-fp32-b1.onnx t=4 stride 1.333 s: 451 windows, median 915.9 ms, p95 1335.8, max 1396.3, late 26, duty 0.748, CPU 2.54 cores, temp 33.102 -> 33.589 C, throttled=0x0
+== 2026-11-08 18:43:25 cooldown | load 3.03 2.93 2.61 | temp 32 C | throttled=0x0 | MemAvailable: 1704784 kB
+== 2026-11-08 18:45:25 after cooldown | load 0.44 1.97 2.29 | temp 24 C | throttled=0x0 | MemAvailable: 1709980 kB
+  {'t_s': 61, 'median_ms': 804.0, 'temp_c': 30.18, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 1.1455078125}
+  {'t_s': 121, 'median_ms': 803.8, 'temp_c': 30.18, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 1.32958984375}
+  {'t_s': 182, 'median_ms': 803.9, 'temp_c': 28.719, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 1.0283203125}
+  {'t_s': 242, 'median_ms': 804.2, 'temp_c': 30.667, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 0.9580078125}
+  {'t_s': 303, 'median_ms': 803.5, 'temp_c': 29.693, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 0.931640625}
+  {'t_s': 365, 'median_ms': 802.9, 'temp_c': 29.693, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 1.14404296875}
+  {'t_s': 426, 'median_ms': 803.8, 'temp_c': 29.693, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 1.3408203125}
+  {'t_s': 487, 'median_ms': 802.8, 'temp_c': 30.667, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 1.43017578125}
+  {'t_s': 547, 'median_ms': 804.0, 'temp_c': 29.693, 'mhz': [1500, 1500, 1500, 1500], 'throttled': 'throttled=0x0', 'load': 1.25}
+v3na_fft_i8dyn_s0se.tflite t=2 stride 1.333 s: 451 windows, median 803.7 ms, p95 813.5, max 826.2, late 0, duty 0.604, CPU 1.17 cores, temp 28.719 -> 30.667 C, throttled=0x0
+== 2026-11-08 18:55:28 end cadence | load 1.23 1.36 1.80 | temp 30 C | throttled=0x0 | MemAvailable: 1705480 kB
+B_DONE
+ORT fp32 4 threads: windows 0-93 (first ~2 min) ran while another job's sha256sum was still busy (median 1322 ms); windows 94-450: median 915 ms, p95 982, max 1339 (1 window over the step).

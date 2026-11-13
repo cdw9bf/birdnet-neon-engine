@@ -1,0 +1,43 @@
+== vs TFLite FP32 (primary: the official model, BirdNET-Go's non-arm64 default)
+label v24foldconv_int8arm; reference data/ref_tflite; candidate data/cand_v24foldconv_int8arm
+window agreement over 227022 windows (strides 0.8+1.5 s) x 6522 classes: top-1 0.9899; hit-set Jaccard @0.8 0.9929 (fp32 hits+cand hits union 50058); flips 357 (margin <=0.005 310, <=0.02 357, >0.05 0, max 0.0120)
+max |dconf| over entries with any side conf > 0.018: 0.0275 (stream SSW_062_20170325_160010Z.flac row 1391 class 1575 Corvus brachyrhynchos_American Crow: fp32 0.4983 vs 0.5258)
+full-vector check on 10325 windows (12 s grid): logit SQNR 55.1 dB, max |dconf| 0.0221
+[upstream_default] overlap 0.0 threshold 0.8 FP level 0 (min det 1) range 0.01
+   ref ref_tflite               TP/FP/FN 161/16/169  P 90.96 %  R 48.79 %
+   v24foldconv_int8arm          TP/FP/FN 159/16/171  P 90.86 %  R 48.18 %
+   dP -0.10 pp [-0.26, +0.00]  dR -0.61 pp [-1.39, +0.00]  identical periods 35/37  saved-detection Jaccard 0.9361 (3882 fp32 / 3874 cand, 256 differ)
+   gate: FAIL   (v3-strict: fail)
+[pi_template] overlap 2.2 threshold 0.8 FP level 2 (min det 3) range 0.05
+   ref ref_tflite               TP/FP/FN 138/3/192  P 97.87 %  R 41.82 %
+   v24foldconv_int8arm          TP/FP/FN 138/3/192  P 97.87 %  R 41.82 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 0.9570 (2863 fp32 / 2871 cand, 126 differ)
+   gate: PASS   (v3-strict: pass)
+[c4_deploy] overlap 1.5 threshold 0.8 FP level 2 (min det 2) range 0.05
+   ref ref_tflite               TP/FP/FN 137/4/193  P 97.16 %  R 41.52 %
+   v24foldconv_int8arm          TP/FP/FN 135/4/195  P 97.12 %  R 40.91 %
+   dP -0.04 pp [-0.17, +0.00]  dR -0.60 pp [-1.55, +0.00]  identical periods 35/37  saved-detection Jaccard 0.9683 (2948 fp32 / 2951 cand, 95 differ)
+   gate: FAIL   (v3-strict: fail)
+OVERALL v24foldconv_int8arm: FAIL upstream_default=F pi_template=P c4_deploy=F
+
+== vs ONNX fp32 (BirdNET_v2.4_fp32.onnx, ORT; calibration)
+label v24foldconv_int8arm; reference data/ref_fp32; candidate data/cand_v24foldconv_int8arm
+window agreement over 227022 windows (strides 0.8+1.5 s) x 6522 classes: top-1 0.9880; hit-set Jaccard @0.8 0.9927 (fp32 hits+cand hits union 50063); flips 366 (margin <=0.005 296, <=0.02 366, >0.05 0, max 0.0175)
+max |dconf| over entries with any side conf > 0.018: 0.2198 (stream SSW_050_20170325_000000Z.flac row 1 class 5256 Regulus satrapa_Golden-crowned Kinglet: fp32 0.4764 vs 0.6962)
+full-vector check on 10325 windows (12 s grid): logit SQNR 46.6 dB, max |dconf| 0.0671
+[upstream_default] overlap 0.0 threshold 0.8 FP level 0 (min det 1) range 0.01
+   ref ref_fp32                 TP/FP/FN 160/16/170  P 90.91 %  R 48.48 %
+   v24foldconv_int8arm          TP/FP/FN 159/16/171  P 90.86 %  R 48.18 %
+   dP -0.04 pp [-0.22, +0.18]  dR -0.29 pp [-1.24, +0.77]  identical periods 34/37  saved-detection Jaccard 0.9354 (3881 fp32 / 3874 cand, 259 differ)
+   gate: PASS   (v3-strict: fail)
+[pi_template] overlap 2.2 threshold 0.8 FP level 2 (min det 3) range 0.05
+   ref ref_fp32                 TP/FP/FN 138/3/192  P 97.87 %  R 41.82 %
+   v24foldconv_int8arm          TP/FP/FN 138/3/192  P 97.87 %  R 41.82 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 0.9567 (2866 fp32 / 2871 cand, 127 differ)
+   gate: PASS   (v3-strict: pass)
+[c4_deploy] overlap 1.5 threshold 0.8 FP level 2 (min det 2) range 0.05
+   ref ref_fp32                 TP/FP/FN 137/4/193  P 97.16 %  R 41.52 %
+   v24foldconv_int8arm          TP/FP/FN 135/4/195  P 97.12 %  R 40.91 %
+   dP -0.04 pp [-0.17, +0.00]  dR -0.60 pp [-1.55, +0.00]  identical periods 35/37  saved-detection Jaccard 0.9605 (2950 fp32 / 2951 cand, 119 differ)
+   gate: FAIL   (v3-strict: fail)
+OVERALL v24foldconv_int8arm: FAIL upstream_default=P pi_template=P c4_deploy=F

@@ -1,0 +1,103 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bnneon"
+version = "0.1.0"
+description = "Python side of the bnneon NEON engine: the ctypes binding, the bnc model compiler and its tools"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Christopher Wiens" }]
+requires-python = ">=3.11"
+dependencies = ["numpy"]
+
+[project.optional-dependencies]
+# the compiler (bnc report / compile / check) and the gate need these; the binding needs numpy only
+compiler = ["onnx", "onnxruntime"]
+# scripts/plot_final_perf.py (the README figure)
+plot = ["matplotlib"]
+lint = ["pylint>=4"]
+
+[project.scripts]
+bnc = "bnneon.compiler.bnc:main"
+
+[tool.setuptools]
+package-dir = { "" = "python" }
+
+[tool.setuptools.packages.find]
+where = ["python"]
+
+[tool.setuptools.package-data]
+"bnneon.compiler" = ["*.txt"]
+
+# Lint gate: scripts/lint.sh (pylint 4). Settings from Google's pylintrc (https://google.github.io/styleguide/pylintrc),
+# with three of its disabled checks turned back on because this project is stricter there: missing-function-docstring,
+# attribute-defined-outside-init and too-many-statements. single-line-if-stmt stays at pylint's default (no).
+[tool.pylint.main]
+persistent = false
+jobs = 4
+py-version = "3.11"
+
+[tool.pylint.basic]
+good-names = ["main", "_"]
+function-rgx = "^(?:(?P<exempt>setUp|tearDown|setUpModule|tearDownModule)|(?P<camel_case>_?[A-Z][a-zA-Z0-9]*)|(?P<snake_case>_?[a-z][a-z0-9_]*))$"
+variable-rgx = "^[a-z][a-z0-9_]*$"
+const-rgx = "^(_?[A-Z][A-Z0-9_]*|__[a-z0-9_]+__|_?[a-z][a-z0-9_]*)$"
+attr-rgx = "^_{0,2}[a-z][a-z0-9_]*$"
+argument-rgx = "^[a-z][a-z0-9_]*$"
+class-attribute-rgx = "^(_?[A-Z][A-Z0-9_]*|__[a-z0-9_]+__|_?[a-z][a-z0-9_]*)$"
+inlinevar-rgx = "^[a-z][a-z0-9_]*$"
+class-rgx = "^_?[A-Z][a-zA-Z0-9]*$"
+module-rgx = "^(_?[a-z][a-z0-9_]*|__init__)$"
+method-rgx = "(?x)^(?:(?P<exempt>_[a-z0-9_]+__|runTest|setUp|tearDown|setUpTestCase|tearDownTestCase|setupSelf|tearDownClass|setUpClass|(test|assert)_*[A-Z0-9][a-zA-Z0-9_]*|next)|(?P<camel_case>_{0,2}[A-Z][a-zA-Z0-9_]*)|(?P<snake_case>_{0,2}[a-z][a-z0-9_]*))$"
+no-docstring-rgx = "(__.*__|main|test.*|.*test|.*Test)$"
+docstring-min-length = 12
+
+[tool.pylint.format]
+max-line-length = 80
+ignore-long-lines = "(?x)(^\\s*(\\#\\ )?<?https?://\\S+>?$|^\\s*(from\\s+\\S+\\s+)?import\\s+.+$)"
+indent-string = "    "
+indent-after-paren = 4
+max-module-lines = 99999
+
+[tool.pylint.design]
+max-statements = 50
+
+[tool.pylint.string]
+check-quote-consistency = true
+
+[tool.pylint.typecheck]
+contextmanager-decorators = ["contextlib.contextmanager"]
+
+[tool.pylint.variables]
+dummy-variables-rgx = "^\\*{0,2}(_$|unused_|dummy_)"
+
+[tool.pylint."messages control"]
+disable = [
+    "use-implicit-booleaness-not-comparison-to-string",
+    "use-implicit-booleaness-not-comparison-to-zero", "duplicate-code", "no-classmethod-decorator",
+    "no-staticmethod-decorator", "useless-object-inheritance", "property-with-parameters",
+    "cyclic-import", "consider-using-from-import", "match-class-bind-self",
+    "match-class-positional-attributes", "consider-merging-isinstance", "too-many-nested-blocks",
+    "simplifiable-if-statement", "redefined-argument-from-local", "no-else-return",
+    "consider-using-ternary", "trailing-comma-tuple", "stop-iteration-return",
+    "simplify-boolean-expression", "inconsistent-return-statements", "useless-return",
+    "consider-swap-variables", "consider-using-join", "consider-using-in", "consider-using-get",
+    "chained-comparison", "consider-using-dict-comprehension", "consider-using-set-comprehension",
+    "simplifiable-if-expression", "no-else-raise", "unnecessary-comprehension",
+    "consider-using-sys-exit", "no-else-break", "no-else-continue", "super-with-arguments",
+    "simplifiable-condition", "condition-evals-to-constant", "consider-using-generator",
+    "use-a-generator", "consider-using-min-builtin", "consider-using-max-builtin",
+    "consider-using-with", "unnecessary-dict-index-lookup", "use-list-literal", "use-dict-literal",
+    "unnecessary-list-index-lookup", "use-yield-from", "chained-comparison-all-equal",
+    "impossible-comparison", "too-many-ancestors", "too-many-instance-attributes",
+    "too-few-public-methods", "too-many-public-methods", "too-many-return-statements",
+    "too-many-branches", "too-many-arguments", "too-many-locals", "too-many-boolean-expressions",
+    "too-many-positional-arguments", "literal-comparison", "comparison-with-itself",
+    "comparison-of-constants", "abstract-method", "arguments-differ", "c-extension-no-member",
+    "consider-using-enumerate", "fixme", "global-statement", "implicit-str-concat", "import-error",
+    "import-self", "no-member", "no-name-in-module", "signature-differs", "trailing-newlines",
+    "unnecessary-pass", "useless-else-on-loop", "wrong-import-order",
+]

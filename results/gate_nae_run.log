@@ -1,0 +1,93 @@
+== N016 perch_v2_nae-neon-fp32 Wed Nov  4 23:36:44 PST 2026
+label N016; adapter perch_v2_na_east; reference <lab-root>/kernel-lab/perch-runtime/data/ref_fp32_na_east; candidate <lab-root>/kernel-lab/v24-neon/data/perch/cand_N016
+window agreement over 142293 windows x 999 classes: top-1 1.0000
+  @0.2 (report only): hit-set Jaccard 1.0000 (union 92992); flips 0 (margin <=0.005 0, <=0.02 0, >0.05 0, max 0.0000)
+  @0.4 (report only): hit-set Jaccard 1.0000 (union 56490); flips 0 (margin <=0.005 0, <=0.02 0, >0.05 0, max 0.0000)
+  @0.5: hit-set Jaccard 1.0000 (union 46349); flips 1 (margin <=0.005 1, <=0.02 1, >0.05 0, max 0.0000)
+  @0.6 (report only): hit-set Jaccard 1.0000 (union 37901); flips 1 (margin <=0.005 1, <=0.02 1, >0.05 0, max 0.0000)
+  @0.8: hit-set Jaccard 1.0000 (union 20869); flips 0 (margin <=0.005 0, <=0.02 0, >0.05 0, max 0.0000)
+max |dconf| over entries with both sides conf > 0.005: 0.0001 (stream SSW_050_20170325_000000Z.flac row 0 class 341 Explosion: ref 0.1789 vs 0.1788); entries stored on one side only: 63 (largest present conf 0.0050, other side <= 0.005)
+full-vector check on 3168 windows (60 s grid): logit SQNR 101.0 dB, max |dconf| 0.0001
+[upstream_default] overlap 0.0 (stride 5.000 s) threshold 0.8 FP level 0 (min det 1) range None
+   ref ref_fp32_na_east         TP/FP/FN 131/31/191  P 80.86 %  R 40.68 %
+   N016                         TP/FP/FN 131/31/191  P 80.86 %  R 40.68 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 1.0000 (2129 ref / 2129 cand, 0 differ)
+   gate: PASS
+[pi_template] overlap 2.2 (stride 1.333 s) threshold 0.8 FP level 2 (min det 2) range None
+   ref ref_fp32_na_east         TP/FP/FN 121/19/201  P 86.43 %  R 37.58 %
+   N016                         TP/FP/FN 121/19/201  P 86.43 %  R 37.58 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 1.0000 (1853 ref / 1853 cand, 0 differ)
+   gate: PASS
+[c4_deploy] overlap 1.5 (stride 2.500 s) threshold 0.8 FP level 2 (min det 1) range None
+   ref ref_fp32_na_east         TP/FP/FN 144/35/178  P 80.45 %  R 44.72 %
+   N016                         TP/FP/FN 144/35/178  P 80.45 %  R 44.72 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 1.0000 (2601 ref / 2601 cand, 0 differ)
+   gate: PASS
+[perch_override] overlap 2.2 (stride 1.333 s) threshold 0.5 FP level 2 (min det 2) range None
+   ref ref_fp32_na_east         TP/FP/FN 196/100/126  P 66.22 %  R 60.87 %
+   N016                         TP/FP/FN 196/100/126  P 66.22 %  R 60.87 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 0.9997 (3754 ref / 3755 cand, 1 differ)
+   gate: PASS
+OVERALL N016: PASS upstream_default=P pi_template=P c4_deploy=P perch_override=P
+== N017 perch_v2_nae-neon-fp16-s8 Thu Nov  5 01:26:41 PST 2026
+label N017; adapter perch_v2_na_east; reference <lab-root>/kernel-lab/perch-runtime/data/ref_fp32_na_east; candidate <lab-root>/kernel-lab/v24-neon/data/perch/cand_N017
+window agreement over 142293 windows x 999 classes: top-1 0.9965
+  @0.2 (report only): hit-set Jaccard 0.9952 (union 93226); flips 448 (margin <=0.005 447, <=0.02 448, >0.05 0, max 0.0078)
+  @0.4 (report only): hit-set Jaccard 0.9959 (union 56593); flips 230 (margin <=0.005 221, <=0.02 230, >0.05 0, max 0.0067)
+  @0.5: hit-set Jaccard 0.9958 (union 46437); flips 193 (margin <=0.005 186, <=0.02 193, >0.05 0, max 0.0070)
+  @0.6 (report only): hit-set Jaccard 0.9965 (union 37949); flips 131 (margin <=0.005 130, <=0.02 131, >0.05 0, max 0.0053)
+  @0.8: hit-set Jaccard 0.9940 (union 20925); flips 126 (margin <=0.005 125, <=0.02 126, >0.05 0, max 0.0055)
+max |dconf| over entries with both sides conf > 0.005: 0.0164 (stream SSW_050_20170325_000000Z.flac row 2390 class 252 Corvus ossifragus: ref 0.2551 vs 0.2387); entries stored on one side only: 28517 (largest present conf 0.0056, other side <= 0.005)
+full-vector check on 3168 windows (60 s grid): logit SQNR 47.9 dB, max |dconf| 0.0121
+[upstream_default] overlap 0.0 (stride 5.000 s) threshold 0.8 FP level 0 (min det 1) range None
+   ref ref_fp32_na_east         TP/FP/FN 131/31/191  P 80.86 %  R 40.68 %
+   N017                         TP/FP/FN 132/31/190  P 80.98 %  R 40.99 %
+   dP +0.12 pp [+0.00, +0.42]  dR +0.32 pp [+0.00, +1.11]  identical periods 36/37  saved-detection Jaccard 0.9851 (2129 ref / 2131 cand, 32 differ)
+   gate: PASS
+[pi_template] overlap 2.2 (stride 1.333 s) threshold 0.8 FP level 2 (min det 2) range None
+   ref ref_fp32_na_east         TP/FP/FN 121/19/201  P 86.43 %  R 37.58 %
+   N017                         TP/FP/FN 121/19/201  P 86.43 %  R 37.58 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 0.9729 (1853 ref / 1858 cand, 51 differ)
+   gate: PASS
+[c4_deploy] overlap 1.5 (stride 2.500 s) threshold 0.8 FP level 2 (min det 1) range None
+   ref ref_fp32_na_east         TP/FP/FN 144/35/178  P 80.45 %  R 44.72 %
+   N017                         TP/FP/FN 146/35/176  P 80.66 %  R 45.34 %
+   dP +0.22 pp [+0.00, +0.62]  dR +0.64 pp [+0.00, +1.64]  identical periods 35/37  saved-detection Jaccard 0.9836 (2601 ref / 2598 cand, 43 differ)
+   gate: PASS
+[perch_override] overlap 2.2 (stride 1.333 s) threshold 0.5 FP level 2 (min det 2) range None
+   ref ref_fp32_na_east         TP/FP/FN 196/100/126  P 66.22 %  R 60.87 %
+   N017                         TP/FP/FN 196/102/126  P 65.77 %  R 60.87 %
+   dP -0.43 pp [-1.07, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 35/37  saved-detection Jaccard 0.9675 (3754 ref / 3752 cand, 124 differ)
+   gate: PASS
+OVERALL N017: PASS upstream_default=P pi_template=P c4_deploy=P perch_override=P
+== N018 perch_v2_nae-neon-fp16 Thu Nov  5 02:23:30 PST 2026
+label N018; adapter perch_v2_na_east; reference <lab-root>/kernel-lab/perch-runtime/data/ref_fp32_na_east; candidate <lab-root>/kernel-lab/v24-neon/data/perch/cand_N018
+window agreement over 142293 windows x 999 classes: top-1 0.9974
+  @0.2 (report only): hit-set Jaccard 0.9964 (union 93156); flips 331 (margin <=0.005 330, <=0.02 331, >0.05 0, max 0.0078)
+  @0.4 (report only): hit-set Jaccard 0.9973 (union 56565); flips 154 (margin <=0.005 153, <=0.02 154, >0.05 0, max 0.0054)
+  @0.5: hit-set Jaccard 0.9974 (union 46416); flips 122 (margin <=0.005 122, <=0.02 122, >0.05 0, max 0.0049)
+  @0.6 (report only): hit-set Jaccard 0.9981 (union 37936); flips 73 (margin <=0.005 73, <=0.02 73, >0.05 0, max 0.0047)
+  @0.8: hit-set Jaccard 0.9961 (union 20914); flips 81 (margin <=0.005 81, <=0.02 81, >0.05 0, max 0.0029)
+max |dconf| over entries with both sides conf > 0.005: 0.0153 (stream SSW_050_20170325_000000Z.flac row 2390 class 252 Corvus ossifragus: ref 0.2551 vs 0.2398); entries stored on one side only: 18495 (largest present conf 0.0055, other side <= 0.005)
+full-vector check on 3168 windows (60 s grid): logit SQNR 52.7 dB, max |dconf| 0.0098
+[upstream_default] overlap 0.0 (stride 5.000 s) threshold 0.8 FP level 0 (min det 1) range None
+   ref ref_fp32_na_east         TP/FP/FN 131/31/191  P 80.86 %  R 40.68 %
+   N018                         TP/FP/FN 131/31/191  P 80.86 %  R 40.68 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 0.9855 (2129 ref / 2130 cand, 31 differ)
+   gate: PASS
+[pi_template] overlap 2.2 (stride 1.333 s) threshold 0.8 FP level 2 (min det 2) range None
+   ref ref_fp32_na_east         TP/FP/FN 121/19/201  P 86.43 %  R 37.58 %
+   N018                         TP/FP/FN 121/19/201  P 86.43 %  R 37.58 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 0.9771 (1853 ref / 1856 cand, 43 differ)
+   gate: PASS
+[c4_deploy] overlap 1.5 (stride 2.500 s) threshold 0.8 FP level 2 (min det 1) range None
+   ref ref_fp32_na_east         TP/FP/FN 144/35/178  P 80.45 %  R 44.72 %
+   N018                         TP/FP/FN 145/35/177  P 80.56 %  R 45.03 %
+   dP +0.11 pp [+0.00, +0.39]  dR +0.32 pp [+0.00, +1.07]  identical periods 36/37  saved-detection Jaccard 0.9851 (2601 ref / 2608 cand, 39 differ)
+   gate: PASS
+[perch_override] overlap 2.2 (stride 1.333 s) threshold 0.5 FP level 2 (min det 2) range None
+   ref ref_fp32_na_east         TP/FP/FN 196/100/126  P 66.22 %  R 60.87 %
+   N018                         TP/FP/FN 196/101/126  P 65.99 %  R 60.87 %
+   dP -0.21 pp [-0.68, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 36/37  saved-detection Jaccard 0.9836 (3754 ref / 3752 cand, 62 differ)
+   gate: PASS
+OVERALL N018: PASS upstream_default=P pi_template=P c4_deploy=P perch_override=P

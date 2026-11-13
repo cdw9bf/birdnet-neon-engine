@@ -1,0 +1,61 @@
+K2B-G1 BirdNET v3.0 GLOBAL (11,560 classes) compiled package, neon-fp16 (the dotprod + fp16 kernel family, mode 3) - gate result;
+criterion declared (K2B-G1 = the V002 criterion, unchanged; docs/GATES.md) before scoring
+candidate lab-data/k2b/gate/pkgs/glob-fp16.bnpk sha256 be0c418ab24022e8186e2673a620676a94b7511c11a614138bf0d273782a92bb (the file scripts/compile_models.sh v3
+writes); scored by the arm64 container build (gcc 14.2) cli sha256 6f746992... (engine 2182bcd) through --pipe at 2
+threads (bit-identical to 1) in the container k2b-eval; its 16-window sample hash equals the Pi 5's (K211)
+reference fp32 ONNX Runtime CPU, birdnet-v3.0-preview3.1-fp32-b1.onnx (sha256 05535c3e...), same windows, same run; 32 streams, 92,829 windows (deploy grid,
+overlap 2.2); scorer scripts/gate_v3_pkg.py at 2906b32 (per-stream completeness check with retry; no retry occurred)
+run history, container and scorer notes: lab-data/k2b/gate/provenance.txt
+
+WINDOW STATISTICS (exact; full outputs streamed)
+all   : 92829 windows, SQNR 58.9 dB, top-1 0.9752, max|dconf| 0.2018 (mean 2.78e-06), Jaccard@0.84 0.9764, flips 556 (<=0.005 481, <=0.02 554, >0.05 0, max 0.0214); worst ('SSW_179_20170603_210015Z.flac', 1593, 11321, 0.18839195370674133, 0.3901904821395874)
+subset: 92829 windows, SQNR 50.8 dB, top-1 0.9830, max|dconf| 0.1492 (mean 2.57e-05), Jaccard@0.84 0.9764, flips 554 (<=0.005 479, <=0.02 552, >0.05 0, max 0.0214); worst ('SSW_179_20170603_210015Z.flac', 1593, 11299, 0.3151432275772095, 0.16591614484786987)
+rest  : 92829 windows, SQNR 60.8 dB, top-1 0.9675, max|dconf| 0.2018 (mean 1.08e-06), Jaccard@0.84 0.9714, flips 2 (<=0.005 2, <=0.02 2, >0.05 0, max 0.0012); worst ('SSW_179_20170603_210015Z.flac', 1593, 11321, 0.18839195370674133, 0.3901904821395874)
+
+DETECTION REPLAY (v3 harness simulate5s.py, BirdNET-Go 20261014; overlap 2.2, thr 0.84, FP L3, v3 geomodel
+@0.05; top-10 over the model's labels, float16; on the Mac from the mirror of the GPU server's replay inputs,
+lab-data/compare-c6/v3g/server_sim_mirror; scripts/gate_sim_v3_pkg.py):
+== range filter at the evaluation site (<site-lat>, <site-lon>); reference fp32 ORT (this run)
+  fp32 ORT (this run)              TP/FP/FN 174/5/156  precision 97.2%  recall 52.7%
+  neon-glob-fp16                   TP/FP/FN 175/5/155  precision 97.2%  recall 53.0%
+  paired bootstrap (2000 reps over 37 periods): dP +0.02 pp [-0.03, +0.09]  dR +0.32 pp [-0.66, +1.37]  -> (a) ok (b) ok
+  identical period-level outcomes: 34/37
+    period SSW_282_20170826_152214Z.flac 0-3600s: ref (3, 1, 3) -> neon-glob-fp16 (4, 1, 2)
+    period Recording_2 0-3600s: ref (16, 0, 13) -> neon-glob-fp16 (17, 0, 12)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> neon-glob-fp16 (9, 0, 8)
+== range filter at the evaluation site (<site-lat>, <site-lon>); reference scores_v3 cache [report-only]
+  scores_v3 cache [report-only]    TP/FP/FN 174/5/156  precision 97.2%  recall 52.7%
+  neon-glob-fp16                   TP/FP/FN 175/5/155  precision 97.2%  recall 53.0%
+  paired bootstrap (2000 reps over 37 periods): dP +0.02 pp [-0.03, +0.09]  dR +0.32 pp [-0.66, +1.37]  -> (a) ok (b) ok
+  identical period-level outcomes: 34/37
+    period SSW_282_20170826_152214Z.flac 0-3600s: ref (3, 1, 3) -> neon-glob-fp16 (4, 1, 2)
+    period Recording_2 0-3600s: ref (16, 0, 13) -> neon-glob-fp16 (17, 0, 12)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> neon-glob-fp16 (9, 0, 8)
+== range filter at each stream; reference fp32 ORT (this run)
+  fp32 ORT (this run)              TP/FP/FN 174/4/156  precision 97.8%  recall 52.7%
+  neon-glob-fp16                   TP/FP/FN 175/4/155  precision 97.8%  recall 53.0%
+  paired bootstrap (2000 reps over 37 periods): dP +0.02 pp [-0.02, +0.08]  dR +0.32 pp [-0.66, +1.37]  -> (a) ok (b) ok
+  identical period-level outcomes: 34/37
+    period SSW_282_20170826_152214Z.flac 0-3600s: ref (3, 1, 3) -> neon-glob-fp16 (4, 1, 2)
+    period Recording_2 0-3600s: ref (16, 0, 13) -> neon-glob-fp16 (17, 0, 12)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> neon-glob-fp16 (9, 0, 8)
+== range filter at each stream; reference scores_v3 cache [report-only]
+  scores_v3 cache [report-only]    TP/FP/FN 174/4/156  precision 97.8%  recall 52.7%
+  neon-glob-fp16                   TP/FP/FN 175/4/155  precision 97.8%  recall 53.0%
+  paired bootstrap (2000 reps over 37 periods): dP +0.02 pp [-0.02, +0.08]  dR +0.32 pp [-0.66, +1.37]  -> (a) ok (b) ok
+  identical period-level outcomes: 34/37
+    period SSW_282_20170826_152214Z.flac 0-3600s: ref (3, 1, 3) -> neon-glob-fp16 (4, 1, 2)
+    period Recording_2 0-3600s: ref (16, 0, 13) -> neon-glob-fp16 (17, 0, 12)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> neon-glob-fp16 (9, 0, 8)
+truth species: 65; in the v3 label set: 65; passing the range filter at site for at least one stream: 65: Red-winged Blackbird, Snow Goose, Tufted Titmouse, Cedar Waxwing, Canada Goose, Red-shouldered Hawk, Northern Cardinal, Veery, Hermit Thrush, Swainson's Thrush, Brown Creeper, Killdeer, Yellow-billed Cuckoo, Northern Flicker, Eastern Wood-Pewee, Ruby-crowned Kinglet, American Crow, Common Raven, Blue Jay, Downy Woodpecker, Hairy Woodpecker, Pileated Woodpecker, Gray Catbird, Kentucky Warbler, Common Yellowthroat, Purple Finch, Wood Thrush, Baltimore Oriole, Nashville Warbler, Belted Kingfisher, Red-bellied Woodpecker, Wild Turkey, Swamp Sparrow, Song Sparrow, Black-and-white Warbler, Brown-headed Cowbird, Great Crested Flycatcher, Black-crowned Night-Heron, Louisiana Waterthrush, Rose-breasted Grosbeak, Eastern Towhee, Scarlet Tanager, Black-capped Chickadee, Blue-gray Gnatcatcher, Common Grackle, Eastern Phoebe, Ovenbird, Bay-breasted Warbler, Hooded Warbler, Chestnut-sided Warbler, Yellow Warbler, American Redstart, Black-throated Green Warbler, White-breasted Nuthatch, Yellow-bellied Sapsucker, American Goldfinch, Barred Owl, European Starling, Carolina Wren, American Robin, Eastern Kingbird, Blue-winged Warbler, Red-eyed Vireo, Blue-headed Vireo, White-throated Sparrow
+truth species: 65; in the v3 label set: 65; passing the range filter at own for at least one stream: 65: Red-winged Blackbird, Snow Goose, Tufted Titmouse, Cedar Waxwing, Canada Goose, Red-shouldered Hawk, Northern Cardinal, Veery, Hermit Thrush, Swainson's Thrush, Brown Creeper, Killdeer, Yellow-billed Cuckoo, Northern Flicker, Eastern Wood-Pewee, Ruby-crowned Kinglet, American Crow, Common Raven, Blue Jay, Downy Woodpecker, Hairy Woodpecker, Pileated Woodpecker, Gray Catbird, Kentucky Warbler, Common Yellowthroat, Purple Finch, Wood Thrush, Baltimore Oriole, Nashville Warbler, Belted Kingfisher, Red-bellied Woodpecker, Wild Turkey, Swamp Sparrow, Song Sparrow, Black-and-white Warbler, Brown-headed Cowbird, Great Crested Flycatcher, Black-crowned Night-Heron, Louisiana Waterthrush, Rose-breasted Grosbeak, Eastern Towhee, Scarlet Tanager, Black-capped Chickadee, Blue-gray Gnatcatcher, Common Grackle, Eastern Phoebe, Ovenbird, Bay-breasted Warbler, Hooded Warbler, Chestnut-sided Warbler, Yellow Warbler, American Redstart, Black-throated Green Warbler, White-breasted Nuthatch, Yellow-bellied Sapsucker, American Goldfinch, Barred Owl, European Starling, Carolina Wren, American Robin, Eastern Kingbird, Blue-winged Warbler, Red-eyed Vireo, Blue-headed Vireo, White-throated Sparrow
+classes the detection gate cannot exercise: every class without annotated audio here, i.e. all but <= 65 of 11560 (all non-North-American and non-annotated species); the window statistics cover them
+
+VERDICT vs the declared criterion:
+(a) dP CI lower -0.03 (site) / -0.02 (own) > -0.5: ok
+(b) dR CI lower -0.66 / -0.66 > -1.0: ok
+(c) Jaccard@0.84 over all classes 0.9764 > 0.97: ok
+(d) flips with margin > 0.05: 0 (max margin 0.0214): ok
+(e) top-1 over all classes 0.9752 >= 0.97: ok
+(f) SQNR rest 60.8 dB >= subset 50.8 - 3: ok
+VERDICT: PASS

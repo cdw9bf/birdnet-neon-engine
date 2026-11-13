@@ -1,0 +1,18 @@
+Older-hardware study of BirdNET v3.0 (2026-11-08): could v3.0 run usably on a Raspberry Pi 4 before the engine had a
+path for it? Experiments H001-H005; this directory holds their summaries (the raw per-run data are not published).
+H005: the stock runtimes for v3.0 on x86 (ONNX Runtime, OpenVINO), scripts/x86_v3_threads.sh.
+
+H005 x86 Xeon E5-2620 v4 (AVX2+FMA), idle, cores 9-12 (NUMA node 1), 20 runs, ORT 1.25.1 / OpenVINO 2026.4.1 CPU f32
+row                                               wall med      min   cpu ms   VmHWM
+ort_fp32-b1_t1                                       275.1    274.5    275.0   786.6
+ort_fp32-b1_t2                                       156.0    153.8    302.8   786.6
+ort_fp32-b1_t4                                        94.5     93.7    343.2   786.8
+ort_north-america-east-fp32-b1_t1                    229.3    228.0    229.1   363.1
+ort_north-america-east-fp32-b1_t2                    128.5    125.8    248.4   363.3
+ort_north-america-east-fp32-b1_t4                     79.4     78.3    283.1   363.7
+ov_fp32-b1_t1                                        313.1    309.0    313.0  1207.7
+ov_fp32-b1_t2                                        166.0    161.6    331.9  1207.3
+ov_fp32-b1_t4                                         97.9     94.5    391.6  1206.9
+ov_north-america-east-fp32-b1_t1                     253.6    251.4    253.5   429.1
+ov_north-america-east-fp32-b1_t2                     138.2    132.2    276.4   430.2
+ov_north-america-east-fp32-b1_t4                      79.9     77.5    319.1   430.0

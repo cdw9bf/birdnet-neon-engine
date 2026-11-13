@@ -1,0 +1,35 @@
+C013 Perch v2 as TFLite fp32 (perch_v2_fp32.tflite, sha256 e6c8edbc..., from perch_v2_no_dft_fp32.onnx) on the TFLite 2.17.1 C API - the Perch gate (tools/modelgate.py extern perch_v2 + sim against the fp32 ORT reference cache), as gate_perch_all.sh runs it
+scored on the Mac (arm64) by scripts/tfl_bench.c (build sha256 f68ef98b...), libtensorflowlite_c 2.17.1, XNNPACK default flags 0x3, delegate threads 1, interpreter threads 1; label logits (--out label)
+run: started 18:07 PST (3 jobs); the Mac rebooted at ~19:42 with 9 of 32 streams scored; resumed 19:56-23:53 (2 jobs; modelgate extern skips scored streams).
+resume check (lab-data/compare-c6/perch/c013_resume_check.txt): same model and harness sha256 before and after; the 9 pre-reboot caches load whole (zip CRCs, keys, shapes, window starts); SSW_007 re-scored from scratch is bit-identical to its pre-reboot cache. Resume accepted, no full rerun.
+
+label C013_perch_tflite_fp32; adapter perch_v2; reference <lab-root>/kernel-lab/perch-runtime/data/ref_fp32; candidate <lab-root>/lab-data/compare-c6/perch/cand_C013_perch_tflite_fp32
+window agreement over 142293 windows x 14795 classes: top-1 1.0000
+  @0.2 (report only): hit-set Jaccard 1.0000 (union 75037); flips 2 (margin <=0.005 2, <=0.02 2, >0.05 0, max 0.0003)
+  @0.4 (report only): hit-set Jaccard 1.0000 (union 47358); flips 0 (margin <=0.005 0, <=0.02 0, >0.05 0, max 0.0000)
+  @0.5: hit-set Jaccard 1.0000 (union 38548); flips 0 (margin <=0.005 0, <=0.02 0, >0.05 0, max 0.0000)
+  @0.6 (report only): hit-set Jaccard 1.0000 (union 30376); flips 0 (margin <=0.005 0, <=0.02 0, >0.05 0, max 0.0000)
+  @0.8: hit-set Jaccard 1.0000 (union 12993); flips 0 (margin <=0.005 0, <=0.02 0, >0.05 0, max 0.0000)
+max |dconf| over entries with both sides conf > 0.005: 0.0009 (stream SSW_035_20170311_040002Z.flac row 3935 class 8302 Motacilla alba: ref 0.2757 vs 0.2766); entries stored on one side only: 212 (largest present conf 0.0050, other side <= 0.005)
+full-vector check on 3168 windows (60 s grid): logit SQNR 88.1 dB, max |dconf| 0.0007
+[upstream_default] overlap 0.0 (stride 5.000 s) threshold 0.8 FP level 0 (min det 1) range None
+   ref ref_fp32                 TP/FP/FN 111/16/219  P 87.40 %  R 33.64 %
+   C013_perch_tflite_fp32       TP/FP/FN 111/16/219  P 87.40 %  R 33.64 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 1.0000 (1433 ref / 1433 cand, 0 differ)
+   gate: PASS
+[pi_template] overlap 2.2 (stride 1.333 s) threshold 0.8 FP level 2 (min det 2) range None
+   ref ref_fp32                 TP/FP/FN 104/16/226  P 86.67 %  R 31.52 %
+   C013_perch_tflite_fp32       TP/FP/FN 104/16/226  P 86.67 %  R 31.52 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 1.0000 (1333 ref / 1333 cand, 0 differ)
+   gate: PASS
+[c4_deploy] overlap 1.5 (stride 2.500 s) threshold 0.8 FP level 2 (min det 1) range None
+   ref ref_fp32                 TP/FP/FN 123/19/207  P 86.62 %  R 37.27 %
+   C013_perch_tflite_fp32       TP/FP/FN 123/19/207  P 86.62 %  R 37.27 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 1.0000 (1826 ref / 1826 cand, 0 differ)
+   gate: PASS
+[perch_override] overlap 2.2 (stride 1.333 s) threshold 0.5 FP level 2 (min det 2) range None
+   ref ref_fp32                 TP/FP/FN 175/69/155  P 71.72 %  R 53.03 %
+   C013_perch_tflite_fp32       TP/FP/FN 175/69/155  P 71.72 %  R 53.03 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 1.0000 (3182 ref / 3182 cand, 0 differ)
+   gate: PASS
+OVERALL C013_perch_tflite_fp32: PASS upstream_default=P pi_template=P c4_deploy=P perch_override=P

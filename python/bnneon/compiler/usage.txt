@@ -1,0 +1,46 @@
+bnc: the bnneon model compiler (ONNX -> .bnpk model package).
+
+usage:
+  python -I compiler/bnc.py report  <model.onnx> [--append head.onnx --at TENSOR] [--json [FILE]]
+  python -I compiler/bnc.py compile <model.onnx> [--append head.onnx --at TENSOR] --labels LABELS.txt
+        --model-id ID --family N --post sigmoid|softmax --paths neon-fp16,neon-fp32 [--sample-rate HZ]
+        [--hop SAMPLES] [--logits TENSOR] [--emb TENSOR] [--proto-s8] [--dense f16|f32] [--no-fold-bn]
+        [--classes idx.txt] [--int8 CLASSES] [--wino MIN_C] [--license-file F] [--attribution TEXT] [--notes TEXT]
+        [--no-canon] [--force] -o OUT.bnpk
+  --paths:   neon-fp16 (ARMv8.2 fp16 arithmetic), neon-fp32 (any AArch64), neon-int8 (any AArch64: fp32 with int8 GEMMs,
+             no dotprod needed; BirdNET v3.0 on a Pi 4); one package per path is the shipping form
+  --int8:    neon-int8 only: the 1x1-conv / dense layer classes that run in int8, comma-separated from pw (1x1 convs with
+             an activation), pwl (1x1 projections without one), head (1x1 convs feeding a pooling head), sed (SED head
+             GEMMs), lin (dense heads), proto (prototype head); default pw,head,sed,lin,proto
+  --wino:    dense 3x3 stride-1 convs with at least MIN_C input channels run as fp32 Winograd F(4,3) (neon-fp32 and
+             neon-int8 paths; default off = direct convs, the parity form); BirdNET v3.0 ships with --wino 24
+  compile:   --license-file and --attribution are required (--force writes without); --family and --post default to 24 and
+             sigmoid when the BirdNET v2.4 backbone is recognized, otherwise --family is required (--force: 0) and --post
+             comes from a final Sigmoid/Softmax in the graph or must be given; --sample-rate must be 48000 for a v2.4
+             backbone (--force to override). A label file not in BirdNET-Go's `Scientific name_Common name` form is
+             warned about (scripts/relabel_for_birdnetgo.py rewrites it).
+  python -I compiler/bnc.py check   <model.onnx> [--labels LABELS.txt] [--sample-rate HZ] [--post sigmoid|softmax]
+        [--logits TENSOR] [--emb TENSOR] [--append head.onnx --at TENSOR] [--paths neon-fp16,neon-fp32]
+        [--int8 CLASSES] [--wino MIN_C] [--audio FILE.wav ...] [--windows-file W.npy|W.f32] [--windows N] [--tflite REF.tflite]
+        [--cli PATH | --docker CONTAINER | --docker-image IMAGE] [--force] [--workdir DIR] [--keep] [--verbose]
+        [--quiet] [--json [FILE]]
+  --logits:  the pre-activation output tensor (default: the graph output a dense or prototype head produces, else the
+             input of a final Sigmoid/Softmax, else the last graph output); --emb: the embedding tensor (default: the
+             last spatial mean); --post defaults to what the graph applies to the logits tensor, else sigmoid
+  --hop:     the model's native hop between windows in samples (0 = the host decides; informational metadata)
+  --classes: keep these output classes (0-based indices of the head, one per line, in output order), e.g. the regional
+             slices of the Perch catalog; --labels is then the sliced label file
+  check:     coverage report, one package per path, the package run through the runtime (native build, an existing
+             --cli, a container that mounts this checkout at /eng with --docker, or a throwaway container from an image
+             with --docker-image: integration/Dockerfile.eval) on a few windows (synthetic, --audio or --windows-file),
+             compared with ONNX Runtime (logit SQNR, max |dconf|, top-1) and a PASS / WARN / FAIL summary with the next
+             step; each path's line states the SQNR it is judged by and any allowance. --force: past the sample-rate refusal.
+             --quiet: no IR listing (the problems, path lines and the verdict only).
+
+exit codes (every command): 0 PASS; 1 WARN (usable, read the summary; also check --paths naming a path this CPU
+  cannot run); 2 unsupported ops (see the report); 3 usage / argument error; 4 the ONNX model cannot be loaded or run
+  by ONNX Runtime; 5 parity FAIL (the package runs but disagrees with ONNX Runtime); 6 the runtime could not be built,
+  or refused the package (its message is printed); 7 label file mismatch; 8 internal error (a compiler bug or an
+  unforeseen graph: the message names the place).
+  -h / --help: this text, exit 0.
+See docs/ADDING_A_MODEL.md.

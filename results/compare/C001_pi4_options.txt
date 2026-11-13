@@ -1,0 +1,31 @@
+# C001 Pi 4 (Cortex-A72): one line per option. id kind need_mb input model [extra]
+# --- BirdNET v2.4 (3 s, 48 kHz) ---
+v24_int8arm_stock      ort  500  win/w48k3s.npy  models/BirdNET_INT8_ARM.onnx                 --runs 40 --warm 8
+v24_int8arm_dfttrunc   ort  500  win/w48k3s.npy  models/BirdNET_v2.4_int8_arm_dfttrunc.onnx   --runs 40 --warm 8
+v24_fp32_dfttrunc      ort  500  win/w48k3s.npy  models/BirdNET_v2.4_fp32_dfttrunc.onnx       --runs 40 --warm 8
+v24_int8arm_foldconv   ort  500  win/w48k3s.npy  models/BirdNET_v2.4_int8_arm_foldconv.onnx   --runs 40 --warm 8
+v24_fp32_foldconv      ort  500  win/w48k3s.npy  models/BirdNET_v2.4_fp32_foldconv.onnx       --runs 40 --warm 8
+v24_fp32_fused         ort  500  win/w48k3s.npy  models/BirdNET_v2.4_fp32_fused.onnx          --runs 40 --warm 8
+v24_neon_fp32          neon 400  win/devA64.f32  weights/birdnet_v2.4-neon-fp32.bnpk          3 1
+v24_int8arm_stock_t4   ort4 500  win/w48k3s.npy  models/BirdNET_INT8_ARM.onnx                 --runs 40 --warm 8
+v24_int8arm_foldconv_t4 ort4 500 win/w48k3s.npy  models/BirdNET_v2.4_int8_arm_foldconv.onnx   --runs 40 --warm 8
+v24_int8arm_stock_t4s ort4 500 win/w48k3s.npy models/BirdNET_INT8_ARM.onnx --runs 40 --warm 8 --spin 1
+v24_int8arm_foldconv_t4s ort4 500 win/w48k3s.npy models/BirdNET_v2.4_int8_arm_foldconv.onnx --runs 40 --warm 8 --spin 1
+# --- BirdNET v3.0 NA-east regional (5 s, 32 kHz): the default for a North American location ---
+v3na_fp32              ort  700  win/w32k5s_v3.npy  models/birdnet-v3.0-preview3.1-north-america-east-fp32-b1.onnx  --runs 12 --warm 2
+v3na_fft3              ort  700  win/w32k5s_v3.npy  models/v3na_d_fft3.onnx                   --runs 12 --warm 2
+# --- BirdNET v3.0 global ---
+v3g_fp32               ort  1100 win/w32k5s_v3.npy  models/birdnet-v3.0-preview3.1-fp32-b1.onnx  --runs 12 --warm 2
+v3g_fft3               ort  1100 win/w32k5s_v3.npy  models/v3g_d_fft3.onnx                    --runs 12 --warm 2
+# --- Perch v2 (5 s, 32 kHz) ---
+perch_fp32             ort  1200 win/w32k5s_perch.npy models/perch_v2_fp32.onnx               --runs 10 --warm 2
+perch_int8arm          ort  700  win/w32k5s_perch.npy models/perch_v2_int8_arm.onnx           --runs 10 --warm 2
+perch_fused_int8arm    ort  700  win/w32k5s_perch.npy models/perch_v2_fused_int8_arm.onnx     --runs 10 --warm 2
+perch_nae_int8arm      ort  500  win/w32k5s_perch.npy models/perch_v2_north-america-east_int8_arm.onnx       --runs 10 --warm 2
+perch_nae_fused_int8arm ort 500  win/w32k5s_perch.npy models/perch_v2_north-america-east_fused_int8_arm.onnx --runs 10 --warm 2
+perch_neon_fp32        neon 750  win/devP16.f32   weights/perch_v2-neon-fp32.bnpk             1 1
+perch_nae_neon_fp32    neon 400  win/devP16.f32   weights/perch_v2_nae-neon-fp32.bnpk         2 1
+# --- BattyBirdNET (EU head; 144000 samples of a 256 kHz stream) ---
+bat_dfttrunc           bat  500  win/bench256k.wav models/birdnet-v2.4-embeddings-fp32-dfttrunc.onnx --head models/BattyBirdNET-EU-256kHz_fp32.onnx --runs 30 --warm 5
+bat_fused_t1           bat  500  win/bench256k.wav models/birdnet-v2.4-embeddings-fp32-fused.onnx    --head models/BattyBirdNET-EU-256kHz_fp32.onnx --runs 30 --warm 5
+bat_neon_fp32          neon 400  win/batdev64.f32 weights/battybirdnet_eu_256khz-neon-fp32.bnpk 2 1

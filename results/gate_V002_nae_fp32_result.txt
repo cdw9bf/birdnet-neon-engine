@@ -1,0 +1,39 @@
+V002 BirdNET v3.0 NORTH-AMERICA-EAST (800 classes) compiled package, fp32 (neon-fp32, mode 2) - gate result, criterion declared (V002, docs/GATES.md) before scoring
+candidate gate/pkgs/nae-fp32.bnpk sha256 3f5654033df58e8e1908a0bec729992190a092c86431e9e8d14c206fcce8ce16 (compiled at engine 102c4ee, src 0eebe5877e5581c2, --wino 24); scored by the arm64 container build (gcc 14.2) /root/bG/cli sha256 657d06ad... through --pipe, 2 threads (bit-identical to 1); its 8-window sample hash 9cfa8e0565f73c2b equals the Pi 4's (K067); the shipped compile (scripts/compile_models.sh v3) gives identical outputs (16 windows)
+reference fp32 ONNX Runtime 1.31.1 CPU, birdnet-v3.0-preview3.1-north-america-east-fp32-b1.onnx (sha256 d578c107...), same windows, same run; 32 streams, 92,829 windows (deploy grid, overlap 2.2)
+
+WINDOW STATISTICS (exact; full outputs streamed, all = the 800 classes):
+all   : 92829 windows, SQNR 99.0 dB, top-1 0.9999, max|dconf| 0.0005 (mean 6.71e-08), Jaccard@0.84 1.0000, flips 1 (<=0.005 1, <=0.02 1, >0.05 0, max 0.0000); worst ('SSW_254_20170722_210019Z.flac', 1839, 397, 0.27774137258529663, 0.2782204747200012)
+
+DETECTION REPLAY (v3 harness simulate5s.py, BirdNET-Go 20261014; overlap 2.2, thr 0.84, FP L3, v3 geomodel @0.05; top-10 over the model's labels, float16; GPU server, scripts/gate_sim_v3_pkg.py):
+== range filter at the evaluation site (<site-lat>, <site-lon>); reference fp32 ORT (this run)
+  fp32 ORT (this run)              TP/FP/FN 171/5/159  precision 97.2%  recall 51.8%
+  neon-nae-fp32                    TP/FP/FN 171/5/159  precision 97.2%  recall 51.8%
+  paired bootstrap (2000 reps over 37 periods): dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  -> (a) ok (b) ok
+  identical period-level outcomes: 37/37
+== range filter at the evaluation site (<site-lat>, <site-lon>); reference scores_v3 cache [report-only]
+  scores_v3 cache [report-only]    TP/FP/FN 171/5/159  precision 97.2%  recall 51.8%
+  neon-nae-fp32                    TP/FP/FN 171/5/159  precision 97.2%  recall 51.8%
+  paired bootstrap (2000 reps over 37 periods): dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  -> (a) ok (b) ok
+  identical period-level outcomes: 37/37
+== range filter at each stream; reference fp32 ORT (this run)
+  fp32 ORT (this run)              TP/FP/FN 171/4/159  precision 97.7%  recall 51.8%
+  neon-nae-fp32                    TP/FP/FN 171/4/159  precision 97.7%  recall 51.8%
+  paired bootstrap (2000 reps over 37 periods): dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  -> (a) ok (b) ok
+  identical period-level outcomes: 37/37
+== range filter at each stream; reference scores_v3 cache [report-only]
+  scores_v3 cache [report-only]    TP/FP/FN 171/4/159  precision 97.7%  recall 51.8%
+  neon-nae-fp32                    TP/FP/FN 171/4/159  precision 97.7%  recall 51.8%
+  paired bootstrap (2000 reps over 37 periods): dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  -> (a) ok (b) ok
+  identical period-level outcomes: 37/37
+truth species: 65; in the v3 label set: 65; passing the range filter at site for at least one stream: 65: Red-winged Blackbird, Snow Goose, Tufted Titmouse, Cedar Waxwing, Canada Goose, Red-shouldered Hawk, Northern Cardinal, Veery, Hermit Thrush, Swainson's Thrush, Brown Creeper, Killdeer, Yellow-billed Cuckoo, Northern Flicker, Eastern Wood-Pewee, Ruby-crowned Kinglet, American Crow, Common Raven, Blue Jay, Downy Woodpecker, Hairy Woodpecker, Pileated Woodpecker, Gray Catbird, Kentucky Warbler, Common Yellowthroat, Purple Finch, Wood Thrush, Baltimore Oriole, Nashville Warbler, Belted Kingfisher, Red-bellied Woodpecker, Wild Turkey, Swamp Sparrow, Song Sparrow, Black-and-white Warbler, Brown-headed Cowbird, Great Crested Flycatcher, Black-crowned Night-Heron, Louisiana Waterthrush, Rose-breasted Grosbeak, Eastern Towhee, Scarlet Tanager, Black-capped Chickadee, Blue-gray Gnatcatcher, Common Grackle, Eastern Phoebe, Ovenbird, Bay-breasted Warbler, Hooded Warbler, Chestnut-sided Warbler, Yellow Warbler, American Redstart, Black-throated Green Warbler, White-breasted Nuthatch, Yellow-bellied Sapsucker, American Goldfinch, Barred Owl, European Starling, Carolina Wren, American Robin, Eastern Kingbird, Blue-winged Warbler, Red-eyed Vireo, Blue-headed Vireo, White-throated Sparrow
+truth species: 65; in the v3 label set: 65; passing the range filter at own for at least one stream: 65: Red-winged Blackbird, Snow Goose, Tufted Titmouse, Cedar Waxwing, Canada Goose, Red-shouldered Hawk, Northern Cardinal, Veery, Hermit Thrush, Swainson's Thrush, Brown Creeper, Killdeer, Yellow-billed Cuckoo, Northern Flicker, Eastern Wood-Pewee, Ruby-crowned Kinglet, American Crow, Common Raven, Blue Jay, Downy Woodpecker, Hairy Woodpecker, Pileated Woodpecker, Gray Catbird, Kentucky Warbler, Common Yellowthroat, Purple Finch, Wood Thrush, Baltimore Oriole, Nashville Warbler, Belted Kingfisher, Red-bellied Woodpecker, Wild Turkey, Swamp Sparrow, Song Sparrow, Black-and-white Warbler, Brown-headed Cowbird, Great Crested Flycatcher, Black-crowned Night-Heron, Louisiana Waterthrush, Rose-breasted Grosbeak, Eastern Towhee, Scarlet Tanager, Black-capped Chickadee, Blue-gray Gnatcatcher, Common Grackle, Eastern Phoebe, Ovenbird, Bay-breasted Warbler, Hooded Warbler, Chestnut-sided Warbler, Yellow Warbler, American Redstart, Black-throated Green Warbler, White-breasted Nuthatch, Yellow-bellied Sapsucker, American Goldfinch, Barred Owl, European Starling, Carolina Wren, American Robin, Eastern Kingbird, Blue-winged Warbler, Red-eyed Vireo, Blue-headed Vireo, White-throated Sparrow
+classes the detection gate cannot exercise: every class without annotated audio here, i.e. all but <= 65 of 800 (all non-North-American and non-annotated species); the window statistics cover them
+
+VERDICT vs the declared criterion:
+(a) dP CI lower +0.00 (site) / +0.00 (own) > -0.5: ok
+(b) dR CI lower +0.00 / +0.00 > -1.0: ok
+(c) Jaccard@0.84 over all classes 1.0000 > 0.97: ok
+(d) flips with margin > 0.05: 0 (max margin 0.0000): ok
+(e) top-1 over all classes 0.9999 >= 0.97: ok
+VERDICT: PASS

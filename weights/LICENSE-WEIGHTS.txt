@@ -1,0 +1,21 @@
+Legacy model weights files (.bn24; formerly also .bnv3) used with this engine
+=============================================================================
+Both formats are re-layouts (no retraining, no re-fitting) of models by the K. Lisa Yang Center for Conservation
+Bioacoustics, Cornell Lab of Ornithology, and Chemnitz University of Technology (Kahl et al. 2021, BirdNET), and keep
+the license of the model they come from:
+
+- .bn24 files: BirdNET v2.4 (BirdNET_GLOBAL_6K_V2.4; the published BirdNET_v2.4_fp32.onnx).
+  Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0),
+  https://creativecommons.org/licenses/by-nc-sa/4.0/ , as the BirdNET-Analyzer README states for the models
+  (https://github.com/birdnet-team/BirdNET-Analyzer; the Zenodo record https://doi.org/10.5281/zenodo.15050749 lists
+  CC BY-NC 4.0). The license text is also embedded in the header of every .bn24 file written by
+  scripts/export_weights.py.
+- .bnv3 files (BirdNET v3.0 preview; this library no longer reads them since its hand-written v3 engine was retired).
+  Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0),
+  https://creativecommons.org/licenses/by-sa/4.0/ , plus the BirdNET+ V3.0 Developer Preview Terms of Use that come
+  with the v3.0 model (https://doi.org/10.5281/zenodo.20703646, TERMS_OF_USE.txt).
+  ShareAlike means these files may not be relabeled NonCommercial.
+
+Both require the BirdNET attribution above.
+The engine source code is licensed separately under the Apache License 2.0 (../LICENSE, ../NOTICE); that license
+does not cover these weights files.

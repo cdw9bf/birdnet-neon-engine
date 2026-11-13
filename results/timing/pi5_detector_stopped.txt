@@ -1,0 +1,53 @@
+Raspberry Pi 5 thread table, BirdNET-Go's detector stopped (Cortex-A76, 4 cores, 2.4 GHz), 2026-11-10 22:04-22:18 EST
+=====================================================================================================================
+Engine at the commit that introduced the neon-fp16 BirdNET v3.0 packages (72628ca), built on the Pi (gcc 14.2.0-19).
+Packages as in weights/SHA256SUMS. The detector container was stopped for the session (13 min 26 s) and started again
+afterwards; one bench at a time under a lock. Governor ondemand, clock 2.4 GHz from the second repeat on.
+7 repeats; each repeat runs every model at 1/2/3/4 threads (T threads on the last T cores; thread order rotated per repeat),
+after waiting for the SoC to be under 58 C. Temperature at the start of the repeats: 44.4, 50.5, 52.1, 52.7, 53.2, 53.2, 53.2 C;
+53.2 C at the end; throttled=0x0 before every repeat, on every row and at the end. 147 rows, no failed run.
+
+wall = the CLI's median ms per window over its reps (v3 and Perch 3 reps, v2.4 and bats 5 reps; 32 windows for v3, 16 otherwise).
+CPU  = user + system time of the whole process / windows scored (n x reps + 1 warm-up window). It includes the model load, and above
+       one thread the worker threads' waiting. Cell format: median (min-max) over the 7 repeats.
+K211 = an earlier table of the same day with the detector running (v3 rows are the mean of its two passes). K211 divided CPU time
+       by n x (reps + 1) although the CLI warms up with one window, not one pass, so its CPU column read low; "K211 CPU corr."
+       rescales it to this table's divisor (x 192/161 for 32 windows, x 96/81 for 16).
+
+model                            T | wall ms/window           | CPU ms/window            | RSS MB | K211 wall | wall vs K211 | K211 CPU corr. | speedup vs T1 | CPU vs T1
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+v2.4 fp16                        1 | 19.54 (19.50-19.64)      | 19.64 (19.62-19.72)      |     42 |     19.60 |        -0.3% |           19.9 |         1.00x |     1.00x
+v2.4 fp16                        2 | 14.31 (14.28-14.38)      | 21.85 (21.81-22.41)      |     42 |     14.27 |        +0.3% |           22.3 |         1.37x |     1.11x
+v2.4 fp16                        3 | 12.09 (12.08-12.17)      | 22.94 (22.90-23.21)      |     42 |     12.10 |        -0.1% |           23.8 |         1.62x |     1.17x
+v2.4 fp16                        4 | 11.46 (11.43-11.50)      | 25.38 (25.26-25.46)      |     42 |     11.42 |        +0.4% |           26.0 |         1.71x |     1.29x
+v3 NA-east fp16                  1 | 126.43 (126.15-126.61)   | 127.79 (127.60-127.97)   |     81 |    127.75 |        -1.0% |          130.5 |         1.00x |     1.00x
+v3 NA-east fp16                  2 | 74.54 (74.44-74.77)      | 142.25 (141.98-142.71)   |     84 |     75.63 |        -1.4% |          147.1 |         1.70x |     1.11x
+v3 NA-east fp16                  3 | 58.69 (58.50-59.01)      | 159.00 (158.46-160.10)   |     88 |     59.96 |        -2.1% |          166.7 |         2.15x |     1.24x
+v3 NA-east fp16                  4 | 52.73 (52.37-53.27)      | 187.69 (186.32-189.74)   |     91 |     54.68 |        -3.6% |          194.3 |         2.40x |     1.47x
+v3 global fp16                   1 | 146.92 (146.67-147.01)   | 153.53 (153.32-153.61)   |    336 |    148.20 |        -0.9% |          155.2 |         1.00x |     1.00x
+v3 global fp16                   2 | 87.60 (87.41-87.95)      | 169.59 (169.31-172.26)   |    336 |     88.92 |        -1.5% |          175.4 |         1.68x |     1.10x
+v3 global fp16                   3 | 72.15 (71.74-72.49)      | 196.68 (195.09-198.29)   |    336 |     74.74 |        -3.5% |          208.3 |         2.04x |     1.28x
+v3 global fp16                   4 | 66.91 (66.49-67.32)      | 237.46 (235.61-239.16)   |    336 |     71.35 |        -6.2% |          252.3 |         2.20x |     1.55x
+Perch fp16+s8                    1 | 142.04 (141.72-142.27)   | 142.31 (142.10-142.73)   |    137 |    143.03 |        -0.7% |          144.8 |         1.00x |     1.00x
+Perch fp16+s8                    2 | 79.34 (79.27-79.37)      | 151.55 (151.37-152.04)   |    137 |     80.15 |        -1.0% |          154.8 |         1.79x |     1.06x
+Perch fp16+s8                    3 | 59.53 (59.42-59.60)      | 161.98 (161.61-162.14)   |    137 |     62.62 |        -4.9% |          170.5 |         2.39x |     1.14x
+Perch fp16+s8                    4 | 49.15 (49.08-49.31)      | 172.22 (171.61-172.71)   |    137 |     55.33 |       -11.2% |          182.8 |         2.89x |     1.21x
+bats EU fp32                     1 | 32.81 (32.69-32.92)      | 32.94 (32.78-33.02)      |     41 |     33.00 |        -0.6% |           33.7 |         1.00x |     1.00x
+bats EU fp32                     2 | 20.68 (20.62-20.71)      | 35.74 (35.62-35.86)      |     41 |     21.06 |        -1.8% |           37.8 |         1.59x |     1.09x
+bats EU fp32                     3 | 17.06 (16.95-17.14)      | 39.44 (39.10-39.74)      |     41 |     17.31 |        -1.4% |           42.1 |         1.92x |     1.20x
+bats EU fp32                     4 | 15.55 (15.43-15.58)      | 44.94 (44.56-45.12)      |     42 |     15.57 |        -0.1% |           46.7 |         2.11x |     1.36x
+v3 NA-east hand-written (.bnv3)  1 | 126.13 (126.03-126.62)   | 127.52 (127.40-128.07)   |    137 |    127.98 |        -1.4% |                |
+
+Output md5 (first 12 hex) identical over all repeats and thread counts, and equal to K211: v2.4 1debeeb52ab4, v3 NA-east 0e0271c5b636,
+v3 global 001c61783d7e, Perch 4f9fad3cc07c, bats 068601714efd. Hand-written engine 418b8cb963c6 (confidences, not logits).
+
+Reading it:
+- Package against the retired hand-written engine, NA-east, 1 thread, same session: 126.43 vs 126.13 ms wall (+0.24 %), CPU
+  127.79 vs 127.52 ms; peak memory 81 vs 137 MB (-56 MB).
+- Stopping the detector buys about 1 % at one thread and 0 to 11 % at four, most for the two big models (the detector uses about
+  13 % of one core, so four bench threads compete with it; v2.4 and bats show no gain). True 4-core numbers: v2.4 11.5 ms, v3 NA-east 52.7 ms, v3 global 66.9 ms, Perch 49.2 ms, bats 15.6 ms.
+- Threads cost CPU: at 4 threads v3 NA-east is 2.40x faster on the wall clock for 1.47x the CPU time per window (v3 global 2.20x for
+  1.55x, Perch 2.89x for 1.21x, v2.4 1.71x for 1.29x, bats 2.11x for 1.36x). Where one thread already keeps up (v3 NA-east at
+  overlap 2.2: one 127 ms inference per 1.33 s step, a duty of about 10 %), 1 thread is the cheapest setting; 2 threads cost about
+  11 % more CPU for v3 NA-east.
+

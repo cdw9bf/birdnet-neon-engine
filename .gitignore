@@ -1,0 +1,14 @@
+# local data and build outputs (not part of the library)
+data/
+weights/*.bn24
+build*/
+eval_tmp*/
+attic/
+*.f32
+*.npz
+__pycache__/
+weights/*.bnp2
+weights/*.bnpk
+weights/*.bnv3
+*.egg-info/
+.venv/

@@ -1,0 +1,43 @@
+Raspberry Pi 4 thread table (Raspberry Pi 4 Model B Rev 1.2, Cortex-A72, 2 GB), one session: 2026-11-11 16:30-17:05 EST
+=====================================================================================================================
+Engine at the commit that retired the hand-written BirdNET v3.0 engine (e696de9), built natively (gcc 14.2.0-19, make -j2),
+one bench at a time under a lock. Governor ondemand, 1.5 GHz at every repeat.
+7 repeats; each repeat runs every model at 1/2/3/4 threads, thread order rotated per repeat. Pinning: 1 thread core 3,
+2 threads cores 2-3, 3 and 4 threads cores 0-3. CLI mode 0, warm-up 1.
+wall = the CLI's median ms per window over its reps. CPU = user + system time of the whole process / (windows x reps + 1); it includes
+the model load and, above one thread, the workers' waiting. Cell = median (min-max) over the 7 repeats. 140 rows, no failed run.
+
+Packages (weights/, all match weights/SHA256SUMS) and inputs:
+  v2.4 fp32        birdnet_v2.4-neon-fp32.bnpk                      devA16.f32   16 windows x 5 reps
+  v3 NA-east int8  birdnet_v3.0_north-america-east-neon-int8.bnpk   v3dev16.f32  16 windows x 2 reps
+  v3 global int8   birdnet_v3.0-neon-int8.bnpk                      v3dev16.f32  16 windows x 2 reps
+  Perch int8       perch_v2-neon-int8.bnpk (full model)             devP16.f32   16 windows x 2 reps
+  bats EU fp32     battybirdnet_eu_256khz-neon-fp32.bnpk            batdev16.f32 16 windows x 5 reps
+
+label threads | wall ms/window median (min-max) | CPU ms/window median (min-max) | peak RSS MB | repeats | output md5
+Perch int8 T1 | 1113.84 (1112.83-1118.46) | 1116.61 (1115.55-1121.18) | 158 | 7 | 6986d348b43e
+Perch int8 T2 | 588.82 (588.11-593.52) | 1160.97 (1158.82-1170.70) | 158 | 7 | 6986d348b43e
+Perch int8 T3 | 418.37 (417.85-421.51) | 1210.58 (1209.85-1218.33) | 159 | 7 | 6986d348b43e
+Perch int8 T4 | 336.06 (334.75-337.24) | 1281.52 (1276.97-1285.64) | 160 | 7 | 6986d348b43e
+bats EU fp32 T1 | 123.30 (121.32-125.18) | 123.79 (121.79-125.72) | 40 | 7 | 068601714efd
+bats EU fp32 T2 | 79.76 (79.35-79.95) | 137.53 (136.96-137.72) | 41 | 7 | 068601714efd
+bats EU fp32 T3 | 66.04 (65.55-66.41) | 151.41 (151.04-152.36) | 41 | 7 | 068601714efd
+bats EU fp32 T4 | 59.02 (58.88-59.44) | 169.75 (169.35-170.22) | 41 | 7 | 068601714efd
+v2.4 fp32 T1 | 129.47 (129.09-130.32) | 130.01 (129.65-130.78) | 66 | 7 | 4f5e85002891
+v2.4 fp32 T2 | 86.13 (85.80-86.55) | 143.88 (143.28-144.79) | 67 | 7 | 4f5e85002891
+v2.4 fp32 T3 | 72.89 (72.55-73.40) | 158.85 (158.40-159.40) | 67 | 7 | 4f5e85002891
+v2.4 fp32 T4 | 65.58 (65.51-65.89) | 176.83 (176.05-177.35) | 67 | 7 | 4f5e85002891
+v3 NA-east int8 T1 | 949.30 (948.30-952.63) | 951.30 (949.97-954.76) | 78 | 7 | c07e99c6a896
+v3 NA-east int8 T2 | 521.20 (520.34-522.71) | 1020.30 (1018.73-1027.64) | 79 | 7 | c07e99c6a896
+v3 NA-east int8 T3 | 383.07 (381.04-385.05) | 1109.97 (1102.33-1117.88) | 80 | 7 | c07e99c6a896
+v3 NA-east int8 T4 | 325.57 (322.30-326.08) | 1251.39 (1238.73-1252.85) | 81 | 7 | c07e99c6a896
+v3 global int8 T1 | 1125.75 (1116.52-1138.22) | 1128.61 (1118.94-1140.97) | 179 | 7 | bd7d9f12a0d1
+v3 global int8 T2 | 609.67 (604.17-623.32) | 1200.42 (1189.18-1231.06) | 180 | 7 | bd7d9f12a0d1
+v3 global int8 T3 | 446.01 (439.50-448.73) | 1299.21 (1284.45-1307.00) | 181 | 7 | bd7d9f12a0d1
+v3 global int8 T4 | 375.41 (371.91-378.34) | 1447.27 (1435.55-1460.61) | 182 | 7 | bd7d9f12a0d1
+
+Output hashes: one md5 / sha256 per model over all 28 runs (4 thread counts x 7 repeats), equal to the arm64 build container's, built
+from the same source on the same inputs: v2.4 8bd82f55af4fde61, v3 NA-east f7bd8fe24b7027c6,
+v3 global 3405427f340b1856, Perch a9e2152ffc48be0a, bats 3a88c37dd16aec46 (sha256, first 16 hex).
+Thermal: throttled=0x0 on all 140 rows, before every repeat and at the end; SoC 40.9 C at the start, 42.3-55.5 C over the rows;
+the 75 C guard never fired. No fan is registered (no cooling_device in sysfs).

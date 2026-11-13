@@ -1,0 +1,50 @@
+V002 BirdNET v3.0 GLOBAL (11,560 classes) compiled package, int8 (neon-int8 --int8 pw,pwl,head,sed,lin, mode 4) - gate result, criterion declared (V002, docs/GATES.md) before scoring
+candidate gate/pkgs/glob-int8.bnpk sha256 7facb075845c987d0328269410177b7baccb27e49f2d5fe4cd5193beacd911af (compiled at engine 102c4ee, src 0eebe5877e5581c2, --wino 24); scored by the arm64 container build (gcc 14.2) /root/bG/cli sha256 657d06ad... through --pipe, 2 threads (bit-identical to 1); its 8-window sample hash f482ac8543e8faf9 equals the Pi 4's (K067); the shipped compile (scripts/compile_models.sh v3) gives identical outputs (16 windows)
+reference fp32 ONNX Runtime 1.31.1 CPU, birdnet-v3.0-preview3.1-fp32-b1.onnx (sha256 05535c3e...), same windows, same run; 32 streams, 92,829 windows (deploy grid, overlap 2.2)
+
+WINDOW STATISTICS (exact; full outputs streamed, all = 11,560 classes, subset = the 800 NA-east classes, rest = the other 10,760):
+all   : 92829 windows, SQNR 61.2 dB, top-1 0.9807, max|dconf| 0.2059 (mean 2.17e-06), Jaccard@0.84 0.9800, flips 470 (<=0.005 415, <=0.02 469, >0.05 0, max 0.0202); worst ('SSW_179_20170603_210015Z.flac', 1593, 11321, 0.18839195370674133, 0.394292414188385)
+subset: 92829 windows, SQNR 53.0 dB, top-1 0.9864, max|dconf| 0.1612 (mean 2.00e-05), Jaccard@0.84 0.9800, flips 468 (<=0.005 413, <=0.02 467, >0.05 0, max 0.0202); worst ('SSW_254_20170722_210019Z.flac', 2570, 5887, 0.7634312510490417, 0.6022767424583435)
+rest  : 92829 windows, SQNR 63.1 dB, top-1 0.9732, max|dconf| 0.2059 (mean 8.48e-07), Jaccard@0.84 0.9718, flips 2 (<=0.005 2, <=0.02 2, >0.05 0, max 0.0019); worst ('SSW_179_20170603_210015Z.flac', 1593, 11321, 0.18839195370674133, 0.394292414188385)
+
+DETECTION REPLAY (v3 harness simulate5s.py, BirdNET-Go 20261014; overlap 2.2, thr 0.84, FP L3, v3 geomodel @0.05; top-10 over the model's labels, float16; on the Mac: the GPU server went offline; its replay-input mirror lab-data/compare-c6/v3g/server_sim_mirror, which reproduces the server byte for byte on the NA-east int8 replay, scripts/gate_sim_v3_pkg.py):
+== range filter at the evaluation site (<site-lat>, <site-lon>); reference fp32 ORT (this run)
+  fp32 ORT (this run)              TP/FP/FN 174/5/156  precision 97.2%  recall 52.7%
+  neon-glob-int8                   TP/FP/FN 174/5/156  precision 97.2%  recall 52.7%
+  paired bootstrap (2000 reps over 37 periods): dP -0.00 pp [-0.05, +0.04]  dR +0.01 pp [-0.87, +0.83]  -> (a) ok (b) ok
+  identical period-level outcomes: 35/37
+    period Recording_2 0-3600s: ref (16, 0, 13) -> neon-glob-int8 (17, 0, 12)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> neon-glob-int8 (9, 0, 8)
+== range filter at the evaluation site (<site-lat>, <site-lon>); reference scores_v3 cache [report-only]
+  scores_v3 cache [report-only]    TP/FP/FN 174/5/156  precision 97.2%  recall 52.7%
+  neon-glob-int8                   TP/FP/FN 174/5/156  precision 97.2%  recall 52.7%
+  paired bootstrap (2000 reps over 37 periods): dP -0.00 pp [-0.05, +0.04]  dR +0.01 pp [-0.87, +0.83]  -> (a) ok (b) ok
+  identical period-level outcomes: 35/37
+    period Recording_2 0-3600s: ref (16, 0, 13) -> neon-glob-int8 (17, 0, 12)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> neon-glob-int8 (9, 0, 8)
+== range filter at each stream; reference fp32 ORT (this run)
+  fp32 ORT (this run)              TP/FP/FN 174/4/156  precision 97.8%  recall 52.7%
+  neon-glob-int8                   TP/FP/FN 174/4/156  precision 97.8%  recall 52.7%
+  paired bootstrap (2000 reps over 37 periods): dP -0.00 pp [-0.04, +0.04]  dR +0.01 pp [-0.87, +0.83]  -> (a) ok (b) ok
+  identical period-level outcomes: 35/37
+    period Recording_2 0-3600s: ref (16, 0, 13) -> neon-glob-int8 (17, 0, 12)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> neon-glob-int8 (9, 0, 8)
+== range filter at each stream; reference scores_v3 cache [report-only]
+  scores_v3 cache [report-only]    TP/FP/FN 174/4/156  precision 97.8%  recall 52.7%
+  neon-glob-int8                   TP/FP/FN 174/4/156  precision 97.8%  recall 52.7%
+  paired bootstrap (2000 reps over 37 periods): dP -0.00 pp [-0.04, +0.04]  dR +0.01 pp [-0.87, +0.83]  -> (a) ok (b) ok
+  identical period-level outcomes: 35/37
+    period Recording_2 0-3600s: ref (16, 0, 13) -> neon-glob-int8 (17, 0, 12)
+    period Recording_2 3600-4200s: ref (10, 0, 7) -> neon-glob-int8 (9, 0, 8)
+truth species: 65; in the v3 label set: 65; passing the range filter at site for at least one stream: 65: Red-winged Blackbird, Snow Goose, Tufted Titmouse, Cedar Waxwing, Canada Goose, Red-shouldered Hawk, Northern Cardinal, Veery, Hermit Thrush, Swainson's Thrush, Brown Creeper, Killdeer, Yellow-billed Cuckoo, Northern Flicker, Eastern Wood-Pewee, Ruby-crowned Kinglet, American Crow, Common Raven, Blue Jay, Downy Woodpecker, Hairy Woodpecker, Pileated Woodpecker, Gray Catbird, Kentucky Warbler, Common Yellowthroat, Purple Finch, Wood Thrush, Baltimore Oriole, Nashville Warbler, Belted Kingfisher, Red-bellied Woodpecker, Wild Turkey, Swamp Sparrow, Song Sparrow, Black-and-white Warbler, Brown-headed Cowbird, Great Crested Flycatcher, Black-crowned Night-Heron, Louisiana Waterthrush, Rose-breasted Grosbeak, Eastern Towhee, Scarlet Tanager, Black-capped Chickadee, Blue-gray Gnatcatcher, Common Grackle, Eastern Phoebe, Ovenbird, Bay-breasted Warbler, Hooded Warbler, Chestnut-sided Warbler, Yellow Warbler, American Redstart, Black-throated Green Warbler, White-breasted Nuthatch, Yellow-bellied Sapsucker, American Goldfinch, Barred Owl, European Starling, Carolina Wren, American Robin, Eastern Kingbird, Blue-winged Warbler, Red-eyed Vireo, Blue-headed Vireo, White-throated Sparrow
+truth species: 65; in the v3 label set: 65; passing the range filter at own for at least one stream: 65: Red-winged Blackbird, Snow Goose, Tufted Titmouse, Cedar Waxwing, Canada Goose, Red-shouldered Hawk, Northern Cardinal, Veery, Hermit Thrush, Swainson's Thrush, Brown Creeper, Killdeer, Yellow-billed Cuckoo, Northern Flicker, Eastern Wood-Pewee, Ruby-crowned Kinglet, American Crow, Common Raven, Blue Jay, Downy Woodpecker, Hairy Woodpecker, Pileated Woodpecker, Gray Catbird, Kentucky Warbler, Common Yellowthroat, Purple Finch, Wood Thrush, Baltimore Oriole, Nashville Warbler, Belted Kingfisher, Red-bellied Woodpecker, Wild Turkey, Swamp Sparrow, Song Sparrow, Black-and-white Warbler, Brown-headed Cowbird, Great Crested Flycatcher, Black-crowned Night-Heron, Louisiana Waterthrush, Rose-breasted Grosbeak, Eastern Towhee, Scarlet Tanager, Black-capped Chickadee, Blue-gray Gnatcatcher, Common Grackle, Eastern Phoebe, Ovenbird, Bay-breasted Warbler, Hooded Warbler, Chestnut-sided Warbler, Yellow Warbler, American Redstart, Black-throated Green Warbler, White-breasted Nuthatch, Yellow-bellied Sapsucker, American Goldfinch, Barred Owl, European Starling, Carolina Wren, American Robin, Eastern Kingbird, Blue-winged Warbler, Red-eyed Vireo, Blue-headed Vireo, White-throated Sparrow
+classes the detection gate cannot exercise: every class without annotated audio here, i.e. all but <= 65 of 11560 (all non-North-American and non-annotated species); the window statistics cover them
+
+VERDICT vs the declared criterion:
+(a) dP CI lower -0.05 (site) / -0.04 (own) > -0.5: ok
+(b) dR CI lower -0.87 / -0.87 > -1.0: ok
+(c) Jaccard@0.84 over all classes 0.9800 > 0.97: ok
+(d) flips with margin > 0.05: 0 (max margin 0.0202): ok
+(e) top-1 over all classes 0.9807 >= 0.97: ok
+(f) SQNR rest 63.1 dB >= subset 53.0 - 3: ok
+VERDICT: PASS

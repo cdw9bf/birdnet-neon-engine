@@ -1,0 +1,7 @@
+C011 BirdNET v3.0 global TFLite fp32 (v3g_fft_fp32.tflite, sha256 7f04d74e...) - window check on 4 of the 32 G003 streams (report-only; no detection replay, which needs all 32 streams). Scored by the TFLite 2.17.1 C API (Mac, XNNPACK default flags, 1 thread) against fp32 ORT 1.31.1 in the same run (scripts/gate_v3_global.py).
+C011 fp32 window check on a 4-stream subset (not the full gate): 7f04d74ed067205b4f21008331ca61afb07b195d18c3b07bdc1868badca7d2be  <lab-root>/lab-data/compare-c6/v3g/models/v3g_fft_fp32.tflite
+STREAMS=SSW_007_20170225_110009Z.flac,SSW_179_20170603_210015Z.flac,SSW_235_20170708_090008Z.flac,Recording_3
+started Sun Nov  8 18:08:33 PST 2026
+all   : 8313 windows, SQNR 108.0 dB, top-1 1.0000, max|dconf| 0.0001 (mean 2.58e-08), Jaccard@0.84 1.0000, flips 0 (<=0.005 0, <=0.02 0, >0.05 0, max 0.0000); worst ('SSW_179_20170603_210015Z.flac', 1815, 8453, 0.291169673204422, 0.29109734296798706)
+subset: 8313 windows, SQNR 100.7 dB, top-1 1.0000, max|dconf| 0.0001 (mean 3.26e-08), Jaccard@0.84 1.0000, flips 0 (<=0.005 0, <=0.02 0, >0.05 0, max 0.0000); worst ('SSW_179_20170603_210015Z.flac', 1815, 8453, 0.291169673204422, 0.29109734296798706)
+rest  : 8313 windows, SQNR 109.4 dB, top-1 0.9999, max|dconf| 0.0001 (mean 2.53e-08), Jaccard@0.84 1.0000, flips 0 (<=0.005 0, <=0.02 0, >0.05 0, max 0.0000); worst ('SSW_179_20170603_210015Z.flac', 1165, 11321, 0.29777783155441284, 0.297846257686615)

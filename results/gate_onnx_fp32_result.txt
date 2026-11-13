@@ -1,0 +1,43 @@
+== vs TFLite FP32 (primary: the official model, BirdNET-Go's non-arm64 default)
+label onnx_fp32; reference data/ref_tflite; candidate data/ref_fp32
+window agreement over 227022 windows (strides 0.8+1.5 s) x 6522 classes: top-1 0.9955; hit-set Jaccard @0.8 0.9991 (fp32 hits+cand hits union 49898); flips 47 (margin <=0.005 41, <=0.02 45, >0.05 0, max 0.0378)
+max |dconf| over entries with any side conf > 0.018: 0.2328 (stream SSW_050_20170325_000000Z.flac row 1 class 5256 Regulus satrapa_Golden-crowned Kinglet: fp32 0.7092 vs 0.4764)
+full-vector check on 10325 windows (12 s grid): logit SQNR 47.3 dB, max |dconf| 0.0690
+[upstream_default] overlap 0.0 threshold 0.8 FP level 0 (min det 1) range 0.01
+   ref ref_tflite               TP/FP/FN 161/16/169  P 90.96 %  R 48.79 %
+   onnx_fp32                    TP/FP/FN 160/16/170  P 90.91 %  R 48.48 %
+   dP -0.06 pp [-0.26, +0.00]  dR -0.31 pp [-1.06, +0.00]  identical periods 36/37  saved-detection Jaccard 0.9987 (3882 fp32 / 3881 cand, 5 differ)
+   gate: PASS   (v3-strict: fail)
+[pi_template] overlap 2.2 threshold 0.8 FP level 2 (min det 3) range 0.05
+   ref ref_tflite               TP/FP/FN 138/3/192  P 97.87 %  R 41.82 %
+   onnx_fp32                    TP/FP/FN 138/3/192  P 97.87 %  R 41.82 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 0.9983 (2863 fp32 / 2866 cand, 5 differ)
+   gate: PASS   (v3-strict: pass)
+[c4_deploy] overlap 1.5 threshold 0.8 FP level 2 (min det 2) range 0.05
+   ref ref_tflite               TP/FP/FN 137/4/193  P 97.16 %  R 41.52 %
+   onnx_fp32                    TP/FP/FN 137/4/193  P 97.16 %  R 41.52 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 0.9919 (2948 fp32 / 2950 cand, 24 differ)
+   gate: PASS   (v3-strict: pass)
+OVERALL onnx_fp32: PASS upstream_default=P pi_template=P c4_deploy=P
+
+== vs ONNX fp32 (BirdNET_v2.4_fp32.onnx, ORT; calibration)
+label onnx_fp32; reference data/ref_fp32; candidate data/ref_fp32
+window agreement over 227022 windows (strides 0.8+1.5 s) x 6522 classes: top-1 1.0000; hit-set Jaccard @0.8 1.0000 (fp32 hits+cand hits union 49875); flips 0 (margin <=0.005 0, <=0.02 0, >0.05 0, max 0.0000)
+max |dconf| over entries with any side conf > 0.018: 0.0000
+full-vector check on 10325 windows (12 s grid): logit SQNR 401.0 dB, max |dconf| 0.0000
+[upstream_default] overlap 0.0 threshold 0.8 FP level 0 (min det 1) range 0.01
+   ref ref_fp32                 TP/FP/FN 160/16/170  P 90.91 %  R 48.48 %
+   onnx_fp32                    TP/FP/FN 160/16/170  P 90.91 %  R 48.48 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 1.0000 (3881 fp32 / 3881 cand, 0 differ)
+   gate: PASS   (v3-strict: pass)
+[pi_template] overlap 2.2 threshold 0.8 FP level 2 (min det 3) range 0.05
+   ref ref_fp32                 TP/FP/FN 138/3/192  P 97.87 %  R 41.82 %
+   onnx_fp32                    TP/FP/FN 138/3/192  P 97.87 %  R 41.82 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 1.0000 (2866 fp32 / 2866 cand, 0 differ)
+   gate: PASS   (v3-strict: pass)
+[c4_deploy] overlap 1.5 threshold 0.8 FP level 2 (min det 2) range 0.05
+   ref ref_fp32                 TP/FP/FN 137/4/193  P 97.16 %  R 41.52 %
+   onnx_fp32                    TP/FP/FN 137/4/193  P 97.16 %  R 41.52 %
+   dP +0.00 pp [+0.00, +0.00]  dR +0.00 pp [+0.00, +0.00]  identical periods 37/37  saved-detection Jaccard 1.0000 (2950 fp32 / 2950 cand, 0 differ)
+   gate: PASS   (v3-strict: pass)
+OVERALL onnx_fp32: PASS upstream_default=P pi_template=P c4_deploy=P

@@ -1,0 +1,14 @@
+gate C014_tflite_capi_vs_R_stock: 26505 windows / 1052 streams; ref R_stock.npy cand T_tflite_capi.npy
+ G1 emb SQNR 46.2 dB (per-window p5/p50 44.2/64.6; max|d| 0.298) -> PASS
+ G2 flips 193 / 77063 ref positives = 0.250 % (6202170 decisions), max margin 0.1979, max|dconf| 0.3065 -> FAIL
+ G3 events L2 ref/cand 8933/8935, pooled J 0.9962, min head J 0.9924; L0 pooled J 0.9928 -> PASS
+ G4 Bavaria-256kHz-high n=520 P 33.1->32.9 dP -0.13 [-0.43,+0.00]  R 38.7->38.4 dR -0.23 [-0.73,+0.00] pp
+ G4 Bavaria-256kHz  n=520 P 41.8->42.3 dP +0.43 [-0.96,+2.06]  R 9.5->9.5 dR +0.00 [+0.00,+0.00] pp
+ G4 EU-256kHz       n=520 P 25.0->25.0 dP +0.00 [-0.41,+0.40]  R 31.7->31.7 dR +0.00 [-0.70,+0.68] pp
+ G4 Scotland-256kHz n=520 P 36.2->36.1 dP -0.05 [-0.35,+0.25]  R 61.3->61.3 dR +0.00 [+0.00,+0.00] pp
+ G4 SouthWales-256kHz n=520 P 15.8->15.7 dP -0.12 [-0.24,-0.02]  R 23.8->23.8 dR +0.00 [+0.00,+0.00] pp
+ G4 Sweden-256kHz   n=520 P 64.9->64.9 dP +0.00 [+0.00,+0.00]  R 11.1->11.1 dR +0.00 [+0.00,+0.00] pp
+ G4 UK-256kHz       n=520 P 39.1->39.1 dP +0.00 [-1.01,+1.03]  R 10.7->10.7 dR +0.00 [+0.00,+0.00] pp
+ G4 (7 heads with labelled species) -> FAIL
+  by source (reported only): dk_audiomoth 8829w flips 22 max|dconf| 0.015; ca_buzzfindr 1985w flips 11 max|dconf| 0.053; ca_buzzfindr_192k 541w flips 2 max|dconf| 0.012; us_uav_va 3808w flips 72 max|dconf| 0.084; de_swarm_B 390w flips 1 max|dconf| 0.017; de_myotis_ref 120w flips 47 max|dconf| 0.306; de_myotis_ctl 32w flips 7 max|dconf| 0.250; dk_sm4bat 10800w flips 31 max|dconf| 0.016
+ VERDICT FAIL

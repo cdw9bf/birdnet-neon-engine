@@ -1,0 +1,43 @@
+== vs TFLite FP32 (primary: the official model, BirdNET-Go's non-arm64 default)
+label C010_v24_tflite_int8; reference data/ref_tflite; candidate data/cand_C010_v24_tflite_int8
+window agreement over 227022 windows (strides 0.8+1.5 s) x 6522 classes: top-1 0.8388; hit-set Jaccard @0.8 0.8777 (fp32 hits+cand hits union 52812); flips 6460 (margin <=0.005 561, <=0.02 2070, >0.05 2186, max 0.4440)
+max |dconf| over entries with any side conf > 0.018: 0.6494 (stream Recording_1 row 4839 class 2850 Hylocichla mustelina_Wood Thrush: fp32 0.7391 vs 0.0897)
+full-vector check on 10325 windows (12 s grid): logit SQNR 22.2 dB, max |dconf| 0.3937
+[upstream_default] overlap 0.0 threshold 0.8 FP level 0 (min det 1) range 0.01
+   ref ref_tflite               TP/FP/FN 161/16/169  P 90.96 %  R 48.79 %
+   C010_v24_tflite_int8         TP/FP/FN 157/11/173  P 93.45 %  R 47.58 %
+   dP +2.53 pp [-0.13, +5.89]  dR -1.26 pp [-2.85, +0.34]  identical periods 25/37  saved-detection Jaccard 0.6771 (3882 fp32 / 3846 cand, 1488 differ)
+   gate: FAIL   (v3-strict: fail)
+[pi_template] overlap 2.2 threshold 0.8 FP level 2 (min det 3) range 0.05
+   ref ref_tflite               TP/FP/FN 138/3/192  P 97.87 %  R 41.82 %
+   C010_v24_tflite_int8         TP/FP/FN 128/3/202  P 97.71 %  R 38.79 %
+   dP -0.20 pp [-0.67, +0.00]  dR -3.09 pp [-5.84, -1.11]  identical periods 30/37  saved-detection Jaccard 0.4894 (2863 fp32 / 2834 cand, 1953 differ)
+   gate: FAIL   (v3-strict: fail)
+[c4_deploy] overlap 1.5 threshold 0.8 FP level 2 (min det 2) range 0.05
+   ref ref_tflite               TP/FP/FN 137/4/193  P 97.16 %  R 41.52 %
+   C010_v24_tflite_int8         TP/FP/FN 130/3/200  P 97.74 %  R 39.39 %
+   dP +0.61 pp [-0.35, +2.52]  dR -2.18 pp [-5.07, +0.00]  identical periods 27/37  saved-detection Jaccard 0.5929 (2948 fp32 / 2909 cand, 1497 differ)
+   gate: FAIL   (v3-strict: fail)
+OVERALL C010_v24_tflite_int8: FAIL upstream_default=F pi_template=F c4_deploy=F
+
+== vs ONNX fp32 (BirdNET_v2.4_fp32.onnx, ORT; calibration)
+label C010_v24_tflite_int8; reference data/ref_fp32; candidate data/cand_C010_v24_tflite_int8
+window agreement over 227022 windows (strides 0.8+1.5 s) x 6522 classes: top-1 0.8386; hit-set Jaccard @0.8 0.8779 (fp32 hits+cand hits union 52807); flips 6449 (margin <=0.005 560, <=0.02 2061, >0.05 2191, max 0.4711)
+max |dconf| over entries with any side conf > 0.018: 0.6499 (stream Recording_1 row 4839 class 2850 Hylocichla mustelina_Wood Thrush: fp32 0.7396 vs 0.0897)
+full-vector check on 10325 windows (12 s grid): logit SQNR 22.3 dB, max |dconf| 0.3935
+[upstream_default] overlap 0.0 threshold 0.8 FP level 0 (min det 1) range 0.01
+   ref ref_fp32                 TP/FP/FN 160/16/170  P 90.91 %  R 48.48 %
+   C010_v24_tflite_int8         TP/FP/FN 157/11/173  P 93.45 %  R 47.58 %
+   dP +2.59 pp [-0.12, +6.05]  dR -0.94 pp [-2.42, +0.61]  identical periods 25/37  saved-detection Jaccard 0.6780 (3881 fp32 / 3846 cand, 1483 differ)
+   gate: FAIL   (v3-strict: fail)
+[pi_template] overlap 2.2 threshold 0.8 FP level 2 (min det 3) range 0.05
+   ref ref_fp32                 TP/FP/FN 138/3/192  P 97.87 %  R 41.82 %
+   C010_v24_tflite_int8         TP/FP/FN 128/3/202  P 97.71 %  R 38.79 %
+   dP -0.20 pp [-0.67, +0.00]  dR -3.09 pp [-5.84, -1.11]  identical periods 30/37  saved-detection Jaccard 0.4898 (2866 fp32 / 2834 cand, 1952 differ)
+   gate: FAIL   (v3-strict: fail)
+[c4_deploy] overlap 1.5 threshold 0.8 FP level 2 (min det 2) range 0.05
+   ref ref_fp32                 TP/FP/FN 137/4/193  P 97.16 %  R 41.52 %
+   C010_v24_tflite_int8         TP/FP/FN 130/3/200  P 97.74 %  R 39.39 %
+   dP +0.61 pp [-0.35, +2.52]  dR -2.18 pp [-5.07, +0.00]  identical periods 27/37  saved-detection Jaccard 0.5917 (2950 fp32 / 2909 cand, 1503 differ)
+   gate: FAIL   (v3-strict: fail)
+OVERALL C010_v24_tflite_int8: FAIL upstream_default=F pi_template=F c4_deploy=F

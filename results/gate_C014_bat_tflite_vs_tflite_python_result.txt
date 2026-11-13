@@ -1,0 +1,14 @@
+gate C014_tflite_capi_vs_R_tfl: 26505 windows / 1052 streams; ref R_tfl.npy cand T_tflite_capi.npy
+ G1 emb SQNR 117.3 dB (per-window p5/p50 115.1/117.2; max|d| 1.24e-05) -> PASS
+ G2 flips 1 / 77067 ref positives = 0.001 % (6202170 decisions), max margin 0.0000, max|dconf| 0.0000 -> PASS
+ G3 events L2 ref/cand 8935/8935, pooled J 0.9998, min head J 0.9975; L0 pooled J 0.9999 -> PASS
+ G4 Bavaria-256kHz-high n=520 P 32.9->32.9 dP +0.00 [+0.00,+0.00]  R 38.4->38.4 dR +0.00 [+0.00,+0.00] pp
+ G4 Bavaria-256kHz  n=520 P 42.3->42.3 dP +0.00 [+0.00,+0.00]  R 9.5->9.5 dR +0.00 [+0.00,+0.00] pp
+ G4 EU-256kHz       n=520 P 25.0->25.0 dP +0.00 [+0.00,+0.00]  R 31.7->31.7 dR +0.00 [+0.00,+0.00] pp
+ G4 Scotland-256kHz n=520 P 36.1->36.1 dP +0.00 [+0.00,+0.00]  R 61.3->61.3 dR +0.00 [+0.00,+0.00] pp
+ G4 SouthWales-256kHz n=520 P 15.7->15.7 dP +0.00 [+0.00,+0.00]  R 23.8->23.8 dR +0.00 [+0.00,+0.00] pp
+ G4 Sweden-256kHz   n=520 P 64.9->64.9 dP +0.00 [+0.00,+0.00]  R 11.1->11.1 dR +0.00 [+0.00,+0.00] pp
+ G4 UK-256kHz       n=520 P 39.1->39.1 dP +0.00 [+0.00,+0.00]  R 10.7->10.7 dR +0.00 [+0.00,+0.00] pp
+ G4 (7 heads with labelled species) -> PASS
+  by source (reported only): dk_audiomoth 8829w flips 0 max|dconf| 0.000; ca_buzzfindr 1985w flips 0 max|dconf| 0.000; ca_buzzfindr_192k 541w flips 0 max|dconf| 0.000; us_uav_va 3808w flips 0 max|dconf| 0.000; de_swarm_B 390w flips 0 max|dconf| 0.000; de_myotis_ref 120w flips 0 max|dconf| 0.000; de_myotis_ctl 32w flips 0 max|dconf| 0.000; dk_sm4bat 10800w flips 1 max|dconf| 0.000
+ VERDICT pass

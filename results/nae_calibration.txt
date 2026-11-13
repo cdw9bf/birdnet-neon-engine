@@ -1,0 +1,97 @@
+Perch v2 north-america-east slice calibration (no verdict); rest logit 9.92; 32 streams
+full-softmax mass of the kept 999 species per window (top kept entry, p_full / p_slice): median 0.607, p10 0.281, p90 0.928 (n=141821); slice confidences are inflated by 1/mass: median x1.65
+LSE of the 999 slice logits: median 10.18, p10 8.96, p90 12.50; rest-logit shrink factor 1/(1+e^(rest-LSE)): median 0.564
+
+== F (full model, kept species, not renormalised) vs S plain slice softmax: gated configs
+window agreement over 142293 windows x 999 classes: top-1 0.9967
+  @0.2 (report only): hit-set Jaccard 0.7471 (union 92992); flips 23520 (margin <=0.005 974, <=0.02 3881, >0.05 14322, max 0.2000)
+  @0.4 (report only): hit-set Jaccard 0.7999 (union 56490); flips 11306 (margin <=0.005 484, <=0.02 1772, >0.05 7114, max 0.3651)
+  @0.5: hit-set Jaccard 0.7957 (union 46348); flips 9467 (margin <=0.005 379, <=0.02 1540, >0.05 5685, max 0.4579)
+  @0.6 (report only): hit-set Jaccard 0.7672 (union 37901); flips 8823 (margin <=0.005 378, <=0.02 1542, >0.05 5132, max 0.5286)
+  @0.8: hit-set Jaccard 0.5921 (union 20869); flips 8513 (margin <=0.005 449, <=0.02 1824, >0.05 4191, max 0.5165)
+max |dconf| over entries with both sides conf > 0.005: 0.6062 (stream SSW_021_20170304_110008Z.flac row 1722 class 11 Aegolius funereus: ref 0.1143 vs 0.7205); entries stored on one side only: 1690242 (largest present conf 0.2518, other side <= 0.005)
+full-vector check on 0 windows (60 s grid): logit SQNR nan dB, max |dconf| 0.0000
+[upstream_default] overlap 0.0 (stride 5.000 s) threshold 0.8 FP level 0 (min det 1) range None
+   ref F_full_kept              TP/FP/FN 108/13/214  P 89.26 %  R 33.54 %
+   S plain slice softmax        TP/FP/FN 131/31/191  P 80.86 %  R 40.68 %
+   dP -8.44 pp [-13.92, -3.71]  dR +7.19 pp [+4.55, +10.03]  identical periods 13/37  saved-detection Jaccard 0.4330 (1369 ref / 2129 cand, 1384 differ)
+[pi_template] overlap 2.2 (stride 1.333 s) threshold 0.8 FP level 2 (min det 2) range None
+   ref F_full_kept              TP/FP/FN 102/13/220  P 88.70 %  R 31.68 %
+   S plain slice softmax        TP/FP/FN 121/19/201  P 86.43 %  R 37.58 %
+   dP -2.30 pp [-6.48, +1.20]  dR +5.95 pp [+3.95, +8.27]  identical periods 15/37  saved-detection Jaccard 0.2263 (1279 ref / 1853 cand, 1976 differ)
+[c4_deploy] overlap 1.5 (stride 2.500 s) threshold 0.8 FP level 2 (min det 1) range None
+   ref F_full_kept              TP/FP/FN 120/15/202  P 88.89 %  R 37.27 %
+   S plain slice softmax        TP/FP/FN 144/35/178  P 80.45 %  R 44.72 %
+   dP -8.43 pp [-13.21, -4.32]  dR +7.50 pp [+4.53, +11.00]  identical periods 15/37  saved-detection Jaccard 0.3272 (1747 ref / 2601 cand, 2204 differ)
+[perch_override] overlap 2.2 (stride 1.333 s) threshold 0.5 FP level 2 (min det 2) range None
+   ref F_full_kept              TP/FP/FN 170/46/152  P 78.70 %  R 52.80 %
+   S plain slice softmax        TP/FP/FN 196/100/126  P 66.22 %  R 60.87 %
+   dP -12.52 pp [-18.67, -7.26]  dR +8.08 pp [+5.53, +10.74]  identical periods 9/37  saved-detection Jaccard 0.4109 (3058 ref / 3754 cand, 2844 differ)
+
+== F (full model, kept species, not renormalised) vs R rest-logit softmax: gated configs
+window agreement over 142293 windows x 999 classes: top-1 0.9967
+  @0.2 (report only): hit-set Jaccard 0.9670 (union 70877); flips 2340 (margin <=0.005 722, <=0.02 1682, >0.05 179, max 0.1686)
+  @0.4 (report only): hit-set Jaccard 0.9634 (union 46169); flips 1689 (margin <=0.005 400, <=0.02 1035, >0.05 205, max 0.3260)
+  @0.5: hit-set Jaccard 0.9598 (union 37715); flips 1517 (margin <=0.005 341, <=0.02 935, >0.05 196, max 0.3502)
+  @0.6 (report only): hit-set Jaccard 0.9460 (union 30001); flips 1621 (margin <=0.005 328, <=0.02 974, >0.05 209, max 0.3819)
+  @0.8: hit-set Jaccard 0.8784 (union 12968); flips 1577 (margin <=0.005 403, <=0.02 1131, >0.05 53, max 0.2710)
+max |dconf| over entries with both sides conf > 0.005: 0.4426 (stream SSW_062_20170325_160010Z.flac row 774 class 270 Cyanocitta cristata: ref 0.2835 vs 0.7261); entries stored on one side only: 1690242 (largest present conf 0.0968, other side <= 0.005)
+full-vector check on 0 windows (60 s grid): logit SQNR nan dB, max |dconf| 0.0000
+[upstream_default] overlap 0.0 (stride 5.000 s) threshold 0.8 FP level 0 (min det 1) range None
+   ref F_full_kept              TP/FP/FN 108/13/214  P 89.26 %  R 33.54 %
+   R rest-logit softmax         TP/FP/FN 111/15/211  P 88.10 %  R 34.47 %
+   dP -1.20 pp [-3.49, +0.40]  dR +0.92 pp [+0.00, +2.02]  identical periods 32/37  saved-detection Jaccard 0.8038 (1369 ref / 1371 cand, 298 differ)
+[pi_template] overlap 2.2 (stride 1.333 s) threshold 0.8 FP level 2 (min det 2) range None
+   ref F_full_kept              TP/FP/FN 102/13/220  P 88.70 %  R 31.68 %
+   R rest-logit softmax         TP/FP/FN 104/11/218  P 90.43 %  R 32.30 %
+   dP +1.74 pp [+0.00, +3.97]  dR +0.59 pp [-0.63, +1.86]  identical periods 31/37  saved-detection Jaccard 0.6745 (1279 ref / 1288 cand, 499 differ)
+[c4_deploy] overlap 1.5 (stride 2.500 s) threshold 0.8 FP level 2 (min det 1) range None
+   ref F_full_kept              TP/FP/FN 120/15/202  P 88.89 %  R 37.27 %
+   R rest-logit softmax         TP/FP/FN 120/15/202  P 88.89 %  R 37.27 %
+   dP +0.02 pp [-1.79, +2.04]  dR -0.01 pp [-0.98, +0.82]  identical periods 33/37  saved-detection Jaccard 0.7428 (1747 ref / 1749 cand, 516 differ)
+[perch_override] overlap 2.2 (stride 1.333 s) threshold 0.5 FP level 2 (min det 2) range None
+   ref F_full_kept              TP/FP/FN 170/46/152  P 78.70 %  R 52.80 %
+   R rest-logit softmax         TP/FP/FN 172/45/150  P 79.26 %  R 53.42 %
+   dP +0.58 pp [+0.00, +1.52]  dR +0.65 pp [+0.00, +1.79]  identical periods 34/37  saved-detection Jaccard 0.7679 (3058 ref / 3073 cand, 805 differ)
+
+== operating point of F at pi_template (overlap 2.2, FP L2, threshold 0.8) vs S / R at swept thresholds
+   F @0.8: TP/FP/FN (102, 13, 220)  P 88.70 %  R 31.68 %  saved 1279
+   t=0.5   S: TP/FP/FN (196, 100, 126) P  66.22 R  60.87 saved  3754 | R: TP/FP/FN (172, 45, 150) P  79.26 R  53.42 saved  3073
+   t=0.6   S: TP/FP/FN (177, 70, 145) P  71.66 R  54.97 saved  3134 | R: TP/FP/FN (156, 30, 166) P  83.87 R  48.45 saved  2526
+   t=0.7   S: TP/FP/FN (156, 44, 166) P  78.00 R  48.45 saved  2538 | R: TP/FP/FN (129, 15, 193) P  89.58 R  40.06 saved  1940
+   t=0.8   S: TP/FP/FN (121, 19, 201) P  86.43 R  37.58 saved  1853 | R: TP/FP/FN (104, 11, 218) P  90.43 R  32.30 saved  1288
+   t=0.85  S: TP/FP/FN (112, 14, 210) P  88.89 R  34.78 saved  1478 | R: TP/FP/FN (82, 10, 240) P  89.13 R  25.47 saved   858
+   t=0.9   S: TP/FP/FN (87, 10, 235) P  89.69 R  27.02 saved   969 | R: TP/FP/FN (54, 9, 268) P  85.71 R  16.77 saved   404
+   t=0.93  S: TP/FP/FN (63, 10, 259) P  86.30 R  19.57 saved   627 | R: TP/FP/FN (31, 4, 291) P  88.57 R   9.63 saved   188
+   t=0.95  S: TP/FP/FN (48, 9, 274) P  84.21 R  14.91 saved   362 | R: TP/FP/FN (18, 1, 304) P  94.74 R   5.59 saved    84
+   t=0.97  S: TP/FP/FN (27, 4, 295) P  87.10 R   8.39 saved   124 | R: TP/FP/FN (7, 1, 315) P  87.50 R   2.17 saved    22
+   t=0.98  S: TP/FP/FN (14, 1, 308) P  93.33 R   4.35 saved    52 | R: TP/FP/FN (2, 0, 320) P 100.00 R   0.62 saved     2
+   t=0.99  S: TP/FP/FN (3, 1, 319) P  75.00 R   0.93 saved     7 | R: TP/FP/FN (0, 0, 322) P   0.00 R   0.00 saved     0
+
+== operating point of F at perch_override (overlap 2.2, FP L2, threshold 0.5) vs S / R at swept thresholds
+   F @0.5: TP/FP/FN (170, 46, 152)  P 78.70 %  R 52.80 %  saved 3058
+   t=0.5   S: TP/FP/FN (196, 100, 126) P  66.22 R  60.87 saved  3754 | R: TP/FP/FN (172, 45, 150) P  79.26 R  53.42 saved  3073
+   t=0.6   S: TP/FP/FN (177, 70, 145) P  71.66 R  54.97 saved  3134 | R: TP/FP/FN (156, 30, 166) P  83.87 R  48.45 saved  2526
+   t=0.7   S: TP/FP/FN (156, 44, 166) P  78.00 R  48.45 saved  2538 | R: TP/FP/FN (129, 15, 193) P  89.58 R  40.06 saved  1940
+   t=0.8   S: TP/FP/FN (121, 19, 201) P  86.43 R  37.58 saved  1853 | R: TP/FP/FN (104, 11, 218) P  90.43 R  32.30 saved  1288
+   t=0.85  S: TP/FP/FN (112, 14, 210) P  88.89 R  34.78 saved  1478 | R: TP/FP/FN (82, 10, 240) P  89.13 R  25.47 saved   858
+   t=0.9   S: TP/FP/FN (87, 10, 235) P  89.69 R  27.02 saved   969 | R: TP/FP/FN (54, 9, 268) P  85.71 R  16.77 saved   404
+   t=0.93  S: TP/FP/FN (63, 10, 259) P  86.30 R  19.57 saved   627 | R: TP/FP/FN (31, 4, 291) P  88.57 R   9.63 saved   188
+   t=0.95  S: TP/FP/FN (48, 9, 274) P  84.21 R  14.91 saved   362 | R: TP/FP/FN (18, 1, 304) P  94.74 R   5.59 saved    84
+   t=0.97  S: TP/FP/FN (27, 4, 295) P  87.10 R   8.39 saved   124 | R: TP/FP/FN (7, 1, 315) P  87.50 R   2.17 saved    22
+   t=0.98  S: TP/FP/FN (14, 1, 308) P  93.33 R   4.35 saved    52 | R: TP/FP/FN (2, 0, 320) P 100.00 R   0.62 saved     2
+   t=0.99  S: TP/FP/FN (3, 1, 319) P  75.00 R   0.93 saved     7 | R: TP/FP/FN (0, 0, 322) P   0.00 R   0.00 saved     0
+
+== operating point of F at upstream_default (overlap 0.0, FP L0, threshold 0.8) vs S / R at swept thresholds
+   F @0.8: TP/FP/FN (108, 13, 214)  P 89.26 %  R 33.54 %  saved 1369
+   t=0.5   S: TP/FP/FN (206, 144, 116) P  58.86 R  63.98 saved  4504 | R: TP/FP/FN (189, 60, 133) P  75.90 R  58.70 saved  3644
+   t=0.6   S: TP/FP/FN (183, 89, 139) P  67.28 R  56.83 saved  3751 | R: TP/FP/FN (160, 35, 162) P  82.05 R  49.69 saved  2920
+   t=0.7   S: TP/FP/FN (162, 57, 160) P  73.97 R  50.31 saved  2975 | R: TP/FP/FN (133, 22, 189) P  85.81 R  41.30 saved  2210
+   t=0.8   S: TP/FP/FN (131, 31, 191) P  80.86 R  40.68 saved  2129 | R: TP/FP/FN (111, 15, 211) P  88.10 R  34.47 saved  1371
+   t=0.85  S: TP/FP/FN (118, 21, 204) P  84.89 R  36.65 saved  1652 | R: TP/FP/FN (88, 12, 234) P  88.00 R  27.33 saved   903
+   t=0.9   S: TP/FP/FN (94, 14, 228) P  87.04 R  29.19 saved  1076 | R: TP/FP/FN (53, 8, 269) P  86.89 R  16.46 saved   412
+   t=0.93  S: TP/FP/FN (71, 11, 251) P  86.59 R  22.05 saved   643 | R: TP/FP/FN (33, 6, 289) P  84.62 R  10.25 saved   191
+   t=0.95  S: TP/FP/FN (49, 10, 273) P  83.05 R  15.22 saved   352 | R: TP/FP/FN (24, 2, 298) P  92.31 R   7.45 saved    91
+   t=0.97  S: TP/FP/FN (25, 6, 297) P  80.65 R   7.76 saved   132 | R: TP/FP/FN (8, 1, 314) P  88.89 R   2.48 saved    26
+   t=0.98  S: TP/FP/FN (13, 2, 309) P  86.67 R   4.04 saved    48 | R: TP/FP/FN (3, 0, 319) P 100.00 R   0.93 saved     3
+   t=0.99  S: TP/FP/FN (1, 1, 321) P  50.00 R   0.31 saved     7 | R: TP/FP/FN (0, 0, 322) P   0.00 R   0.00 saved     0

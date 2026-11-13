@@ -1,0 +1,16 @@
+birdnet-neon-engine: the libbnneon NEON inference engine, its command-line tools and
+the bnneon Python package (binding and bnc model compiler)
+Copyright 2026 Christopher Wiens
+
+The engine code is licensed under the Apache License, Version 2.0 (see
+LICENSE). Files under weights/ and any compiled model package (.bnpk, and the
+legacy .bn24) are not covered by it: each carries the license of the model it
+derives from (see weights/LICENSE-*.txt; for example CC BY-NC-SA 4.0 for
+BirdNET v2.4 and everything derived from it), not Apache-2.0.
+
+The model-structure dumps under results/ (graph_compact.txt,
+perch_graph_compact.txt, mac_table.txt, perch_mac_table.txt,
+sens_single_layer_i8.txt) list node names, operators and tensor shapes of
+BirdNET v2.4, BirdNET v3.0 and Perch v2 (no weights). They describe those
+models and are provided for reference under the models' own terms, not
+claimed under Apache-2.0.
