@@ -204,9 +204,9 @@ def class_labels(raw: bytes) -> list[str]:
     """One label per class: the label lines without Perch's header line.
 
     The rule every reader of a package's label file follows. Twin:
-    bnneon.binding.class_labels (the binding is self-contained; the README's
-    C example spells the same rule); tests/test_label_rule.py checks that
-    all three agree.
+    bnneon.binding.class_labels (the binding is self-contained; the C example
+    in docs/REFERENCE.md spells the same rule); tests/test_label_rule.py
+    checks that all three agree.
     """
     lines = nonempty_lines(raw)
     if lines and lines[0] == PERCH_LABEL_HEADER:

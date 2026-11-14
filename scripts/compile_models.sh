@@ -19,7 +19,7 @@ cd "$(dirname "$0")/.."
 # The defaults are paths under data/ (git-ignored): put or link the files there, or set the variables. Layout:
 #   data/battybirdnet/{birdnet-v2.4-embeddings-fp32.onnx, birdnet-v2.4-embeddings-fp32-dfttrunc.onnx, fp32/, labels/}
 #   data/birdnet/birdnet_labels_v2.4.txt   data/perch/{perch_v2_fp32.onnx, perch_v2_labels.txt, regional_nae/}
-#   data/birdnet_v3/ (the four v3.0 files below). Where to download each file: README.md, "Getting the models".
+#   data/birdnet_v3/ (the four v3.0 files below). Where to download each file: docs/REFERENCE.md, "Getting the models".
 PY=${PY:-python3}
 B=${B:-data/battybirdnet}
 V24=${V24:-$B/birdnet-v2.4-embeddings-fp32.onnx}

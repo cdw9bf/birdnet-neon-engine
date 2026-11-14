@@ -1,4 +1,4 @@
-"""Compiles and runs the C quick-start example in README.md.
+"""Compiles and runs the C example (quickstart.c) in docs/REFERENCE.md.
 
   python -I tests/test_readme_example.py [--lib build/libbnneon.so]
       [--model FILE ...] [--cc cc]
@@ -6,13 +6,13 @@
 (-I with bnneon installed in the interpreter; for a checkout that is not
 installed: PYTHONPATH=<checkout>/python python -P -s tests/...)
 
-So the README cannot drift from the API: extracts the first ```c block of
-README.md, compiles it with -Wall -Wextra -Werror against src/bnneon.h and the
-built library, runs it on each model (default: the packages and the legacy
-.bn24 in weights/ this CPU can run) and on a missing file, and checks the
-output: five classes with confidences in [0, 1], and the library's message on
-failure. A missing library, compiler or model is a clean skip (exit 0 with a
-"skip" line).
+So the documented example cannot drift from the API: extracts the first
+```c block of docs/REFERENCE.md (the README links to it), compiles it with
+-Wall -Wextra -Werror against src/bnneon.h and the built library, runs it on
+each model (default: the packages and the legacy .bn24 in weights/ this CPU
+can run) and on a missing file, and checks the output: five classes with
+confidences in [0, 1], and the library's message on failure. A missing
+library, compiler or model is a clean skip (exit 0 with a "skip" line).
 """
 import os
 import re
@@ -25,6 +25,8 @@ import bnneon  # the label column is checked against the binding's labels()
 from bnneon import testutil
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# the page whose first ```c block is the C example (quickstart.c)
+EXAMPLE_DOC = os.path.join(ROOT, "docs", "REFERENCE.md")
 DEFAULT_MODELS = ["birdnet_v2.4-neon-fp16.bnpk", "birdnet_v2.4-neon-fp32.bnpk",
                   "battybirdnet_eu_256khz-neon-fp32.bnpk",
                   "perch_v2_nae-neon-fp16-s8.bnpk",
@@ -39,8 +41,8 @@ def _run(cmd, **kwargs):
 
 
 def readme_example():
-    """The first ```c block of README.md, or None."""
-    with open(os.path.join(ROOT, "README.md"), encoding="utf-8") as f:
+    """The first ```c block of docs/REFERENCE.md, or None."""
+    with open(EXAMPLE_DOC, encoding="utf-8") as f:
         m = re.search(r"```c\n(.*?)```", f.read(), re.S)
     return m.group(1) if m else None
 
@@ -93,7 +95,7 @@ def main():
               f"or pass --lib / --cc)")
         return 0
     code = readme_example()
-    check("README has a C example", code is not None)
+    check("docs/REFERENCE.md has a C example", code is not None)
     if code is None:
         return 1
     models = testutil.opt_all("--model") or testutil.default_models(

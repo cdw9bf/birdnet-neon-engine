@@ -1,9 +1,10 @@
 # Accuracy gates and evaluation data
 
-Every engine row in the README and in `results/MENU.txt` passed an accuracy gate: the candidate package was compared
-with an fp32 reference of the same model on real recordings, against a pass criterion that was written down before
-any candidate was scored. Every candidate scored is reported, pass or fail (the failures are in `DEADENDS.md`). This
-page gives the evaluation data, the harness and the declared criteria; the result files are in `results/`.
+Every engine row in the README, in [RESULTS.md](RESULTS.md) and in `results/MENU.txt` passed an accuracy gate: the
+candidate package was compared with an fp32 reference of the same model on real recordings, against a pass criterion
+that was written down before any candidate was scored. Every candidate scored is reported, pass or fail (the failures
+are in `DEADENDS.md`). This page gives the evaluation data, the harness and the declared criteria; the result files
+are in `results/`.
 
 The result files and session logs keep the labels of the development repository the runs were made in: commit ids
 (for example the engine commit of a timing session), experiment ids (A017, K068, ...), names of session scripts, and

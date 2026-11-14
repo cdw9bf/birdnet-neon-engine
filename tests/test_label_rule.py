@@ -1,16 +1,17 @@
-"""The label-line rule: the compiler, the Python binding and the README's C.
+"""The label-line rule: the compiler, the Python binding and the C example.
 
   python -P -s tests/test_label_rule.py [--cc cc] [--labels FILE ...]
       (bnneon installed, or PYTHONPATH=<checkout>/python)
 
 The compiler (bnneon.compiler.prep.class_labels), the binding
-(bnneon.binding.class_labels, its self-contained twin) and the README's C
-example (class_label / label_len, compiled from the README's first ```c
-block) must number a package's label lines alike. Checks the rule on cases,
-that all three agree on every case, and that the compiler refuses the files
-other line rules would number differently. --labels FILE: also checks that
-the compiler accepts that file and the three readers agree on it. Without a C
-compiler the C part is a clean skip. Exit 0 when every check passes.
+(bnneon.binding.class_labels, its self-contained twin) and the C example
+(class_label / label_len, compiled from the first ```c block of
+docs/REFERENCE.md) must number a package's label lines alike. Checks the rule
+on cases, that all three agree on every case, and that the compiler refuses
+the files other line rules would number differently. --labels FILE: also
+checks that the compiler accepts that file and the three readers agree on it.
+Without a C compiler the C part is a clean skip. Exit 0 when every check
+passes.
 """
 import os
 import re
@@ -24,11 +25,13 @@ from bnneon import testutil
 from bnneon.compiler import prep
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# the page whose first ```c block is the C example (quickstart.c)
+EXAMPLE_DOC = os.path.join(ROOT, "docs", "REFERENCE.md")
 CHECKS = testutil.Checks()
 check = CHECKS.check
 # the C side prints each label followed by this separator
 SEP = b"\x1f"
-# reads a label file on stdin, prints every class label (the README's rule)
+# reads a label file on stdin, prints every class label (the example's rule)
 C_MAIN = r"""
 int main(void) {
   static char buf[1 << 20];
@@ -80,9 +83,9 @@ REFUSED = [
 ]
 
 
-def readme_label_functions():
-    """label_len and class_label from the README's first ```c block."""
-    with open(os.path.join(ROOT, "README.md"), encoding="utf-8") as f:
+def example_label_functions():
+    """label_len and class_label from the C example's ```c block."""
+    with open(EXAMPLE_DOC, encoding="utf-8") as f:
         m = re.search(r"```c\n(.*?)```", f.read(), re.S)
     if m is None:
         return None
@@ -98,9 +101,9 @@ def readme_label_functions():
 
 
 def build_c_reader(cc, tmp):
-    """Compiles the README's label functions; the executable or None."""
-    functions = readme_label_functions()
-    check("README has label_len and class_label", functions is not None)
+    """Compiles the example's label functions; the executable or None."""
+    functions = example_label_functions()
+    check("C example has label_len and class_label", functions is not None)
     if functions is None:
         return None
     src = os.path.join(tmp, "labels.c")
@@ -111,13 +114,13 @@ def build_c_reader(cc, tmp):
     r = subprocess.run([cc, "-std=gnu11", "-O2", "-Wall", "-Wextra",
                         "-Werror", src, "-o", exe], capture_output=True,
                        text=True, check=False)
-    check("README label functions compile with -Werror", r.returncode == 0,
+    check("C example label functions compile with -Werror", r.returncode == 0,
           r.stdout + r.stderr)
     return None if r.returncode else exe
 
 
 def c_labels(exe, raw):
-    """The README reader's class labels of a file's bytes."""
+    """The C example reader's class labels of a file's bytes."""
     out = subprocess.run([exe], input=raw, capture_output=True, check=True)
     return [s.decode("utf-8", "replace") for s in out.stdout.split(SEP)[:-1]]
 
@@ -132,7 +135,7 @@ def test_cases(exe):
         check(f"compiler accepts: {name}",
               prep.label_rule_error("l.txt", raw) is None)
         if exe:
-            check(f"README C: {name}", c_labels(exe, raw) == want,
+            check(f"C example: {name}", c_labels(exe, raw) == want,
                   c_labels(exe, raw))
 
 
@@ -147,7 +150,7 @@ def test_refused(exe):
         check(f"binding = compiler: {name}",
               binding.class_labels(raw.decode()) == prep.class_labels(raw))
         if exe and "\0" not in text:
-            check(f"README C = compiler: {name}",
+            check(f"C example = compiler: {name}",
                   c_labels(exe, raw) == prep.class_labels(raw),
                   c_labels(exe, raw))
 
@@ -164,7 +167,7 @@ def test_files(exe, paths):
         check(f"{name}: binding = compiler ({len(want)} labels)",
               binding.class_labels(raw.decode("utf-8", "replace")) == want)
         if exe:
-            check(f"{name}: README C = compiler", c_labels(exe, raw) == want)
+            check(f"{name}: C example = compiler", c_labels(exe, raw) == want)
 
 
 def main():
@@ -172,7 +175,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix="bnn_labels_") as tmp:
         exe = build_c_reader(cc, tmp) if shutil.which(cc) else None
         if exe is None:
-            print(f"skip README C part (no C compiler '{cc}', or it failed)")
+            print(f"skip C example part (no C compiler '{cc}', or it failed)")
         test_cases(exe)
         test_refused(exe)
         test_files(exe, testutil.opt_all("--labels"))

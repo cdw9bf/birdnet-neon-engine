@@ -316,9 +316,10 @@ SQNR between the two; `bnc check --tflite` repeats that comparison against the e
   line `inat2024_fsd50k`, Perch v2's catalog header, is not a class) and ship the file's bytes and sha256 in the
   package; nothing checks the names. Save it as plain text with `\n` or `\r\n` line ends: the compiler refuses a
   file that a host could number differently (other line breaks, a NUL byte, lines blank only by other white space;
-  README, "Input and output per model"). The `Scientific name_Common name` form
-  matters to BirdNET-Go, which splits each line on `_` (an optional third field is a code), so a file published as
-  `Common_Name_Genus_species` (BirdNET-Analyzer's default) must be rewritten BEFORE compiling:
+  [REFERENCE.md, "Input and output per model"](REFERENCE.md#input-and-output-per-model)). The
+  `Scientific name_Common name` form matters to BirdNET-Go, which splits each line on `_` (an optional third field
+  is a code), so a file published as `Common_Name_Genus_species` (BirdNET-Analyzer's default) must be rewritten
+  BEFORE compiling:
 
   ```
   python -I scripts/relabel_for_birdnetgo.py Labels.txt Labels_go.txt [--sci "Eurasian_Golden_Oriole=Oriolus oriolus"]

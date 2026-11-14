@@ -47,7 +47,7 @@ Same as BirdNET v2.4. The file is only useful with the bnneon engine; it is not 
 # BirdNET v3.0 model packages (`birdnet_v3.0[_north-america-east]-neon-fp16|int8|fp32.bnpk`)
 
 **Status:** not published. You build the packages from the original models with `scripts/compile_models.sh v3`; no
-copy is hosted. Where to get the inputs: README, "Getting the models".
+copy is hosted. Where to get the inputs: [docs/REFERENCE.md, "Getting the models"](docs/REFERENCE.md#getting-the-models).
 
 ## What it is
 The published BirdNET v3.0 Developer Preview 3.1 fp32 ONNX models (global `birdnet-v3.0-preview3.1-fp32-b1.onnx`,
